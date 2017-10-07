@@ -1,0 +1,17 @@
+
+*.class
+
+CorgiBot\.iml
+dependency-reduced-pom.xml
+
+config\.yml
+target/*
+
+Sussi.iml
+.gitattributes
+
+latest\.log
+*.iml
+Sussi.iml
+.gitattributes
+Sussi.iml
