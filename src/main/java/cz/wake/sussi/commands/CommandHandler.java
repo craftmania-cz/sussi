@@ -1,5 +1,7 @@
 package cz.wake.sussi.commands;
 
+import cz.wake.sussi.commands.mod.Ats;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +31,6 @@ public class CommandHandler {
     }
 
     public void register() {
-
+        registerCommand(new Ats());
     }
 }
