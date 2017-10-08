@@ -2,6 +2,7 @@ package cz.wake.sussi;
 
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.MainListener;
+import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
 import me.jagrosh.jdautilities.waiter.EventWaiter;
 import net.dv8tion.jda.core.AccountType;
@@ -17,6 +18,7 @@ public class Sussi {
     private static Sussi instance;
     private MainListener events;
     private static JDA jda;
+    private SQLManager sql;
     private CommandHandler ch = new CommandHandler();
     public static final String PREFIX = ",";
     public static long startUp;
@@ -36,6 +38,7 @@ public class Sussi {
                 .buildBlocking();
 
         (instance = new Sussi()).init();
+        (instance = new Sussi()).initDatabase();
 
     }
 
@@ -63,5 +66,12 @@ public class Sussi {
         return startUp;
     }
 
+    private void initDatabase() {
+        sql = new SQLManager(this);
+    }
+
+    public SQLManager getSql() {
+        return sql;
+    }
 
 }

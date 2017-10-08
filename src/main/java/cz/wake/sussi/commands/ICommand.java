@@ -27,8 +27,4 @@ public interface ICommand {
     default boolean deleteMessage() {
         return false;
     }
-
-    default boolean onlyCM(){
-        return false;
-    }
 }

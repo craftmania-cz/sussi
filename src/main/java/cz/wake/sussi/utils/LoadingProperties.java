@@ -57,15 +57,15 @@ public class LoadingProperties {
         return dbpassword;
     }
 
-    public String getMinConnections() {
-        return minConnections;
+    public int getMinConnections() {
+        return Integer.valueOf(minConnections);
     }
 
-    public String getMaxConnections() {
-        return maxConnections;
+    public int getMaxConnections() {
+        return Integer.valueOf(maxConnections);
     }
 
-    public String getTimeout() {
-        return timeout;
+    public int getTimeout() {
+        return Integer.valueOf(timeout);
     }
 }

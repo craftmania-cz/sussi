@@ -65,7 +65,7 @@ public class MainListener extends ListenerAdapter {
 
     @Override
     public void onShutdown(ShutdownEvent event) {
-        //Sussi.getInstance().getSql().onDisable();
+        Sussi.getInstance().getSql().onDisable();
     }
 
     private void delete(Message message) {
