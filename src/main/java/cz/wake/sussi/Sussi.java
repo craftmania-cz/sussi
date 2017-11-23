@@ -2,6 +2,7 @@ package cz.wake.sussi;
 
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.MainListener;
+import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
 import me.jagrosh.jdautilities.waiter.EventWaiter;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.util.Timer;
 
 public class Sussi {
 
@@ -39,6 +41,9 @@ public class Sussi {
 
         (instance = new Sussi()).init();
         (instance = new Sussi()).initDatabase();
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new StatusChanger(), 10, 60000);
 
     }
 
