@@ -5,6 +5,7 @@ import cz.wake.sussi.Sussi;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SQLManager {
 
@@ -89,6 +90,39 @@ public class SQLManager {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final String getRandomArchiv() {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT url FROM sussi_archiv ORDER BY RAND() LIMIT 1;");
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("url");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return "";
+    }
+
+    public final void insertChnge(final String change) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO sussi_archiv (url) VALUES (?);");
+            ps.setString(1, change);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             pool.close(conn, ps, null);
         }

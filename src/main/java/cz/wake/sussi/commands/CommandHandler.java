@@ -1,6 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.Ats;
+import cz.wake.sussi.commands.user.Cmarchiv;
 import cz.wake.sussi.commands.user.Help;
 
 import java.util.ArrayList;
@@ -34,5 +35,6 @@ public class CommandHandler {
     public void register() {
         registerCommand(new Ats());
         registerCommand(new Help());
+        registerCommand(new Cmarchiv());
     }
 }
