@@ -15,12 +15,12 @@ public class Help implements ICommand {
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if(args.length < 1){
             if(channel.getType() == ChannelType.TEXT){
-                channel.sendMessage(MessageUtils.getEmbed(Constants.BLUE).setTitle("Zkontroluj si zprávy")
+                channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setTitle("Zkontroluj si zprávy")
                         .setDescription(":mailbox_with_mail: | Odeslal jsem ti do zpráv nápovědu s příkazy!").build()).queue();
             }
             sender.openPrivateChannel().queue(msg -> {
-                msg.sendMessage(MessageUtils.getEmbed(Constants.BLUE)
-                        .setTitle("**Nápověda k CorgiBot**", null)
+                msg.sendMessage(MessageUtils.getEmbed(Constants.GREEN)
+                        .setTitle("**Nápověda k Sussi**", null)
                         .setDescription(getContext())
                         .build()).queue();
             });
@@ -66,7 +66,7 @@ public class Help implements ICommand {
     private StringBuilder getContext(){
         StringBuilder builder = new StringBuilder();
         CommandHandler ch = new CommandHandler();
-        builder.append("Prefix pro příkazy na tvém serveru je `.`\nDodatečné informace o příkazu .help <příkaz>");
+        builder.append("Prefix pro příkazy na tvém serveru je `,`\nDodatečné informace o příkazu ,help <příkaz>");
         for(CommandType type : CommandType.getTypes()){
             if(type == CommandType.BOT_OWNER){
                 return builder.append("");
