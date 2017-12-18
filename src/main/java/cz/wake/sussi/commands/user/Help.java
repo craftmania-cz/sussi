@@ -16,7 +16,7 @@ public class Help implements ICommand {
         if(args.length < 1){
             if(channel.getType() == ChannelType.TEXT){
                 channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setTitle("Zkontroluj si zprávy")
-                        .setDescription(":mailbox_with_mail: | Odeslal jsem ti do zpráv nápovědu s příkazy!").build()).queue();
+                        .setDescription(":mailbox_with_mail: | Odeslala jsem ti do zpráv nápovědu s příkazy!").build()).queue();
             }
             sender.openPrivateChannel().queue(msg -> {
                 msg.sendMessage(MessageUtils.getEmbed(Constants.GREEN)
@@ -45,7 +45,7 @@ public class Help implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Základní nápověda pro Corgiho.";
+        return "Základní nápověda pro Sussi.";
     }
 
     @Override
