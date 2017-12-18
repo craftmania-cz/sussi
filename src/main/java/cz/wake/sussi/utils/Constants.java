@@ -15,6 +15,7 @@ public class Constants {
     // Emoji
     final public static String BACK = "\u25C0";
     final public static String NEXT = "\u25B6";
+    final public static String DELETE = "\u274C";
 
     // AT Rank Colors
     final public static Color MAJITEL = new Color(30, 144, 255);
