@@ -1,6 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.Ats;
+import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.Cmarchiv;
 import cz.wake.sussi.commands.user.Help;
 
@@ -36,5 +37,6 @@ public class CommandHandler {
         registerCommand(new Ats());
         registerCommand(new Help());
         registerCommand(new Cmarchiv());
+        registerCommand(new Stop());
     }
 }
