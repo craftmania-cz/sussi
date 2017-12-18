@@ -9,6 +9,7 @@ import me.jagrosh.jdautilities.waiter.EventWaiter;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
@@ -25,7 +26,7 @@ public class Sussi {
     public static final String PREFIX = ",";
     public static long startUp;
 
-    public static void main(String[] args) throws LoginException, RateLimitedException, InterruptedException, IOException {
+    public static void main(String[] args) throws LoginException, InterruptedException, IOException, RateLimitedException {
 
         LoadingProperties config = new LoadingProperties();
 
@@ -37,6 +38,7 @@ public class Sussi {
                 .setToken(config.getBotToken())
                 .addEventListener(new MainListener(waiter))
                 .addEventListener(waiter)
+                .setGame(Game.of(Game.GameType.DEFAULT, "Načítání..."))
                 .buildBlocking();
 
         (instance = new Sussi()).init();
