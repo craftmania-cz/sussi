@@ -3,7 +3,9 @@ package cz.wake.sussi.runnable;
 import cz.wake.sussi.Sussi;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.WebSocketCode;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.impl.JDAImpl;
+import net.dv8tion.jda.core.managers.Presence;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -36,15 +38,6 @@ public class StatusChanger extends TimerTask {
     }
 
     private void setStatus(){
-        JSONObject obj = new JSONObject();
-        JSONObject game = new JSONObject();
-        game.put("url", "https://www.twitch.tv/sussi");
-        game.put("type", 3);
-        obj.put("afk", false);
-        obj.put("status", OnlineStatus.ONLINE.getKey());
-        obj.put("since", System.currentTimeMillis());
-        game.put("name", String.valueOf(getOnlinePlayers()) + " hráčů");
-        obj.put("game", game);
-        ((JDAImpl) Sussi.getJda()).getClient().send(new JSONObject().put("d", obj).put("op", WebSocketCode.PRESENCE).toString());
+        Sussi.getJda().getPresence().setGame(Game.of(Game.GameType.WATCHING, String.valueOf(getOnlinePlayers() + " hráčů")));
     }
 }
