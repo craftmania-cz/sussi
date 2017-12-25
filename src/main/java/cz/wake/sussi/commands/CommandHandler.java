@@ -5,6 +5,7 @@ import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.Cmarchiv;
 import cz.wake.sussi.commands.user.Help;
 import cz.wake.sussi.commands.user.NasranoVKytare;
+import cz.wake.sussi.commands.user.Pravidla;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +41,6 @@ public class CommandHandler {
         registerCommand(new Cmarchiv());
         registerCommand(new Stop());
         registerCommand(new NasranoVKytare());
+        registerCommand(new Pravidla());
     }
 }
