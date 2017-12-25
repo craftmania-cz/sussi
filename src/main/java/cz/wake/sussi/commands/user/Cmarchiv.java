@@ -12,28 +12,84 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Cmarchiv implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(args.length < 1){
-            try{
-                channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Něco z CM archivu:").setImage(Sussi.getInstance().getSql().getRandomArchiv()).build()).queue();
-            } catch (Exception e){
+        if (args.length < 1) {
+
+            String url = "";
+            int id = 0;
+
+            try {
+                Connection conn = null;
+                PreparedStatement ps = null;
+                try {
+                    conn = Sussi.getInstance().getSql().getPool().getConnection();
+                    ps = conn.prepareStatement("SELECT * FROM sussi_archiv ORDER BY RAND() LIMIT 1;");
+                    ps.executeQuery();
+                    if (ps.getResultSet().next()) {
+                        url = ps.getResultSet().getString("url");
+                        id = ps.getResultSet().getInt("id");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    Sussi.getInstance().getSql().getPool().close(conn, ps, null);
+                }
+
+                channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Něco z CM archivu:").setImage(url).setFooter("ID: " + id, null).build()).queue();
+            } catch (Exception e) {
                 MessageUtils.sendErrorMessage("A sakra chyba, zkus to zachvilku!", channel);
             }
-        } else {
-            if(args[0].equalsIgnoreCase("add")){
-                if(sender.getId().equals("177516608778928129") && member.isOwner()){
-                    try {
-                        String messageEdited = message.getContent().replace(",cmarchiv add ", "");
-                        Sussi.getInstance().getSql().insertChnge(messageEdited);
-                        channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("Do archivu uspesne pridan novy odkaz!").build()).queue();
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
+        } else if (args[0].equalsIgnoreCase("add")) {
+            if (sender.getId().equals("177516608778928129") && member.isOwner()) {
+                try {
+                    String messageEdited = message.getContent().replace(",cmarchiv add ", "");
+                    Sussi.getInstance().getSql().insertChnge(messageEdited);
+                    channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("Do archivu úspěsně přidán nový odkaz!").build()).queue();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+        } else if (args[0].equalsIgnoreCase("status")) {
+            channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("V archivu je celkem **" + Sussi.getInstance().getSql().countArchiv() + "** obrázků.").build()).queue();
+        } else if (args[0].equalsIgnoreCase("delete")) {
+            if (sender.getId().equals("177516608778928129") && member.isOwner()) {
+                String id = args[1];
+                try {
+                    Sussi.getInstance().getSql().delete(id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("Z archivu byl úspěšně odebrán obrázek s ID: " + id).build()).queue();
+            }
+        } else {
+            String id = args[0];
+            String url = "";
+
+            Connection conn = null;
+            PreparedStatement ps = null;
+            try {
+                conn = Sussi.getInstance().getSql().getPool().getConnection();
+                ps = conn.prepareStatement("SELECT url FROM sussi_archiv WHERE id = '" + id + "'");
+                ps.executeQuery();
+                if (ps.getResultSet().next()) {
+                    url =  ps.getResultSet().getString("url");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                MessageUtils.sendErrorMessage("Požadovaný obrázek podle ID nebyl nalezen!", channel);
+            } finally {
+                Sussi.getInstance().getSql().getPool().close(conn, ps, null);
+            }
+
+            channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Něco z CM archivu:").setImage(url).setFooter("ID: " + id, null).build()).queue();
+
         }
 
     }
@@ -50,7 +106,11 @@ public class Cmarchiv implements ICommand {
 
     @Override
     public String getHelp() {
-        return ",cmarchiv";
+        return ",cmarchiv - Vygenerování náhodného obrázku\n" +
+                ",cmarchiv [ID] - Získání obrázku podle ID\n" +
+                ",cmarchiv add [URL] - Přidání obrázku do archivu (Wake)\n" +
+                ",cmarchiv delete [URL] - Odebrání obrázku z archivu (Wake)\n" +
+                ",cmarchiv status - Přehled o celkovém počtu dat v archivu";
     }
 
     @Override
