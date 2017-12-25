@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class Ats2 implements ICommand {
+public class Ats implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
@@ -63,7 +63,7 @@ public class Ats2 implements ICommand {
 
     @Override
     public String getCommand() {
-        return "ats2";
+        return "ats";
     }
 
     @Override
@@ -73,8 +73,8 @@ public class Ats2 implements ICommand {
 
     @Override
     public String getHelp() {
-        return ".ats <nick> - Zjištění aktivity pro zadaný nick\n" +
-                ".ats reset - Vyresetování ATS (Wake)";
+        return ",ats <nick> - Zjištění aktivity pro zadaný nick\n" +
+                ",ats reset - Vyresetování ATS (Wake)";
     }
 
     @Override
