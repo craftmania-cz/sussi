@@ -1,7 +1,6 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.Ats;
-import cz.wake.sussi.commands.mod.Ats2;
 import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.Cmarchiv;
 import cz.wake.sussi.commands.user.Help;
@@ -40,7 +39,7 @@ public class CommandHandler {
         registerCommand(new Help());
         registerCommand(new Cmarchiv());
         registerCommand(new Stop());
-        registerCommand(new Ats2());
+        registerCommand(new Ats());
         registerCommand(new NasranoVKytare());
     }
 }
