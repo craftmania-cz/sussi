@@ -39,7 +39,6 @@ public class CommandHandler {
         registerCommand(new Help());
         registerCommand(new Cmarchiv());
         registerCommand(new Stop());
-        registerCommand(new Ats());
         registerCommand(new NasranoVKytare());
     }
 }
