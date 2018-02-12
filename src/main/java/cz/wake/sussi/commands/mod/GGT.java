@@ -91,21 +91,21 @@ public class GGT implements ICommand {
 
     @Override
     public String getCommand() {
-        return "ggt";
+        return "turnaj";
     }
 
     @Override
     public String getDescription() {
-        return "Příkaz na GGT";
+        return "Příkaz správu turnaj serverů.";
     }
 
     @Override
     public String getHelp() {
-        return ",ggt - Zobrazí seznam hráčů na whitelistu\n" +
-                ",ggt add [nick] - Přidá hráče na server\n" +
-                ",ggt remove [nick] - Odebere hráče z serveru\n" +
-                ",ggt streamlink [odkaz] - Nastaví odkaz na Stream\n" +
-                ",ggt server [LOCK/UNLOCK] - Změní v lobby status serveru";
+        return ",turnaj - Zobrazí seznam hráčů na whitelistu\n" +
+                ",turnaj add [nick] - Přidá hráče na server\n" +
+                ",turnaj remove [nick] - Odebere hráče z serveru\n" +
+                ",turnaj streamlink [odkaz] - Nastaví odkaz na Stream\n" +
+                ",turnaj server [LOCK/UNLOCK] - Změní v lobby status serveru";
     }
 
     @Override
