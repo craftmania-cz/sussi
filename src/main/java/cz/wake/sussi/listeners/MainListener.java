@@ -27,8 +27,8 @@ public class MainListener extends ListenerAdapter {
             return;
         }
 
-        if (e.getMessage().getRawContent().startsWith(String.valueOf(Sussi.PREFIX)) && !e.getAuthor().isBot()) {
-            String message = e.getMessage().getRawContent();
+        if (e.getMessage().getContentRaw().startsWith(String.valueOf(Sussi.PREFIX)) && !e.getAuthor().isBot()) {
+            String message = e.getMessage().getContentRaw();
             String command = message.substring(1);
             String[] args = new String[0];
             if (message.contains(" ")) {

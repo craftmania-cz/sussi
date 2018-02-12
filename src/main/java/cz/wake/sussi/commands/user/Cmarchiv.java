@@ -49,7 +49,7 @@ public class Cmarchiv implements ICommand {
         } else if (args[0].equalsIgnoreCase("add")) {
             if (sender.getId().equals("177516608778928129") && member.isOwner()) {
                 try {
-                    String messageEdited = message.getContent().replace(",cmarchiv add ", "");
+                    String messageEdited = message.getContentRaw().replace(",cmarchiv add ", "");
                     Sussi.getInstance().getSql().insertChnge(messageEdited);
                     channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("Do archivu úspěsně přidán nový odkaz!").build()).queue();
                 } catch (Exception e) {

@@ -16,7 +16,6 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 
 import java.awt.*;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -30,20 +29,28 @@ public class Ats implements ICommand {
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
         } else if (args[0].equalsIgnoreCase("reset")) {
             if (sender.getId().equals("177516608778928129") && member.isOwner()) {
-                Sussi.getInstance().getSql().resetATS("surv_chat_body");
-                Sussi.getInstance().getSql().resetATS("surv_played_time");
-                Sussi.getInstance().getSql().resetATS("sky_chat_body");
-                Sussi.getInstance().getSql().resetATS("sky_played_time");
-                Sussi.getInstance().getSql().resetATS("crea_chat_body");
-                Sussi.getInstance().getSql().resetATS("crea_played_time");
-                Sussi.getInstance().getSql().resetATS("prison_chat_body");
-                Sussi.getInstance().getSql().resetATS("prison_played_time");
-                Sussi.getInstance().getSql().resetATS("vanilla_chat_body");
-                Sussi.getInstance().getSql().resetATS("vanilla_played_time");
-                Sussi.getInstance().getSql().resetATS("minigames_chat_body");
-                Sussi.getInstance().getSql().resetATS("minigames_played_time");
-                Sussi.getInstance().getSql().resetATS("vanillasb_played_time");
-                Sussi.getInstance().getSql().resetATS("vanillasb_chat_body");
+                try {
+                    Sussi.getInstance().getSql().resetATS("surv_chat_body");
+                    Sussi.getInstance().getSql().resetATS("surv_played_time");
+                    Sussi.getInstance().getSql().resetATS("sky_chat_body");
+                    Sussi.getInstance().getSql().resetATS("sky_played_time");
+                    Sussi.getInstance().getSql().resetATS("crea_chat_body");
+                    Sussi.getInstance().getSql().resetATS("crea_played_time");
+                    Sussi.getInstance().getSql().resetATS("prison_chat_body");
+                    Sussi.getInstance().getSql().resetATS("prison_played_time");
+                    Sussi.getInstance().getSql().resetATS("vanilla_chat_body");
+                    Sussi.getInstance().getSql().resetATS("vanilla_played_time");
+                    Sussi.getInstance().getSql().resetATS("minigames_chat_body");
+                    Sussi.getInstance().getSql().resetATS("minigames_played_time");
+                    Sussi.getInstance().getSql().resetATS("vanillasb_played_time");
+                    Sussi.getInstance().getSql().resetATS("vanillasb_chat_body");
+                    Sussi.getInstance().getSql().resetATS("build_played_time");
+                    Sussi.getInstance().getSql().resetATS("build_chat_body");
+                    channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("ATS bylo úspěšně vyresetováno!").build()).queue();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    channel.sendMessage(MessageUtils.getEmbed(Constants.RED).setDescription("Nastala chyba při resetu ATS!").build()).queue();
+                }
             } else {
                 MessageUtils.sendErrorMessage("Toto může provádět pouze Wake!", channel);
             }
@@ -73,8 +80,11 @@ public class Ats implements ICommand {
 
     @Override
     public String getHelp() {
-        return ",ats <nick> - Zjištění aktivity pro zadaný nick\n" +
+        return ",ats [nick] - Zjištění aktivity pro zadaný nick\n" +
                 ",ats reset - Vyresetování ATS (Wake)";
+                //",ats build [nick] - Povolí/zakáže zadanému nicku přístup na build servery.\n" +
+                //",ats add [nick] - Přidá nick do ATS.\n" +
+                //",ats remove [nick] - Odebere nick z ATS.";
     }
 
     @Override
@@ -106,8 +116,9 @@ public class Ats implements ICommand {
         int minGTime = Sussi.getInstance().getSql().getStalkerStats(name, "minigames_played_time");
         int vsbChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
         int vsbTime = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_played_time");
+        int buildTime = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
 
-        int total_hours = survTime + skyTime + prisTime + creaTime + vanTime + minGTime + vsbTime;
+        int total_hours = survTime + skyTime + prisTime + creaTime + vanTime + minGTime + vsbTime + buildTime;
         int total_activity = survChatBody + skyChatBody + creaChatBody + prisChatBody + vanChatBody + miniGChatBody + vsbChatBody;
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -129,14 +140,14 @@ public class Ats implements ICommand {
                 m.addReaction(Constants.NEXT).queue();
                 m.addReaction(Constants.DELETE).queue();
                 w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
-                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getEmote().getName().equals(Constants.DELETE));
+                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.DELETE));
                 }, (MessageReactionAddEvent ev) -> {
                     m.delete().queue();
                     message.delete().queue();
                 }, 60, TimeUnit.SECONDS, null);
 
                 w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
-                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getEmote().getName().equals(Constants.NEXT));
+                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.NEXT));
                 }, (MessageReactionAddEvent ev) -> {
                     secondPage(s,m,ch,w,name);
                 }, 60, TimeUnit.SECONDS, null);
@@ -148,14 +159,14 @@ public class Ats implements ICommand {
                 m.addReaction(Constants.DELETE).queue();
 
                 w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
-                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getEmote().getName().equals(Constants.DELETE));
+                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.DELETE));
                 }, (MessageReactionAddEvent ev) -> {
                     m.delete().queue();
                     message.delete().queue();
                 }, 60, TimeUnit.SECONDS, null);
 
                 w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
-                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getEmote().getName().equals(Constants.NEXT));
+                    return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.NEXT));
                 }, (MessageReactionAddEvent ev) -> {
                     secondPage(s,m,ch,w,name);
                 }, 60, TimeUnit.SECONDS, null);
@@ -195,6 +206,10 @@ public class Ats implements ICommand {
         int vanillasb_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_played_time");
         long vanillasb_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "vanillasb_pos_aktivita");
 
+        //int build_chat = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
+        int build_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
+        long build_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "build_pos_aktivita");
+
         message.editMessage(MessageUtils.getEmbed(getColorByRank(rank)).setTitle("Přehled ATS pro - " + name)
                 .addField("Survival", "**Chat**: " + survival_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", survival_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(survival_posledni_aktivita), true)
                 .addField("Skyblock", "**Chat**: " + skyblock_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", skyblock_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(skyblock_posledni_aktivita), true)
@@ -203,17 +218,18 @@ public class Ats implements ICommand {
                 .addField("Vanilla", "**Chat**: " + vanilla_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", vanilla_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(vanilla_posledni_aktivita), true)
                 .addField("MiniGames", "**Chat**: " + minigames_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", minigames_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(minigames_posledni_aktivita), true)
                 .addField("Vanilla Skyblock", "**Chat**: " + vanillasb_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", vanillasb_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(vanillasb_posledni_aktivita), true)
+                .addField("Build servery", "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", build_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(build_posledni_aktivita), true)
                 .setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null).build()).queue((Message m) -> {
 
             w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
-                return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getEmote().getName().equals(Constants.DELETE));
+                return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.DELETE));
             }, (MessageReactionAddEvent ev) -> {
                 m.delete().queue();
                 message.delete().queue();
             }, 60, TimeUnit.SECONDS, null);
 
             w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
-                return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getEmote().getName().equals(Constants.BACK));
+                return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.BACK));
             }, (MessageReactionAddEvent ev) -> {
                 firstPage(s,message,ch,w,name, true);
             }, 60, TimeUnit.SECONDS, null);
@@ -241,12 +257,14 @@ public class Ats implements ICommand {
 
         //Calculate acitivy
         if(total_activity >= 0 && total_activity <= 201){
-            points = points - -2;
+            points = points - -3;
         } else if(total_activity >= 200 && total_activity <= 600){
-            points = points - -1;
+            points = points - -2;
         } else if(total_activity >= 600 && total_activity <= 1200){
-            points = points + 1;
+            // nic
         } else if(total_activity >= 1200 && total_activity <= 2400){
+            points = points + 1;
+        } else {
             points = points + 2;
         }
 
