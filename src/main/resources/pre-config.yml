@@ -12,5 +12,8 @@ minimumConnections: 2
 maximumConnections: 5
 timeout: 30000
 
-#Discord Token
+# Discord Token
 token: token-from-discord-api
+
+# IPHub Key
+ipHubKey: keys

@@ -7,7 +7,7 @@ import java.util.Properties;
 public class LoadingProperties {
 
     private String botToken;
-    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout;
+    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey;
 
     public LoadingProperties() {
         try {
@@ -27,6 +27,7 @@ public class LoadingProperties {
             minConnections = properties.getProperty("minimumConnections");
             maxConnections = properties.getProperty("maximumConnections");
             timeout = properties.getProperty("timeout");
+            ipHubKey = properties.getProperty("ipHubKey");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,5 +68,9 @@ public class LoadingProperties {
 
     public int getTimeout() {
         return Integer.valueOf(timeout);
+    }
+
+    public String getIpHubKey() {
+        return ipHubKey;
     }
 }

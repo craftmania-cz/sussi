@@ -1,6 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.Ats;
+import cz.wake.sussi.commands.mod.CheckIP;
 import cz.wake.sussi.commands.mod.GGT;
 import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.Cmarchiv;
@@ -44,5 +45,6 @@ public class CommandHandler {
         registerCommand(new NasranoVKytare());
         registerCommand(new Pravidla());
         registerCommand(new GGT());
+        registerCommand(new CheckIP());
     }
 }

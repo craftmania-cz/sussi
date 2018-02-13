@@ -25,10 +25,12 @@ public class Sussi {
     private CommandHandler ch = new CommandHandler();
     public static final String PREFIX = ",";
     public static long startUp;
+    private static String ipHubKey = "";
 
     public static void main(String[] args) throws LoginException, InterruptedException, IOException, RateLimitedException {
 
         LoadingProperties config = new LoadingProperties();
+        ipHubKey = config.getIpHubKey();
 
         EventWaiter waiter = new EventWaiter();
 
@@ -81,4 +83,7 @@ public class Sussi {
         return sql;
     }
 
+    public static String getIpHubKey() {
+        return ipHubKey;
+    }
 }
