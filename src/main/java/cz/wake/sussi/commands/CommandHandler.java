@@ -4,10 +4,7 @@ import cz.wake.sussi.commands.mod.Ats;
 import cz.wake.sussi.commands.mod.CheckIP;
 import cz.wake.sussi.commands.mod.GGT;
 import cz.wake.sussi.commands.owner.Stop;
-import cz.wake.sussi.commands.user.Cmarchiv;
-import cz.wake.sussi.commands.user.Help;
-import cz.wake.sussi.commands.user.NasranoVKytare;
-import cz.wake.sussi.commands.user.Pravidla;
+import cz.wake.sussi.commands.user.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +43,6 @@ public class CommandHandler {
         registerCommand(new Pravidla());
         registerCommand(new GGT());
         registerCommand(new CheckIP());
+        registerCommand(new Unban());
     }
 }
