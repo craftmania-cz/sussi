@@ -44,5 +44,6 @@ public class CommandHandler {
         registerCommand(new GGT());
         registerCommand(new CheckIP());
         registerCommand(new Unban());
+        registerCommand(new Liturkey());
     }
 }
