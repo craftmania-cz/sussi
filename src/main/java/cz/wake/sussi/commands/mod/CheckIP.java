@@ -23,7 +23,7 @@ public class CheckIP implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if(args.length < 1){
-            //HELP
+            channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription("IP zkontroluješ v následovně: `,checkip [IPv4]` - Například: `,checkip 8.8.8.8`").build()).queue();
         } else {
 
             String ip = args[0];
@@ -71,7 +71,7 @@ public class CheckIP implements ICommand {
 
     @Override
     public String getHelp() {
-        return ",checkip [ip] - Pro kontrolu.";
+        return ",checkip [IP] - Pro kontrolu.";
     }
 
     @Override
