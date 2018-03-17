@@ -48,7 +48,7 @@ public class CheckIP implements ICommand {
                 channel.sendMessage(MessageUtils.getEmbed(resolveColor(block)).setTitle("Kontrola IP adresy")
                     .setDescription("**IP**: " + ip + "\n" + "**Země**: " + resolveFlag(countryCode) + " "
                             + countryName + "\n" + "**ISP**: " + isp + "\n" + "**Typ**: " + resolveType(block))
-                        .setFooter("Hosting/Proxy mohou být malý poskytovatelé internetu.", null).build()).queue();
+                        .setFooter("Hosting/Proxy mohou být malí poskytovatelé internetu.", null).build()).queue();
 
 
             } catch (Exception e){
