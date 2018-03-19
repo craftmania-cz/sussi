@@ -27,5 +27,17 @@ public class Constants {
     final public static Color MOD = new Color(255, 165, 0);
     final public static Color BUILDER = new Color(145, 44, 238);
 
+    // Numbers
+    final public static String ONE = "\u0031\u20E3";
+    final public static String TWO = "\u0032\u20E3";
+    final public static String THREE = "\u0033\u20E3";
+    final public static String FOUR = "\u0034\u20E3";
+    final public static String FIVE = "\u0035\u20E3";
+    final public static String SIX = "\u0036\u20E3";
+    final public static String SEVEN = "\u0037\u20E3";
+    final public static String EIGHT = "\u0038\u20E3";
+    final public static String NINE = "\u0039\u20E3";
+    final public static String TEN = "\uD83D\uDD1F";
+
 
 }

@@ -2,6 +2,8 @@ package cz.wake.sussi.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.objects.LBan;
+import cz.wake.sussi.objects.LPlayer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -273,5 +275,45 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
         return "";
+    }
+
+    public final LPlayer getPlayerBanlistObject(final String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM bungeecord.litebans_history WHERE name = ?;");
+            ps.setString(1, name);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return new LPlayer(name, ps.getResultSet().getString("uuid"), ps.getResultSet().getString("ip"), ps.getResultSet().getString("date"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
+    }
+
+    public final LBan getActiveBanObject(final String uuid) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM bungeecord.litebans_bans WHERE uuid = ? AND active = (1);");
+            ps.setString(1, uuid);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return new LBan(uuid, ps.getResultSet().getString("reason"), ps.getResultSet().getString("banned_by_name"),
+                        ps.getResultSet().getLong("time"), ps.getResultSet().getLong("until"),
+                        ps.getResultSet().getBoolean("ipban"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
     }
 }

@@ -27,36 +27,41 @@ public class CheckIP implements ICommand {
         } else {
 
             String ip = args[0];
-            if(!(isIP(ip))){
-                MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
-                return;
-            }
+            checkIP(ip, channel);
+        }
+    }
 
-            String countryCode, countryName, isp;
-            int block;
+    public void checkIP(String ip, MessageChannel channel){
 
-            OkHttpClient caller = new OkHttpClient();
-            Request request = new Request.Builder().url("http://v2.api.iphub.info/ip/" + ip).addHeader("X-Key", Sussi.getIpHubKey()).build();
-            try {
-                Response response = caller.newCall(request).execute();
-                JSONObject json = new JSONObject(response.body().string());
-                countryCode = (String) json.get("countryCode");
-                countryName = (String) json.get("countryName");
-                isp = (String) json.get("isp");
-                block = (int) json.get("block");
+        if(!(isIP(ip))){
+            MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
+            return;
+        }
 
-                channel.sendMessage(MessageUtils.getEmbed(resolveColor(block)).setTitle("Kontrola IP adresy")
+        String countryCode, countryName, isp;
+        int block;
+
+        OkHttpClient caller = new OkHttpClient();
+        Request request = new Request.Builder().url("http://v2.api.iphub.info/ip/" + ip).addHeader("X-Key", Sussi.getIpHubKey()).build();
+        try {
+            Response response = caller.newCall(request).execute();
+            JSONObject json = new JSONObject(response.body().string());
+            countryCode = (String) json.get("countryCode");
+            countryName = (String) json.get("countryName");
+            isp = (String) json.get("isp");
+            block = (int) json.get("block");
+
+            channel.sendMessage(MessageUtils.getEmbed(resolveColor(block)).setTitle("Kontrola IP adresy")
                     .setDescription("**IP**: " + ip + "\n" + "**Země**: " + resolveFlag(countryCode) + " "
                             + countryName + "\n" + "**ISP**: " + isp + "\n" + "**Typ**: " + resolveType(block))
-                        .setFooter("Hosting/Proxy mohou být malí poskytovatelé internetu.", null).build()).queue();
+                    .setFooter("Hosting/Proxy mohou být malí poskytovatelé internetu.", null).build()).queue();
 
 
-            } catch (Exception e){
-                MessageUtils.sendErrorMessage("Chyba v API! Zkus to zachvilku...", channel);
-                e.printStackTrace();
-            }
-
+        } catch (Exception e){
+            MessageUtils.sendErrorMessage("Chyba v API! Zkus to zachvilku...", channel);
+            e.printStackTrace();
         }
+
     }
 
     @Override

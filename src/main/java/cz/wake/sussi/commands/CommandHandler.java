@@ -1,6 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.Ats;
+import cz.wake.sussi.commands.mod.CheckBan;
 import cz.wake.sussi.commands.mod.CheckIP;
 import cz.wake.sussi.commands.mod.GGT;
 import cz.wake.sussi.commands.owner.Stop;
@@ -45,5 +46,6 @@ public class CommandHandler {
         registerCommand(new CheckIP());
         registerCommand(new Unban());
         registerCommand(new Liturkey());
+        registerCommand(new CheckBan());
     }
 }
