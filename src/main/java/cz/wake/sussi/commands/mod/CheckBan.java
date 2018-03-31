@@ -21,7 +21,7 @@ public class CheckBan implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if(args.length < 1){
-            //HELP
+            channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription("Nick zkontroluješ v následovně: `,checkban Nick` - Například: `,checkban " + member.getNickname() + "`").build()).queue();
         } else {
             String data = args[0];
 
@@ -75,12 +75,6 @@ public class CheckBan implements ICommand {
                 e.printStackTrace();
                 MessageUtils.sendErrorMessage("Nastala chyba při získávání dat hráče, zkus to zachvilku...", channel);
             }
-
-
-
-
-
-
         }
     }
 
