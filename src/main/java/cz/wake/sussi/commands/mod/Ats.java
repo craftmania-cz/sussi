@@ -130,7 +130,7 @@ public class Ats implements ICommand {
         embed.addField("Celkem hodin", TimeUtils.formatTime("%d dni, %hh %mm", total_hours, false), true);
         embed.addField("Celkem aktivita", String.valueOf(total_activity) + " bodů", true);
         embed.addField("Možné body", String.valueOf(getChangePoints(total_hours, total_activity)), true);
-        embed.addField("Min. počet hodin", min_hours + " hodin", true);
+        embed.addField("Min. počet hodin", min_hours + " hodin (" + resolveTime(total_hours/60, min_hours) +  ")", true);
         embed.setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null);
 
         if(generated){
@@ -234,6 +234,14 @@ public class Ats implements ICommand {
                 firstPage(s,message,ch,w,name, true);
             }, 60, TimeUnit.SECONDS, null);
         });
+    }
+
+    private String resolveTime(int hours, int min){
+        System.out.println(hours);
+        if(hours >= min){
+            return "\u2705";
+        }
+        return "\u274C";
     }
 
     private int getChangePoints(int hours, int total_activity){
