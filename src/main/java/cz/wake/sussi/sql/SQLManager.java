@@ -2,6 +2,7 @@ package cz.wake.sussi.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.objects.BlacklistName;
 import cz.wake.sussi.objects.LBan;
 import cz.wake.sussi.objects.LPlayer;
 
@@ -315,5 +316,44 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
         return null;
+    }
+
+    public final BlacklistName getBlacklistedPlayer(final String nick) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM blacklisted_players WHERE nick = ?;");
+            ps.setString(1, nick);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return new BlacklistName(nick, ps.getResultSet().getString("reason"), ps.getResultSet().getString("banned_by"),
+                    ps.getResultSet().getLong("time_start"), ps.getResultSet().getLong("time_end"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
+    }
+
+    public final List<String> getPlayersInBlacklist() {
+        List<String> names = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT nick FROM blacklisted_players;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                names.add(ps.getResultSet().getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return names;
     }
 }
