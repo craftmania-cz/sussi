@@ -38,23 +38,33 @@ public class CheckIP implements ICommand {
             return;
         }
 
-        String countryCode, countryName, isp;
-        int block;
+        boolean vpn;
+        String hostName, stringOrg, countryCode, countryName;
+        Object city;
 
         OkHttpClient caller = new OkHttpClient();
-        Request request = new Request.Builder().url("http://v2.api.iphub.info/ip/" + ip).addHeader("X-Key", Sussi.getIpHubKey()).build();
+        Request request = new Request.Builder().url("http://api.vpnblocker.net/v2/json/" + ip + "/" + Sussi.getIpHubKey()).build();
         try {
             Response response = caller.newCall(request).execute();
             JSONObject json = new JSONObject(response.body().string());
-            countryCode = (String) json.get("countryCode");
-            countryName = (String) json.get("countryName");
-            isp = (String) json.get("isp");
-            block = (int) json.get("block");
 
-            channel.sendMessage(MessageUtils.getEmbed(resolveColor(block)).setTitle("Kontrola IP adresy")
+            vpn = (boolean) json.get("host-ip");
+            hostName = (String) json.get("hostname");
+            stringOrg = (String) json.get("org");
+            city = json.get("city");
+
+            System.out.println(city);
+
+            JSONObject countyObject = json.getJSONObject("country");
+
+            countryCode = (String) countyObject.get("code");
+            countryName = (String) countyObject.get("name");
+
+
+            channel.sendMessage(MessageUtils.getEmbed(resolveColor(vpn)).setTitle("Kontrola IP adresy")
                     .setDescription("**IP**: " + ip + "\n" + "**Země**: " + resolveFlag(countryCode) + " "
-                            + countryName + "\n" + "**ISP**: " + isp + "\n" + "**Typ**: " + resolveType(block))
-                    .setFooter("Hosting/Proxy mohou být malí poskytovatelé internetu.", null).build()).queue();
+                            + countryName + "\n" + "**ISP**: " + stringOrg + "\n" + "**Host**: " + hostName + "\n" + "**Město**: " + resolveCity(city) + "\n" + "**Typ**: " + resolveType(vpn))
+                    .build()).queue();
 
 
         } catch (Exception e){
@@ -103,27 +113,30 @@ public class CheckIP implements ICommand {
         }
     }
 
-    private Color resolveColor(int type){
-        if(type == 0){
+    private Color resolveColor(boolean type){
+        if(!type){
             return Constants.GREEN;
-        } else if (type == 1){
-            return Constants.RED;
         } else {
-            return Constants.ORANGE;
+            return Constants.RED;
         }
     }
 
-    private String resolveType(int type){
-        if(type == 0){
+    private String resolveType(boolean type){
+        if(!type){
             return "Bezpečná IP";
-        } else if (type == 1){
-            return "Proxy/VPN";
         } else {
-            return "Hosting/Proxy";
+            return "Proxy/VPN";
         }
     }
 
     private String resolveFlag(String country){
         return ":flag_" + country.toLowerCase() + ":";
+    }
+
+    private String resolveCity(Object city){
+        if(city == JSONObject.NULL){
+            return "Nenalezeno";
+        }
+        return (String)city;
     }
 }
