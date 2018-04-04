@@ -1,5 +1,9 @@
 package cz.wake.sussi.commands;
 
+import cz.wake.sussi.commands.games.ClashRoyale;
+import cz.wake.sussi.commands.games.Fortnite;
+import cz.wake.sussi.commands.games.Hearthstone;
+import cz.wake.sussi.commands.games.LeagueOfLegends;
 import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.*;
@@ -45,5 +49,9 @@ public class CommandHandler {
         registerCommand(new Liturkey());
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
+        registerCommand(new Hearthstone());
+        registerCommand(new Fortnite());
+        registerCommand(new ClashRoyale());
+        registerCommand(new LeagueOfLegends());
     }
 }

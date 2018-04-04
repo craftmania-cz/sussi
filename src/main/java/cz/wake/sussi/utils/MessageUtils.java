@@ -5,10 +5,12 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
 
 import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.util.concurrent.TimeUnit;
 
 public class MessageUtils {
 
@@ -64,5 +66,17 @@ public class MessageUtils {
 
     public static EmbedBuilder getEmbedError() {
         return new EmbedBuilder().setFooter("Chyba při provádění akce CorgiBot", Sussi.getJda().getSelfUser().getAvatarUrl());
+    }
+
+    public static void autoDeleteMessage(Message message, long delay) {
+        message.delete().queueAfter(delay, TimeUnit.MILLISECONDS);
+    }
+
+    public static void sendAutoDeletedMessage(String message, long delay, MessageChannel channel) {
+        channel.sendMessage(message).queue(msg -> autoDeleteMessage(msg, delay));
+    }
+
+    public static void sendAutoDeletedMessage(MessageEmbed messageEmbed, long delay, MessageChannel channel) {
+        channel.sendMessage(messageEmbed).queue(msg -> autoDeleteMessage(msg, delay));
     }
 }
