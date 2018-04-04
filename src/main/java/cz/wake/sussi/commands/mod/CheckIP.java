@@ -7,6 +7,7 @@ import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -51,7 +52,7 @@ public class CheckIP implements ICommand {
         Object city;
 
         OkHttpClient caller = new OkHttpClient();
-        Request request = new Request.Builder().url("http://api.vpnblocker.net/v2/json/" + ip + "/" + Sussi.getIpHubKey()).build();
+        Request request = new Request.Builder().url("https://api.vpnblocker.net/v2/json/" + ip + "/" + Sussi.getIpHubKey()).build();
         try {
             Response response = caller.newCall(request).execute();
             JSONObject json = new JSONObject(response.body().string());
@@ -59,8 +60,15 @@ public class CheckIP implements ICommand {
             vpn = (boolean) json.get("host-ip");
             try {
                 hostName = (String) json.get("hostname");
-            } catch (JSONException e){
-                MessageUtils.sendErrorMessage("Zadaná IP není v databázi nebo neexistuje!", channel);
+            } catch (Exception e){
+                EmbedBuilder eb = new EmbedBuilder();
+                StringBuilder string = new StringBuilder();
+
+                eb.setColor(Constants.ADMIN);
+                string.append("Zadaná IP není v databázi nebo neexistuje!");
+                string.append("\n\n**Report**\n```" + json.toString() + "```");
+                eb.setDescription(string);
+                channel.sendMessage(eb.build()).queue();
                 return;
             }
             stringOrg = (String) json.get("org");
