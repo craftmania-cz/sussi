@@ -14,9 +14,12 @@ import net.dv8tion.jda.core.entities.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CheckIP implements ICommand {
 
@@ -33,13 +36,18 @@ public class CheckIP implements ICommand {
 
     public void checkIP(String ip, MessageChannel channel){
 
-        if(!(isIP(ip))){
+        if(ip.equalsIgnoreCase("wake")){
+            channel.sendMessage("<:nelsonHAHA:267710889338077184>").queue();
+            return;
+        }
+
+        if(!(isIP(ip) || isIPv6(ip))){
             MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
             return;
         }
 
         boolean vpn;
-        String hostName, stringOrg, countryCode, countryName;
+        String hostName = null, stringOrg, countryCode, countryName;
         Object city;
 
         OkHttpClient caller = new OkHttpClient();
@@ -49,21 +57,31 @@ public class CheckIP implements ICommand {
             JSONObject json = new JSONObject(response.body().string());
 
             vpn = (boolean) json.get("host-ip");
-            hostName = (String) json.get("hostname");
+            try {
+                hostName = (String) json.get("hostname");
+            } catch (JSONException e){
+                MessageUtils.sendErrorMessage("Zadaná IP není v databázi nebo neexistuje!", channel);
+                return;
+            }
             stringOrg = (String) json.get("org");
             city = json.get("city");
-
-            System.out.println(city);
 
             JSONObject countyObject = json.getJSONObject("country");
 
             countryCode = (String) countyObject.get("code");
             countryName = (String) countyObject.get("name");
 
+            if (city == JSONObject.NULL){
+                city = "Nenalezeno";
+            }
+
+             if (stringOrg == JSONObject.NULL){
+                stringOrg = "Nenalezeno";
+             }
 
             channel.sendMessage(MessageUtils.getEmbed(resolveColor(vpn)).setTitle("Kontrola IP adresy")
                     .setDescription("**IP**: " + ip + "\n" + "**Země**: " + resolveFlag(countryCode) + " "
-                            + countryName + "\n" + "**ISP**: " + stringOrg + "\n" + "**Host**: " + hostName + "\n" + "**Město**: " + resolveCity(city) + "\n" + "**Typ**: " + resolveType(vpn))
+                            + countryName + "\n" + "**ISP**: " + stringOrg + "\n" + "**Host**: " + hostName + "\n" + "**Město**: " + city + "\n" + "**Typ**: " + resolveType(vpn))
                     .build()).queue();
 
 
@@ -113,6 +131,12 @@ public class CheckIP implements ICommand {
         }
     }
 
+    private boolean isIPv6(String ip){
+        Pattern p = Pattern.compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))");
+        Matcher matcher = p.matcher(ip);
+        return matcher.find();
+    }
+
     private Color resolveColor(boolean type){
         if(!type){
             return Constants.GREEN;
@@ -131,12 +155,5 @@ public class CheckIP implements ICommand {
 
     private String resolveFlag(String country){
         return ":flag_" + country.toLowerCase() + ":";
-    }
-
-    private String resolveCity(Object city){
-        if(city == JSONObject.NULL){
-            return "Nenalezeno";
-        }
-        return (String)city;
     }
 }
