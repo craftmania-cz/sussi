@@ -5,6 +5,7 @@ import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.BlacklistName;
 import cz.wake.sussi.objects.LBan;
 import cz.wake.sussi.objects.LPlayer;
+import cz.wake.sussi.objects.RewardPlayer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -355,5 +356,90 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
         return names;
+    }
+
+    public final boolean hasActiveReward(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM vybery_dotaznik WHERE nick = '" + p + "';");
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void addToRewardList(final String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO vybery_dotaznik (nick) VALUES (?);");
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void removeFromRewardList(final String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("DELETE FROM vybery_dotaznik WHERE nick = ?;");
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final List<String> getPlayersOnRewardList() {
+        List<String> names = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT nick FROM vybery_dotaznik;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                names.add(ps.getResultSet().getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return names;
+    }
+
+    public final RewardPlayer getRewardPlayer(final String nick) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM vybery_dotaznik WHERE nick = ?;");
+            ps.setString(1, nick);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return new RewardPlayer(nick, ps.getResultSet().getBoolean("vybrano"), ps.getResultSet().getString("server"),
+                        ps.getResultSet().getLong("time"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
     }
 }

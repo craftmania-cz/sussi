@@ -57,5 +57,6 @@ public class CommandHandler {
         registerCommand(new Overwatch());
         registerCommand(new CsGO());
         registerCommand(new Factorio());
+        registerCommand(new Dotaznik());
     }
 }
