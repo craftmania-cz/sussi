@@ -54,5 +54,7 @@ public class CommandHandler {
         registerCommand(new Osu());
         registerCommand(new Pubg());
         registerCommand(new RocketLeague());
+        registerCommand(new Overwatch());
+        registerCommand(new CsGO());
     }
 }
