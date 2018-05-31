@@ -56,5 +56,6 @@ public class CommandHandler {
         registerCommand(new RocketLeague());
         registerCommand(new Overwatch());
         registerCommand(new CsGO());
+        registerCommand(new Factorio());
     }
 }
