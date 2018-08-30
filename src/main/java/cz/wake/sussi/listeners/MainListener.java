@@ -1,9 +1,9 @@
 package cz.wake.sussi.listeners;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
-import com.jagrosh.jdautilities.waiter.EventWaiter;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.ShutdownEvent;
@@ -19,6 +19,7 @@ public class MainListener extends ListenerAdapter {
     public MainListener(EventWaiter w) {
         this.w = w;
     }
+
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {

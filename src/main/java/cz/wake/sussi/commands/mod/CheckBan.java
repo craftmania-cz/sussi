@@ -1,6 +1,6 @@
 package cz.wake.sussi.commands.mod;
 
-import com.jagrosh.jdautilities.waiter.EventWaiter;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
