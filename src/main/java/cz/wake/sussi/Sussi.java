@@ -1,11 +1,11 @@
 package cz.wake.sussi;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
-import com.jagrosh.jdautilities.waiter.EventWaiter;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

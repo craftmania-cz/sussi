@@ -1,8 +1,7 @@
 package cz.wake.sussi.commands.mod;
 
-import com.jagrosh.jdautilities.menu.pagination.Paginator;
-import com.jagrosh.jdautilities.menu.pagination.PaginatorBuilder;
-import com.jagrosh.jdautilities.waiter.EventWaiter;
+import com.jagrosh.jdautilities.menu.Paginator;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
@@ -24,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Dotaznik implements ICommand {
 
-    private PaginatorBuilder pBuilder;
+    private Paginator.Builder pBuilder;
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
@@ -128,7 +127,8 @@ public class Dotaznik implements ICommand {
             return;
         }
 
-        pBuilder = new PaginatorBuilder().setColumns(1)
+        pBuilder = new Paginator.Builder()
+                .setColumns(1)
                 .setItemsPerPage(10)
                 .showPageNumbers(true)
                 .waitOnSinglePage(false)

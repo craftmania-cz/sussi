@@ -1,8 +1,7 @@
 package cz.wake.sussi.commands.mod;
 
-import com.jagrosh.jdautilities.menu.pagination.Paginator;
-import com.jagrosh.jdautilities.menu.pagination.PaginatorBuilder;
-import com.jagrosh.jdautilities.waiter.EventWaiter;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.jagrosh.jdautilities.menu.Paginator;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
@@ -106,7 +105,8 @@ public class Blacklist implements ICommand {
             return;
         }
 
-        PaginatorBuilder pBuilder = new PaginatorBuilder().setColumns(1)
+        Paginator.Builder pBuilder = new Paginator.Builder()
+                .setColumns(1)
                 .setItemsPerPage(10)
                 .showPageNumbers(true)
                 .waitOnSinglePage(false)

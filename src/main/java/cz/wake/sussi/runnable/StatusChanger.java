@@ -21,16 +21,16 @@ public class StatusChanger extends TimerTask {
         setStatus();
     }
 
-    private int getOnlinePlayers(){
+    private static int getOnlinePlayers() {
         int online;
         OkHttpClient caller = new OkHttpClient();
-        Request request = new Request.Builder().url("https://mcapi.de/api/server/mc.craftmania.cz").build();
+        Request request = new Request.Builder().url("https://mcapi.us/server/status?ip=mc.craftmania.cz").build();
         try {
             Response response = caller.newCall(request).execute();
             JSONObject json = new JSONObject(response.body().string());
             JSONObject jsonArray = json.getJSONObject("players");
-            online = jsonArray.getInt("online");
-        } catch (Exception e){
+            online = jsonArray.getInt("now");
+        } catch (Exception e) {
             e.printStackTrace();
             online = 0;
         }
