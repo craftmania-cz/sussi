@@ -1,6 +1,7 @@
 package cz.wake.sussi.runnable;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.objects.ServerInfo;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.WebSocketCode;
 import net.dv8tion.jda.core.entities.Game;
@@ -21,23 +22,7 @@ public class StatusChanger extends TimerTask {
         setStatus();
     }
 
-    private static int getOnlinePlayers() {
-        int online;
-        OkHttpClient caller = new OkHttpClient();
-        Request request = new Request.Builder().url("https://mcapi.us/server/status?ip=mc.craftmania.cz").build();
-        try {
-            Response response = caller.newCall(request).execute();
-            JSONObject json = new JSONObject(response.body().string());
-            JSONObject jsonArray = json.getJSONObject("players");
-            online = jsonArray.getInt("now");
-        } catch (Exception e) {
-            e.printStackTrace();
-            online = 0;
-        }
-        return online;
-    }
-
     private void setStatus(){
-        Sussi.getJda().getPresence().setGame(Game.of(Game.GameType.WATCHING, String.valueOf(getOnlinePlayers() + " hráčů")));
+        Sussi.getJda().getPresence().setGame(Game.of(Game.GameType.WATCHING, ServerInfo.getOnlinePlayers() + " hráčů"));
     }
 }
