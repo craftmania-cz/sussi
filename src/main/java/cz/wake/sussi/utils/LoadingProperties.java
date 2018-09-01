@@ -7,7 +7,7 @@ import java.util.Properties;
 public class LoadingProperties {
 
     private String botToken;
-    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey;
+    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, apiUrl, beta;
 
     public LoadingProperties() {
         try {
@@ -28,6 +28,8 @@ public class LoadingProperties {
             maxConnections = properties.getProperty("maximumConnections");
             timeout = properties.getProperty("timeout");
             ipHubKey = properties.getProperty("ipHubKey");
+            apiUrl = properties.getProperty("apiUrl");
+            beta = properties.getProperty("isBeta");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,5 +74,13 @@ public class LoadingProperties {
 
     public String getIpHubKey() {
         return ipHubKey;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public Boolean isBeta() {
+        return Boolean.parseBoolean(beta);
     }
 }
