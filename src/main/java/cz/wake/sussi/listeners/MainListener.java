@@ -21,7 +21,6 @@ public class MainListener extends ListenerAdapter {
         this.w = w;
     }
 
-
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
@@ -51,7 +50,7 @@ public class MainListener extends ListenerAdapter {
                         try {
                             cmd.onCommand(e.getAuthor(), e.getChannel(), e.getMessage(), finalArgs, e.getMember(), w);
                         } catch (Exception ex) {
-                            SussiLogger.fatalMessage("Internal error when executing the command!");
+                            SussiLogger.fatalMessage("Internal error when executing the command!\n" + ex.printStackTrace());
                         }
                         if (cmd.deleteMessage()) {
                             delete(e.getMessage());
