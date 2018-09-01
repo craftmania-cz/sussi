@@ -50,7 +50,8 @@ public class MainListener extends ListenerAdapter {
                         try {
                             cmd.onCommand(e.getAuthor(), e.getChannel(), e.getMessage(), finalArgs, e.getMember(), w);
                         } catch (Exception ex) {
-                            SussiLogger.fatalMessage("Internal error when executing the command!\n" + ex.printStackTrace());
+                            SussiLogger.fatalMessage("Internal error when executing the command!");
+                            ex.printStackTrace();
                         }
                         if (cmd.deleteMessage()) {
                             delete(e.getMessage());
