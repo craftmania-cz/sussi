@@ -3,7 +3,7 @@ package cz.wake.sussi.utils;
 public class EmoteList {
 
     // Emotes
-    final public static String OLIZNU_TE = "<:oliznuTe:485380368526999553>";
+    final public static String OLIZNU_TE = "<:oliznuTe:372765248085557249>";
     final public static String CHOCOLATE_BAR = "\ud83c\udf6b";
     final public static String ORANGE = "\ud83c\udf4a";
     final public static String GLASS_OF_ORANGE = "\ud83e\udd43";

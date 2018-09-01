@@ -40,7 +40,6 @@ public class CommandHandler {
         registerCommand(new Help());
         registerCommand(new Cmarchiv());
         registerCommand(new Stop());
-        registerCommand(new NasranoVKytare());
         registerCommand(new Pravidla());
         registerCommand(new GGT());
         registerCommand(new CheckIP());
