@@ -4,6 +4,7 @@ import cz.wake.sussi.commands.games.*;
 import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.*;
+import cz.wake.sussi.utils.SussiLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class CommandHandler {
         try {
             commands.add(c);
         } catch (Exception e) {
-            //
+            SussiLogger.warnMessage("Error during register command - " + c.getCommand() + " .");
         }
     }
 
@@ -34,6 +35,7 @@ public class CommandHandler {
     }
 
     public void register() {
+        SussiLogger.infoMessage("Loading all commands.");
         registerCommand(new Ats());
         registerCommand(new Help());
         registerCommand(new Cmarchiv());
@@ -58,5 +60,8 @@ public class CommandHandler {
         registerCommand(new CsGO());
         registerCommand(new Factorio());
         registerCommand(new Dotaznik());
+        registerCommand(new Fantiik());
+        registerCommand(new Standa());
+        SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
