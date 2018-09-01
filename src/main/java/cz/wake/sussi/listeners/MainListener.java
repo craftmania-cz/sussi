@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
+import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.ShutdownEvent;
@@ -39,6 +40,7 @@ public class MainListener extends ListenerAdapter {
             }
             for (ICommand cmd : Sussi.getInstance().getCommandHandler().getCommands()) {
                 if (cmd.getCommand().equalsIgnoreCase(command)) {
+                    SussiLogger.commandMessage("'," + cmd.getCommand() + "', Guild: " + e.getGuild().getName() + ", Channel: " + e.getChannel().getName() + ", Sender: " + e.getAuthor().getName() + "#" + e.getAuthor().getDiscriminator() + " (" + e.getAuthor().getId() + ")");
                     String[] finalArgs = args;
                     List<Permission> perms = e.getGuild().getSelfMember().getPermissions(e.getChannel());
                     if (!perms.contains(Permission.MESSAGE_EMBED_LINKS)) {
@@ -49,7 +51,7 @@ public class MainListener extends ListenerAdapter {
                         try {
                             cmd.onCommand(e.getAuthor(), e.getChannel(), e.getMessage(), finalArgs, e.getMember(), w);
                         } catch (Exception ex) {
-                            //
+                            SussiLogger.fatalMessage("Internal error when executing the command!");
                         }
                         if (cmd.deleteMessage()) {
                             delete(e.getMessage());
