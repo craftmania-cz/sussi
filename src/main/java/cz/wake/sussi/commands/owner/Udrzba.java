@@ -31,11 +31,11 @@ public class Udrzba implements ICommand {
 
             if (Sussi.getInstance().getSql().isMaintenance(name.toLowerCase())) {
                 Sussi.getInstance().getSql().updateMaintenance(name.toLowerCase(), 0);
-                channel.sendMessage("Údržba pro server " + name + " byla vypnuta.");
+                channel.sendMessage("Údržba pro server `" + name + "` byla vypnuta.").queue();
             }
             else {
                 Sussi.getInstance().getSql().updateMaintenance(name.toLowerCase(), 1);
-                channel.sendMessage("Údržba pro server " + name + " byla zapnuta.");
+                channel.sendMessage("Údržba pro server `" + name + "` byla zapnuta.").queue();
             }
         }
     }
@@ -52,7 +52,7 @@ public class Udrzba implements ICommand {
 
     @Override
     public String getHelp() {
-        return ".udrzba <server> - Zapnutí/Vypnutí údržby na serveru";
+        return ",udrzba <server> - Zapnutí/Vypnutí údržby na serveru";
     }
 
     @Override
