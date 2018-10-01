@@ -9,6 +9,7 @@ import cz.wake.sussi.objects.RewardPlayer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -441,5 +442,64 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
         return null;
+    }
+
+    public final void updateMaintenance(final String server, final int value) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE `stav_survival_server` SET `udrzba` = ? WHERE `nazev` = ?;");
+            ps.setInt(1, value);
+            ps.setString(2, server);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final boolean isMaintenance(final String server) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT udrzba FROM stav_survival_server WHERE nazev=?");
+            ps.setString(1, server);
+            ResultSet result = ps.executeQuery();
+            if (result.next()) {
+                int value = result.getInt("udrzba");
+                result.close();
+                if (value == 1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } else {
+                result.close();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public final boolean isExistServer(final String server) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM stav_survival_server WHERE nazev = '" + server + "';");
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
     }
 }

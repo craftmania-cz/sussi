@@ -3,6 +3,7 @@ package cz.wake.sussi.commands;
 import cz.wake.sussi.commands.games.*;
 import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.Stop;
+import cz.wake.sussi.commands.owner.Udrzba;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 
@@ -61,6 +62,7 @@ public class CommandHandler {
         registerCommand(new Dotaznik());
         registerCommand(new Fantiik());
         registerCommand(new Standa());
+        registerCommand(new Udrzba());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
