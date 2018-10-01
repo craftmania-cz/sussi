@@ -18,6 +18,7 @@ public class ServerInfo {
             JSONObject json = new JSONObject(response.body().string());
             return json;
         } catch (Exception e) {
+            e.printStackTrace();
             SussiLogger.fatalMessage("Internal error when retrieving data from api!");
             return null;
         }
@@ -25,48 +26,38 @@ public class ServerInfo {
 
     public static int getOnlinePlayers() {
         if (getJson() != null) {
-            int online;
             JSONObject jsonArray = getJson().getJSONObject("players");
-            online = jsonArray.getInt("now");
-            return online;
+            return jsonArray.getInt("now");
         }
         return 0;
     }
 
     public static int getMaxOnlinePlayers() {
         if (getJson() != null) {
-            int maxOnline;
             JSONObject jsonArray = getJson().getJSONObject("players");
-            maxOnline = jsonArray.getInt("max");
-            return maxOnline;
+            return jsonArray.getInt("max");
         }
         return 0;
     }
 
     public static boolean getOnlineStatus() {
         if (getJson() != null) {
-            boolean isOnline;
-            isOnline = getJson().getBoolean("online");
-            return isOnline;
+            return getJson().getBoolean("online");
         }
         return false;
     }
 
     public static String getMotd() {
         if (getJson() != null) {
-            String motd;
-            motd = getJson().getString("motd");
-            return motd;
+            return getJson().getString("motd");
         }
         return "";
     }
 
     public static String getVersion() {
         if (getJson() != null) {
-            String version;
             JSONObject jsonArray = getJson().getJSONObject("server");
-            version = jsonArray.getString("name");
-            return version;
+            return jsonArray.getString("name");
         }
         return "";
     }
