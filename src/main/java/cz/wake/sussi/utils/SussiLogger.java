@@ -21,7 +21,7 @@ public class SussiLogger {
     }
 
     public static void infoMessage(String text) {
-        Sussi.LOGGER.info(AnsiColor.BLUE.applyTo("ℹ info") + "        " + text);
+        Sussi.LOGGER.info(AnsiColor.BLUE.applyTo("ℹ info") + "     " + text);
     }
 
     public static void debugMessage(String text) {
