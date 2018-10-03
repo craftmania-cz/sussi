@@ -26,8 +26,13 @@ public class ServerInfo {
 
     public static int getOnlinePlayers() {
         if (getJson() != null) {
-            JSONObject jsonArray = getJson().getJSONObject("players");
-            return jsonArray.getInt("now");
+            try {
+                JSONObject jsonArray = getJson().getJSONObject("players");
+                return jsonArray.getInt("now");
+            } catch(NullPointerException e){
+                SussiLogger.dangerMessage("Chyba při zjištění online počtu hráčů.");
+                return 0;
+            }
         }
         return 0;
     }
