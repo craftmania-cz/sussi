@@ -68,11 +68,12 @@ public class Help implements ICommand {
         CommandHandler ch = new CommandHandler();
         builder.append("Prefix pro příkazy na tvém serveru je `,`\nDodatečné informace o příkazu ,help <příkaz>");
         for(CommandType type : CommandType.getTypes()){
-            if(type == CommandType.BOT_OWNER){
+            if(type == CommandType.BOT_OWNER || type == CommandType.ADMINISTARTOR){
                 return builder.append("");
             }
             builder.append("\n\n");
-            builder.append("**" + type.formattedName() + "** - " + ch.getCommandsByType(type).size() + "\n");
+            builder.append("**" + type.formattedName().replace("_", " ") + "** - "
+                    + ch.getCommandsByType(type).size() + "\n");
             for (ICommand c : ch.getCommands()){
                 if(c.getType().equals(type)){
                     builder.append("`" + c.getCommand() + "` ");

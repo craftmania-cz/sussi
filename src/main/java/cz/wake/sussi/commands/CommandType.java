@@ -9,6 +9,7 @@ public enum CommandType {
     GENERAL,
     MODERATION,
     FUN,
+    GAME_CHANNEL,
     ADMINISTARTOR,
     BOT_OWNER;
 
@@ -20,7 +21,7 @@ public enum CommandType {
     }
 
     public static CommandType[] getTypes() {
-        return new CommandType[]{GENERAL, FUN, MODERATION, ADMINISTARTOR, BOT_OWNER};
+        return new CommandType[]{GENERAL, FUN, MODERATION, GAME_CHANNEL, ADMINISTARTOR, BOT_OWNER};
     }
 
     public List<ICommand> getCommands() {

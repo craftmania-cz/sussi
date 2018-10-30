@@ -46,7 +46,7 @@ public class ClashRoyale implements ICommand {
 
     @Override
     public CommandType getType() {
-        return CommandType.GENERAL;
+        return CommandType.GAME_CHANNEL;
     }
 
     @Override
