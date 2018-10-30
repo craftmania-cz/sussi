@@ -7,6 +7,7 @@ public class EmoteList {
     final public static String CHOCOLATE_BAR = "\ud83c\udf6b";
     final public static String ORANGE = "\ud83c\udf4a";
     final public static String GLASS_OF_ORANGE = "\ud83e\udd43";
+    final public static String JACK_O_LANTERN = "\uD83C\uDF83";
     final public static String BACK = "\u25C0";
     final public static String NEXT = "\u25B6";
     final public static String DELETE = "\u274C";
