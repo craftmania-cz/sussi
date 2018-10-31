@@ -2,10 +2,7 @@ package cz.wake.sussi.sql;
 
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
-import cz.wake.sussi.objects.BlacklistName;
-import cz.wake.sussi.objects.LBan;
-import cz.wake.sussi.objects.LPlayer;
-import cz.wake.sussi.objects.RewardPlayer;
+import cz.wake.sussi.objects.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -135,6 +132,55 @@ public class SQLManager {
         }
     }
 
+    public final void addWhitelistedIP(final String address, final String description) {
+            Connection conn = null;
+            PreparedStatement ps = null;
+            try {
+                conn = pool.getConnection();
+                ps = conn.prepareStatement("INSERT INTO ip_whitelist (address, description) VALUES (?, ?);");
+                ps.setString(1, address);
+                ps.setString(2, description);
+                ps.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                pool.close(conn, ps, null);
+            }
+    }
+
+    public final void removeWhitelistedIP(final String address) {
+            Connection conn = null;
+            PreparedStatement ps = null;
+            try {
+                conn = pool.getConnection();
+                ps = conn.prepareStatement("DELETE FROM ip_whitelist WHERE address = ?;");
+                ps.setString(1, address);
+                ps.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                pool.close(conn, ps, null);
+            }
+    }
+
+    public final List<WhitelistedIP> getWhitelistedIPs() {
+        List<WhitelistedIP> whitelistedIPS = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM ip_whitelist;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                whitelistedIPS.add(new WhitelistedIP(ps.getResultSet().getString("address"), ps.getResultSet().getString("description")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return whitelistedIPS;
+    }
 
     public final void delete(final String change) {
         Connection conn = null;
