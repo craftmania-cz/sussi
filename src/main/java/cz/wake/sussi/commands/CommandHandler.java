@@ -45,7 +45,6 @@ public class CommandHandler {
         registerCommand(new GGT());
         registerCommand(new CheckIP());
         registerCommand(new Unban());
-        registerCommand(new Liturkey());
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
         registerCommand(new Hearthstone());
@@ -59,7 +58,6 @@ public class CommandHandler {
         registerCommand(new Overwatch());
         registerCommand(new CsGO());
         registerCommand(new Dotaznik());
-        registerCommand(new Fantiik());
         registerCommand(new Standa());
         registerCommand(new Udrzba());
         registerCommand(new HalloweenStats());
