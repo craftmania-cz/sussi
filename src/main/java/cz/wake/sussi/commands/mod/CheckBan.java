@@ -120,10 +120,10 @@ public class CheckBan implements ICommand {
     }
 
     private String controlIP(String ip, MessageChannel tc){
-        if(tc.getId().equals("236749682229903360") || tc.getId().equals("402262554375880705")){
+        if(tc.getId().equals("236749682229903360") || tc.getId().equals("402262554375880705") || tc.getId().equals("484807072060538881") || tc.getId().equals("451785371399749642")) {
             return ip;
         }
-        return "Skryto";
+        return "Skrytá";
     }
 
 

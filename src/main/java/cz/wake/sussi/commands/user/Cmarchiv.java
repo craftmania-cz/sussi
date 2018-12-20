@@ -47,7 +47,7 @@ public class Cmarchiv implements ICommand {
                 MessageUtils.sendErrorMessage("A sakra chyba, zkus to zachvilku!", channel);
             }
         } else if (args[0].equalsIgnoreCase("add")) {
-            if (sender.getId().equals("177516608778928129") && member.isOwner()) {
+            if (sender.getId().equals("177516608778928129") && member.isOwner() || sender.getId().equals("238410025813540865")) {
                 try {
                     String messageEdited = message.getContentRaw().replace(",cmarchiv add ", "");
                     Sussi.getInstance().getSql().insertChnge(messageEdited);
@@ -59,7 +59,7 @@ public class Cmarchiv implements ICommand {
         } else if (args[0].equalsIgnoreCase("status")) {
             channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("V archivu je celkem **" + Sussi.getInstance().getSql().countArchiv() + "** obrázků.").build()).queue();
         } else if (args[0].equalsIgnoreCase("delete")) {
-            if (sender.getId().equals("177516608778928129") && member.isOwner()) {
+            if (sender.getId().equals("177516608778928129") && member.isOwner() || sender.getId().equals("238410025813540865")) {
                 String id = args[1];
                 try {
                     Sussi.getInstance().getSql().delete(id);
@@ -108,8 +108,8 @@ public class Cmarchiv implements ICommand {
     public String getHelp() {
         return ",cmarchiv - Vygenerování náhodného obrázku\n" +
                 ",cmarchiv [ID] - Získání obrázku podle ID\n" +
-                ",cmarchiv add [URL] - Přidání obrázku do archivu (Wake)\n" +
-                ",cmarchiv delete [URL] - Odebrání obrázku z archivu (Wake)\n" +
+                ",cmarchiv add [URL] - Přidání obrázku do archivu (Wake, Krosta)\n" +
+                ",cmarchiv delete [URL] - Odebrání obrázku z archivu (Wake, Krosta)\n" +
                 ",cmarchiv status - Přehled o celkovém počtu dat v archivu";
     }
 

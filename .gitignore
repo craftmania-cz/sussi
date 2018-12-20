@@ -10,9 +10,11 @@ logs/*
 
 Sussi.iml
 .gitattributes
+.idea
 
 latest\.log
 *.iml
 Sussi.iml
 .gitattributes
+.idea
 Sussi.iml
