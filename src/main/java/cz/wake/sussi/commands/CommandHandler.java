@@ -53,15 +53,13 @@ public class CommandHandler {
         registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
         registerCommand(new Osu());
-        registerCommand(new Pubg());
         registerCommand(new RocketLeague());
         registerCommand(new Overwatch());
-        registerCommand(new CsGO());
         registerCommand(new Dotaznik());
         registerCommand(new Standa());
         registerCommand(new Udrzba());
-        registerCommand(new HalloweenStats());
         registerCommand(new IPWhitelist());
+        registerCommand(new Hytale());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

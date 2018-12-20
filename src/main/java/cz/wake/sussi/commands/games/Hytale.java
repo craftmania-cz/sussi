@@ -10,33 +10,33 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class CsGO implements ICommand {
+public class Hytale implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("433590093454901249"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("433590093454901249")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("523086828765446154"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("523086828765446154")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `CS:GO`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Hytale`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("433590093454901249")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("523086828765446154")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `CS:GO`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Hytale`!", 5000L, channel);
             }
-        } catch (Exception ex) {
+        } catch (Exception ex){
             ex.printStackTrace();
         }
     }
 
     @Override
     public String getCommand() {
-        return "csgo";
+        return "hytale";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #cs_go";
+        return "Získání role a přístupu do channelu #hytale";
     }
 
     @Override
