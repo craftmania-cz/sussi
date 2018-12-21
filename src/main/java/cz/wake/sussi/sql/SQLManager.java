@@ -564,4 +564,96 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public final boolean isAlreadyLinked(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND nickname != '-1';");
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public String getLinkedNickname(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = ? AND nickname != '-1';");
+            ps.setString(1, p);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("nickname");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return "";
+    }
+
+    public final boolean hasConnection(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND expire > " + System.currentTimeMillis() + ";");
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public ConnectTask getActiveConnectionTask(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND expire > " + System.currentTimeMillis() + ";");
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                System.out.print(ps.getResultSet().toString());
+                return new ConnectTask(p, ps.getResultSet().getString("code"), ps.getResultSet().getLong("expire"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
+    }
+
+    public ConnectTask createConnectionTask(String p, String code) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO player_discordconnections (userid, code, expire, nickname) VALUES (?, ?, ?, ?);");
+            ps.setString(1, p);
+            ps.setString(2, code);
+            ps.setLong(3, System.currentTimeMillis() + 15 * 60 * 1000); //15m
+            ps.setString(4, "-1");
+            ps.executeUpdate();
+            return new ConnectTask(p, code, System.currentTimeMillis() + 15 * 60 * 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
 }
