@@ -1,20 +1,10 @@
-
-*.class
-
-CorgiBot\.iml
 dependency-reduced-pom.xml
-
 config\.yml
-target/*
 logs/*
-
 Sussi.iml
 .gitattributes
 .idea
+target
+.gradle
 
-latest\.log
-*.iml
-Sussi.iml
-.gitattributes
-.idea
-Sussi.iml
+build
