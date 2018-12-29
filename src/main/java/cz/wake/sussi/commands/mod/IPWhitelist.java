@@ -1,37 +1,61 @@
 package cz.wake.sussi.commands.mod;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.jagrosh.jdautilities.menu.Paginator;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.objects.WhitelistedIP;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.exceptions.PermissionException;
 
 import java.awt.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class IPWhitelist implements ICommand {
 
+    private Paginator.Builder pBuilder;
+
+
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129")) {
+        if(sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129") || sender.getId().equals("211749751475929088")) {
             List<WhitelistedIP> ips = Sussi.getInstance().getSql().getWhitelistedIPs();
 
             if(args.length < 1) {
-                EmbedBuilder builder = new EmbedBuilder();
-                builder.setTitle("Seznam IP adres na whitelistu");
-                builder.setColor(Color.yellow);
-                for(WhitelistedIP ip : ips) {
-                    builder.appendDescription("**" + ip.getAddress() + "** - " + ip.getDescription() + "\n");
+                if(ips.isEmpty()) {
+                    MessageUtils.sendErrorMessage("No, nikdo na IPWhitelistu není!", channel);
+                    return;
                 }
-                channel.sendMessage(builder.build()).queue();
-                return;
+
+                pBuilder = new Paginator.Builder()
+                        .setColumns(1)
+                        .setItemsPerPage(10)
+                        .showPageNumbers(true)
+                        .waitOnSinglePage(false)
+                        .useNumberedItems(true)
+                        .setFinalAction(m -> {
+                            try {
+                                m.clearReactions().queue();
+                            } catch (PermissionException e) {
+                                m.delete().queue();
+                            }
+                        })
+                        .setEventWaiter(w)
+                        .setTimeout(1, TimeUnit.MINUTES);
+
+                for(WhitelistedIP ip : ips) {
+                    pBuilder.addItems("**" + ip.getAddress() + "** - " + ip.getDescription());
+                }
+
+                Paginator p = pBuilder.setColor(Color.YELLOW).setText("Seznam hráčů na IPWhitelistu:").build();
+                p.paginate(channel, 1);
             }
 
             if(args[0].equals("add")) {
@@ -89,7 +113,8 @@ public class IPWhitelist implements ICommand {
                 return;
             }
         } else {
-            channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Na toto mají právo pouze Krosta a Kwak!").build()).queue();
+            MessageUtils.sendErrorMessage("Na toto má práva pouze Krosta nebo Kwak!", channel);
+            return;
         }
     }
 
