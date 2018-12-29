@@ -18,8 +18,5 @@ token: token-from-discord-api
 # IPHub Key
 ipHubKey: keys
 
-# API
-apiUrl: https://mcapi.us/server/status?ip=mc.craftmania.cz
-
 # Beta
 isBeta: true
