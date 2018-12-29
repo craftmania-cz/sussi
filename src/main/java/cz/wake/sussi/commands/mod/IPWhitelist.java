@@ -56,6 +56,7 @@ public class IPWhitelist implements ICommand {
 
                 Paginator p = pBuilder.setColor(Color.YELLOW).setText("Seznam hráčů na IPWhitelistu:").build();
                 p.paginate(channel, 1);
+                return;
             }
 
             if(args[0].equals("add")) {
