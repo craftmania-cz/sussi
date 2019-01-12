@@ -13,7 +13,7 @@ public class ServerInfo {
     private static JSONObject getJson() {
         try {
             OkHttpClient caller = new OkHttpClient();
-            Request request = (new Builder()).url(Sussi.API_URL).build();
+            Request request = (new Builder()).url("https://api.mcsrvstat.us/1/mc.craftmania.cz").build();
             Response response = caller.newCall(request).execute();
             JSONObject json = new JSONObject(response.body().string());
             return json;
@@ -28,7 +28,7 @@ public class ServerInfo {
         if (getJson() != null) {
             try {
                 JSONObject jsonArray = getJson().getJSONObject("players");
-                return jsonArray.getInt("now");
+                return jsonArray.getInt("online");
             } catch(NullPointerException e){
                 SussiLogger.dangerMessage("Chyba při zjištění online počtu hráčů.");
                 return 0;
