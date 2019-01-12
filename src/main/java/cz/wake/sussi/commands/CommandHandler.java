@@ -60,6 +60,8 @@ public class CommandHandler {
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
         registerCommand(new Hytale());
+        registerCommand(new Events());
+        registerCommand(new Anime());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
