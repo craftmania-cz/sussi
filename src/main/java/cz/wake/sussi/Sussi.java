@@ -54,7 +54,6 @@ public class Sussi {
         SussiLogger.infoMessage("Loading config...");
         LoadingProperties config = new LoadingProperties();
         ipHubKey = config.getIpHubKey();
-        API_URL = config.getApiUrl();
         isBeta = config.isBeta();
 
         EventWaiter waiter = new EventWaiter();
