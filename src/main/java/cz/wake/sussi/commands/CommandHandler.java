@@ -47,7 +47,6 @@ public class CommandHandler {
         registerCommand(new Unban());
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
-        registerCommand(new Hearthstone());
         registerCommand(new Fortnite());
         registerCommand(new ClashRoyale());
         registerCommand(new LeagueOfLegends());
@@ -62,6 +61,8 @@ public class CommandHandler {
         registerCommand(new Hytale());
         registerCommand(new Events());
         registerCommand(new Anime());
+        registerCommand(new Apex());
+        registerCommand(new Paladins());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
