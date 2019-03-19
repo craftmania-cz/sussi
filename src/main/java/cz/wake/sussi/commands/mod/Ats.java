@@ -52,7 +52,7 @@ public class Ats implements ICommand {
                     channel.sendMessage(MessageUtils.getEmbed(Constants.RED).setDescription("Nastala chyba při resetu ATS!").build()).queue();
                 }
             } else {
-                MessageUtils.sendErrorMessage("Toto může provádět pouze Wake!", channel);
+                MessageUtils.sendErrorMessage("Toto může provádět pouze Wake a Krosta!", channel);
             }
         } else {
             String name = args[0];

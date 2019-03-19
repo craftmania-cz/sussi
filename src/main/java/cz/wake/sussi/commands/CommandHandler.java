@@ -50,6 +50,7 @@ public class CommandHandler {
         registerCommand(new Blacklist());
         registerCommand(new Hearthstone());
         registerCommand(new Fortnite());
+        registerCommand(new Satisfactory());
         registerCommand(new ClashRoyale());
         registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
