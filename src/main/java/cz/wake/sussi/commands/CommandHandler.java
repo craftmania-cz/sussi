@@ -48,6 +48,7 @@ public class CommandHandler {
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
         registerCommand(new Fortnite());
+        registerCommand(new Satisfactory());
         registerCommand(new ClashRoyale());
         registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
