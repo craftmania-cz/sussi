@@ -15,12 +15,12 @@ public class Satisfactory implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("557630734542569532"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("557630734542569532")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("557626989389938698"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("557626989389938698")).queue();
                 message.delete().queue();
                 MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Satisfactory`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("557630734542569532")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("557626989389938698")).queue();
                 message.delete().queue();
                 MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Satisfactory`!", 5000L, channel);
             }
