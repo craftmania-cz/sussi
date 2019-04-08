@@ -1,7 +1,7 @@
 version: "3"
 services:
   bot:
-    image: mrwakecz/corgibot:stable
+    image: git.craftmania.cz:4567/craftmania/sussi:stable
     restart: always
     network_mode: "host"
     user: root
