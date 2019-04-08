@@ -7,7 +7,7 @@ services:
     user: root
     container_name: sussibot
     volumes:
-      - /srv/sussi/config.json:/srv/config.json
+      - /srv/sussi/config.yml:/srv/config.yml
       - /srv/sussi/logs:/srv/logs
     stop_grace_period: 7200s
     entrypoint:
