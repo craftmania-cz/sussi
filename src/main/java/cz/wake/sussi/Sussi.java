@@ -1,7 +1,10 @@
 package cz.wake.sussi;
 
+import ai.api.AIConfiguration;
+import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
+import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
@@ -60,12 +63,16 @@ public class Sussi {
 
         startUp = System.currentTimeMillis();
 
+        AIConfiguration aiConfig = new AIConfiguration(config.getDialogFlowApiKey());
+        AIDataService aiDataService = new AIDataService(aiConfig);
+
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
         jda = new JDABuilder(AccountType.BOT)
                 .setToken(config.getBotToken())
                 .addEventListener(new MainListener(waiter))
                 .addEventListener(waiter)
+                .addEventListener(new DialogFlowListener(aiDataService))
                 .setGame(Game.of(Game.GameType.DEFAULT, "Načítání..."))
                 .build().awaitReady();
 

@@ -20,3 +20,8 @@ ipHubKey: keys
 
 # Beta
 isBeta: true
+
+# Integrace s Dialogglow
+dialogflow-enabled: true
+dialogflow-api-key: some-key-yep
+dialogflow-channels: "kek", "kek"
