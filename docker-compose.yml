@@ -1,0 +1,20 @@
+version: "3"
+services:
+  bot:
+    image: mrwakecz/corgibot:stable
+    restart: always
+    network_mode: "host"
+    user: root
+    container_name: sussibot
+    volumes:
+      - /srv/corgibot/config.json:/srv/config.json
+      - /srv/corgibot/logs:/srv/logs
+    stop_grace_period: 7200s
+    entrypoint:
+      - java
+      - -jar
+      - -Xmx1g
+      - -XX:+UseG1GC
+      - -XX:+ParallelRefProcEnabled
+      - -XX:+UseStringDeduplication
+      - Sussi.jar
