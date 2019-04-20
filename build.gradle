@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'net.dv8tion', name: 'JDA', version:'3.8.1_448'
+    compile group: 'net.dv8tion', name: 'JDA', version:'3.8.3_462'
     compile group: 'com.jagrosh', name: 'jda-utilities', version:'2.1.5'
     compile group: 'com.zaxxer', name: 'HikariCP', version:'3.2.0'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.25'
@@ -45,5 +45,8 @@ dependencies {
     compile group: 'com.mashape.unirest', name: 'unirest-java', version:'1.4.9'
     compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.2.3'
     compile group: 'ai.api', name: 'libai', version: '1.6.12'
+    compile group: 'io.prometheus', name: 'simpleclient', version: '0.6.0'
+    compile group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.6.0'
+    compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: '0.6.0'
     testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version:'1.7.25'
 }
