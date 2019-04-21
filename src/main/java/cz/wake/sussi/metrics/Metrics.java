@@ -33,7 +33,7 @@ public class Metrics {
 
         new BotCollector(new BotMetrics()).register();
         try {
-            server = new HTTPServer(9191);
+            server = new HTTPServer(9181);
             logger.info("Setup HTTPServer for Metrics");
         } catch (IOException e) {
             throw new IllegalStateException("Failed to set up HTTPServer for Metrics", e);
