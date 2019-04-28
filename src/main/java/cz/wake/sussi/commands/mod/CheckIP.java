@@ -31,16 +31,22 @@ public class CheckIP implements ICommand {
             channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription("IP zkontroluješ v následovně: `,checkip [IPv4]` - Například: `,checkip 8.8.8.8`").build()).queue();
         } else {
             String ip = args[0];
-            checkIP(ip, channel);
+            if (isIP(ip) || isIPv6(ip)) {
+                checkIP(ip, channel);
+            } else if (isText(ip)) {
+                String playerIP = Sussi.getInstance().getSql().getIPFromServerByPlayer(ip);
+                if (playerIP != null) {
+                    checkIP(playerIP, channel);
+                    return;
+                }
+                MessageUtils.sendErrorMessage("Pro zadany nick nebyla nelezena zadna IP!", channel);
+            } else {
+                MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
+            }
         }
     }
 
     public void checkIP(String ip, MessageChannel channel){
-
-        if(!(isIP(ip) || isIPv6(ip))){
-            MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
-            return;
-        }
 
         boolean vpn = false;
         String provider = "Unknown";
@@ -170,6 +176,12 @@ public class CheckIP implements ICommand {
     private boolean isIPv6(String ip){
         Pattern p = Pattern.compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))");
         Matcher matcher = p.matcher(ip);
+        return matcher.find();
+    }
+
+    private boolean isText(String text) {
+        Pattern p = Pattern.compile("^[A-Za-z0-9_.]+$");
+        Matcher matcher = p.matcher(text);
         return matcher.find();
     }
 
