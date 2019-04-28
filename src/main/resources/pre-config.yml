@@ -17,6 +17,7 @@ token: token-from-discord-api
 
 # IPHub Key
 ipHubKey: keys
+proxycheckKey: kek
 
 # Beta
 isBeta: true

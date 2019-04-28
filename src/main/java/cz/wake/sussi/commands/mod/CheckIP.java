@@ -6,6 +6,7 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
+import cz.wake.sussi.utils.LoadingProperties;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
@@ -29,7 +30,6 @@ public class CheckIP implements ICommand {
         if(args.length < 1){
             channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription("IP zkontroluješ v následovně: `,checkip [IPv4]` - Například: `,checkip 8.8.8.8`").build()).queue();
         } else {
-
             String ip = args[0];
             checkIP(ip, channel);
         }
@@ -37,61 +37,89 @@ public class CheckIP implements ICommand {
 
     public void checkIP(String ip, MessageChannel channel){
 
-        if(ip.equalsIgnoreCase("wake")){
-            channel.sendMessage("<:nelsonHAHA:267710889338077184>").queue();
-            return;
-        }
-
         if(!(isIP(ip) || isIPv6(ip))){
             MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
             return;
         }
 
-        boolean vpn;
-        String hostName = null, stringOrg, countryCode, countryName;
+        boolean vpn = false;
+        String provider = "Unknown";
+        String countryCode = "Unknown";
+        String countryName = "Unknown";
+        String type = null;
+        int risk = 0;
         Object city;
 
+        LoadingProperties properties = new LoadingProperties();
+
+        String finalUrl = "https://proxycheck.io/v2/" + ip + "?key=" + properties.getProxycheckKey()  + "&vpn=1&asn=1&node=1&time=1&inf=0&risk=1&port=1&seen=1&days=7&tag=Sussi_kontrola";
+
         OkHttpClient caller = new OkHttpClient();
-        Request request = new Request.Builder().url("https://api.vpnblocker.net/v2/json/" + ip + "/" + Sussi.getIpHubKey()).build();
+        Request request = new Request.Builder().url(finalUrl).build();
         try {
             Response response = caller.newCall(request).execute();
             JSONObject json = new JSONObject(response.body().string());
+            JSONObject adressInfo = json.getJSONObject(ip);
 
-            vpn = (boolean) json.get("host-ip");
-            try {
-                hostName = (String) json.get("hostname");
-            } catch (Exception e){
-                EmbedBuilder eb = new EmbedBuilder();
-                StringBuilder string = new StringBuilder();
+            System.out.println(adressInfo);
 
-                eb.setColor(Constants.ADMIN);
-                string.append("Zadaná IP není v databázi nebo neexistuje!");
-                string.append("\n\n**Report**\n```" + json.toString() + "```");
-                eb.setDescription(string);
-                channel.sendMessage(eb.build()).queue();
+            // Embed Builder
+            EmbedBuilder eb = new EmbedBuilder();
+            StringBuilder text = new StringBuilder();
+
+            if (adressInfo.get("proxy").equals("yes")) { // Kdyz je proxy true, tak se jedná o VPN/Proxy.
+                vpn = true;
+            }
+
+            // Nezjistitelna IP?
+            if (adressInfo.get("isocode") == JSONObject.NULL) {
+                channel.sendMessage(MessageUtils.getEmbed().setTitle("Kontrola IP adresy")
+                    .setDescription("Tato IP adresa je nezjistitelná.").build()).queue();
                 return;
             }
-            stringOrg = (String) json.get("org");
-            city = json.get("city");
 
-            JSONObject countyObject = json.getJSONObject("country");
+            // Standartní setup pro všechny kontroly
+            text.append("**IP:** " + ip + "\n");
 
-            countryCode = (String) countyObject.get("code");
-            countryName = (String) countyObject.get("name");
-
-            if (city == JSONObject.NULL){
-                city = "Nenalezeno";
+            if (adressInfo.has("provider")) {
+                provider = (String) adressInfo.get("provider");
+                text.append("**Provider:** " + provider + "\n");
+            }
+            if (adressInfo.has("country") && adressInfo.has("isocode")) {
+                countryName = (String) adressInfo.get("country");
+                countryCode = (String) adressInfo.get("isocode");
+                text.append("**Země:** " + resolveFlag(countryCode) + " " + countryName + "\n");
             }
 
-             if (stringOrg == JSONObject.NULL){
-                stringOrg = "Nenalezeno";
-             }
+            if (adressInfo.has("city")) {
+                city = (String) adressInfo.get("city");
+                text.append("**Město:** " + city + "\n");
+            }
 
-            channel.sendMessage(MessageUtils.getEmbed(resolveColor(vpn)).setTitle("Kontrola IP adresy")
-                    .setDescription("**IP**: " + ip + "\n" + "**Země**: " + resolveFlag(countryCode) + " "
-                            + countryName + "\n" + "**ISP**: " + stringOrg + "\n" + "**Host**: " + hostName + "\n" + "**Město**: " + city + "\n" + "**Typ**: " + resolveType(vpn))
-                    .build()).queue();
+            if (adressInfo.has("risk")) {
+                risk = (int) adressInfo.get("risk");
+                text.append("**Risk:** " + risk + "% \n");
+            }
 
+            if (vpn) {
+                type = (String) adressInfo.get("type");
+                if (type.equalsIgnoreCase("vpn")) { // Zda je IP VPN
+                    eb.setColor(Constants.ADMIN);
+                    text.append("**VPN:** Ano");
+
+
+                } else { // IP je Proxy
+                    eb.setColor(Constants.MANAGER);
+                    text.append("**Proxy:** Ano");
+                }
+            } else {
+                // Neni Proxy/VPN
+                eb.setColor(Constants.GREEN);
+                text.append("**Proxy/VPN:** Ne");
+
+            }
+
+            channel.sendMessage(eb.setAuthor("Kontrola IP adresy").setDescription(text).build()).queue();
 
         } catch (Exception e){
             MessageUtils.sendErrorMessage("Chyba v API! Zkus to zachvilku...", channel);
@@ -143,22 +171,6 @@ public class CheckIP implements ICommand {
         Pattern p = Pattern.compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))");
         Matcher matcher = p.matcher(ip);
         return matcher.find();
-    }
-
-    private Color resolveColor(boolean type){
-        if(!type){
-            return Constants.GREEN;
-        } else {
-            return Constants.RED;
-        }
-    }
-
-    private String resolveType(boolean type){
-        if(!type){
-            return "Bezpečná IP";
-        } else {
-            return "Proxy/VPN";
-        }
     }
 
     private String resolveFlag(String country){

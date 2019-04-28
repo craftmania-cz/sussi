@@ -9,7 +9,7 @@ import java.util.Properties;
 public class LoadingProperties {
 
     private String botToken;
-    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta,
+    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
                     dialogFlowApiKey;
     private boolean dialogFlowEnabled;
     private List<String> dialogFlowChannels;
@@ -33,6 +33,7 @@ public class LoadingProperties {
             maxConnections = properties.getProperty("maximumConnections");
             timeout = properties.getProperty("timeout");
             ipHubKey = properties.getProperty("ipHubKey");
+            proxycheckKey = properties.getProperty("proxycheckKey");
             beta = properties.getProperty("isBeta");
 
             dialogFlowApiKey = properties.getProperty("dialogflow-api-key");
@@ -94,6 +95,10 @@ public class LoadingProperties {
 
     public boolean isDialogFlowEnabled() {
         return dialogFlowEnabled;
+    }
+
+    public String getProxycheckKey() {
+        return proxycheckKey;
     }
 
     public List<String> getDialogFlowChannels() {
