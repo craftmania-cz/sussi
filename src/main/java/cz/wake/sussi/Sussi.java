@@ -64,6 +64,7 @@ public class Sussi {
 
         startUp = System.currentTimeMillis();
 
+        // Dialogflow
         AIConfiguration aiConfig = new AIConfiguration(config.getDialogFlowApiKey());
         AIDataService aiDataService = new AIDataService(aiConfig);
 

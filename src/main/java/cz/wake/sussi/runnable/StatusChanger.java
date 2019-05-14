@@ -19,7 +19,11 @@ public class StatusChanger extends TimerTask {
 
     @Override
     public void run() {
-        setStatus();
+        try {
+            setStatus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setStatus(){
