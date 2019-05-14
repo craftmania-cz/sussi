@@ -1,8 +1,12 @@
 package cz.wake.sussi;
 
+import ai.api.AIConfiguration;
+import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
+import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
+import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
@@ -54,12 +58,15 @@ public class Sussi {
         SussiLogger.infoMessage("Loading config...");
         LoadingProperties config = new LoadingProperties();
         ipHubKey = config.getIpHubKey();
-        API_URL = config.getApiUrl();
         isBeta = config.isBeta();
 
         EventWaiter waiter = new EventWaiter();
 
         startUp = System.currentTimeMillis();
+
+        // Dialogflow
+        AIConfiguration aiConfig = new AIConfiguration(config.getDialogFlowApiKey());
+        AIDataService aiDataService = new AIDataService(aiConfig);
 
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
@@ -67,11 +74,15 @@ public class Sussi {
                 .setToken(config.getBotToken())
                 .addEventListener(new MainListener(waiter))
                 .addEventListener(waiter)
+                .addEventListener(new DialogFlowListener(aiDataService))
                 .setGame(Game.of(Game.GameType.DEFAULT, "Načítání..."))
                 .build().awaitReady();
 
         // Register commands
         (instance = new Sussi()).init();
+
+        // Metrics
+        Metrics.setup();
 
         // isBeta and MySQL
         if (!isBeta) {

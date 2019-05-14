@@ -28,7 +28,7 @@ public class Ats implements ICommand {
             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - ats :question:")
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
         } else if (args[0].equalsIgnoreCase("reset")) {
-            if (sender.getId().equals("177516608778928129")  || sender.getId().equals("263736235539955713")) {
+            if (sender.getId().equals("177516608778928129")  || sender.getId().equals("238410025813540865")) {
                 try {
                     Sussi.getInstance().getSql().resetATS("surv_chat_body");
                     Sussi.getInstance().getSql().resetATS("surv_played_time");
@@ -52,7 +52,7 @@ public class Ats implements ICommand {
                     channel.sendMessage(MessageUtils.getEmbed(Constants.RED).setDescription("Nastala chyba při resetu ATS!").build()).queue();
                 }
             } else {
-                MessageUtils.sendErrorMessage("Toto může provádět pouze Wake!", channel);
+                MessageUtils.sendErrorMessage("Toto může provádět pouze Wake a Krosta!", channel);
             }
         } else {
             String name = args[0];
@@ -123,7 +123,7 @@ public class Ats implements ICommand {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Přehled ATS pro - " + name);
-        embed.setThumbnail("https://visage.surgeplay.com/head/128/" + name);
+        embed.setThumbnail("https://mc-heads.net/head/" + name + "/128.png");
         embed.setColor(getColorByRank(rank));
         embed.addField("Rank", getRankByID(rank), true);
         embed.addField("Přístup na Build", getResult(pristup_build), true);
@@ -296,6 +296,8 @@ public class Ats implements ICommand {
     private Color getColorByRank(int rank){
         if(rank == 12){
             return Constants.MAJITEL;
+        } else if (rank == 11){
+            return Constants.MANAGER;
         } else if (rank == 10){
             return Constants.HL_ADMIN;
         } else if (rank == 9){
@@ -318,6 +320,8 @@ public class Ats implements ICommand {
     private String getRankByID(int rank){
         if(rank == 12){
             return "Majitel";
+        } else if (rank == 11){
+            return "Manager";
         } else if (rank == 10){
             return "Hl.Admin";
         } else if (rank == 9){

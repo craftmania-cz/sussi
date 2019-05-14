@@ -10,19 +10,19 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class Pubg implements ICommand {
+public class Paladins implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("432195990746038272"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("432195990746038272")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("543905557581529089"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("543905557581529089")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `PUBG`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Paladins`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("432195990746038272")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("543905557581529089")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `PUBG`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Paladins`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class Pubg implements ICommand {
 
     @Override
     public String getCommand() {
-        return "pubg";
+        return "paladins";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #pubg";
+        return "Získání role a přístupu do channelu #paladins";
     }
 
     @Override

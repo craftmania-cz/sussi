@@ -21,6 +21,7 @@ public class Constants {
 
     // AT Rank Colors
     final public static Color MAJITEL = new Color(30, 144, 255);
+    final public static Color MANAGER = new Color(255, 224, 102);
     final public static Color HL_ADMIN = new Color(205, 0, 0);
     final public static Color ADMIN = new Color(255, 64, 64);
     final public static Color DEV = new Color(39, 64, 139);

@@ -549,20 +549,23 @@ public class SQLManager {
         }
     }
 
-    public final boolean hasPlayerHalloweenGame(String p) {
+    public final String getIPFromServerByPlayer(String player) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM halloween_players WHERE nick = '" + p + "';");
+            ps = conn.prepareStatement("SELECT ip FROM bungeecord.litebans_history WHERE name = ?;");
+            ps.setString(1, player);
             ps.executeQuery();
-            return ps.getResultSet().next();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("ip");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         } finally {
             pool.close(conn, ps, null);
         }
+        return null;
     }
 
     public final boolean isAlreadyLinked(String p) {

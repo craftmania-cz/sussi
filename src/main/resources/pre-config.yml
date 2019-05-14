@@ -17,9 +17,12 @@ token: token-from-discord-api
 
 # IPHub Key
 ipHubKey: keys
-
-# API
-apiUrl: https://mcapi.us/server/status?ip=mc.craftmania.cz
+proxycheckKey: kek
 
 # Beta
 isBeta: true
+
+# Integrace s Dialogglow
+dialogflow-enabled: true
+dialogflow-api-key: some-key-yep
+dialogflow-channels: "kek", "kek"

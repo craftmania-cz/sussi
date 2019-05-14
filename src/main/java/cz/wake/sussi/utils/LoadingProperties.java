@@ -2,12 +2,17 @@ package cz.wake.sussi.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 public class LoadingProperties {
 
     private String botToken;
-    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, apiUrl, beta;
+    private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
+                    dialogFlowApiKey;
+    private boolean dialogFlowEnabled;
+    private List<String> dialogFlowChannels;
 
     public LoadingProperties() {
         try {
@@ -28,8 +33,12 @@ public class LoadingProperties {
             maxConnections = properties.getProperty("maximumConnections");
             timeout = properties.getProperty("timeout");
             ipHubKey = properties.getProperty("ipHubKey");
-            apiUrl = properties.getProperty("apiUrl");
+            proxycheckKey = properties.getProperty("proxycheckKey");
             beta = properties.getProperty("isBeta");
+
+            dialogFlowApiKey = properties.getProperty("dialogflow-api-key");
+            dialogFlowEnabled = Boolean.valueOf(properties.getProperty("dialogflow-enabled"));
+            dialogFlowChannels = Collections.singletonList(properties.getProperty("dialogflow-channels"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,11 +85,23 @@ public class LoadingProperties {
         return ipHubKey;
     }
 
-    public String getApiUrl() {
-        return apiUrl;
-    }
-
     public Boolean isBeta() {
         return Boolean.parseBoolean(beta);
+    }
+
+    public String getDialogFlowApiKey() {
+        return dialogFlowApiKey;
+    }
+
+    public boolean isDialogFlowEnabled() {
+        return dialogFlowEnabled;
+    }
+
+    public String getProxycheckKey() {
+        return proxycheckKey;
+    }
+
+    public List<String> getDialogFlowChannels() {
+        return dialogFlowChannels;
     }
 }
