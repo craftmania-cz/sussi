@@ -64,6 +64,7 @@ public class CommandHandler {
         registerCommand(new Events());
         registerCommand(new Apex());
         registerCommand(new Paladins());
+        registerCommand(new ProfileCommand());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
