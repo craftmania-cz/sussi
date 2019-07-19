@@ -25,7 +25,7 @@ public class IPWhitelist implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129") || sender.getId().equals("211749751475929088")) {
+        if(sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129") || sender.getId().equals("211749751475929088") || sender.getId().equals("234700305831428106")) {
             List<WhitelistedIP> ips = Sussi.getInstance().getSql().getWhitelistedIPs();
 
             if(args.length < 1) {
@@ -132,9 +132,9 @@ public class IPWhitelist implements ICommand {
     @Override
     public String getHelp() {
         return ",ipwl - Zobrazí seznam IP adres na whitelistu\n" +
-                ",ipwl add <ip> <description> - Přidá IP adresu na whitelist\n" +
-                ",ipwl remove <ip> - Odebere IP adresu z whitelistu\n" +
-                ",ipwl check <ip> - Zkontroluje zda je IP na whitelistu";
+                ",ipwl add <uuid> <description> - Přidá IP adresu na whitelist\n" +
+                ",ipwl remove <uuid> - Odebere IP adresu z whitelistu\n" +
+                ",ipwl check <uuid> - Zkontroluje zda je IP na whitelistu";
     }
 
     @Override
