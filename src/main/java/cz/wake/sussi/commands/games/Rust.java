@@ -10,19 +10,19 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class ClashRoyale implements ICommand {
+public class Rust implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("430744307025051678"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("430744307025051678")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("602257566801723402"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("602257566801723402")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Clash Royale`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Rust`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("430744307025051678")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("602257566801723402")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Clash Royale`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Rust`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class ClashRoyale implements ICommand {
 
     @Override
     public String getCommand() {
-        return "clashroyale";
+        return "rust";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #clash_royale";
+        return "Získání role a přístupu do channelu #rust";
     }
 
     @Override

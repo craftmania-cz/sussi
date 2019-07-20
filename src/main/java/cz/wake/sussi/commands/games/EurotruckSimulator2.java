@@ -10,19 +10,19 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class Satisfactory implements ICommand {
+public class EurotruckSimulator2 implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("602251341531840533"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("602251341531840533")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("602251414705668137"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("602251414705668137")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Satisfactory`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Euro Truck Simulator 2`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("602251341531840533")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("602251414705668137")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Satisfactory`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Euro Truck Simulator 2`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class Satisfactory implements ICommand {
 
     @Override
     public String getCommand() {
-        return "satisfactory";
+        return "eurotrucksimulator2";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #satisfactory";
+        return "Získání role a přístupu do channelu #euro_truck_simulator";
     }
 
     @Override
