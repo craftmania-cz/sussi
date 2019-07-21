@@ -163,6 +163,37 @@ public class SQLManager {
             }
     }
 
+    public final void addWhitelistedNick(final String nick, final String description) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO nick_whitelist (nick, description) VALUES (?, ?);");
+            ps.setString(1, nick);
+            ps.setString(2, description);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void removeWhitelistedUUID(final String nick) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("DELETE FROM nick_whitelist WHERE nick = ?;");
+            ps.setString(1, nick);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
     public final List<WhitelistedIP> getWhitelistedIPs() {
         List<WhitelistedIP> whitelistedIPS = new ArrayList<>();
         Connection conn = null;
@@ -180,6 +211,25 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
         return whitelistedIPS;
+    }
+
+    public final List<WhitelistedNick> getWhitelistedNicks() {
+        List<WhitelistedNick> whitelistedNicks = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM nick_whitelist;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                whitelistedNicks.add(new WhitelistedNick(ps.getResultSet().getString("nick"), ps.getResultSet().getString("description")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return whitelistedNicks;
     }
 
     public final void delete(final String change) {
@@ -495,7 +545,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE `stav_survival_server` SET `udrzba` = ? WHERE `nazev` = ?;");
+            ps = conn.prepareStatement("UPDATE stav_survival_server SET udrzba = ? WHERE `nazev` = ?;");
             ps.setInt(1, value);
             ps.setString(2, server);
             ps.execute();

@@ -58,6 +58,7 @@ public class CommandHandler {
         registerCommand(new Standa());
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
+        registerCommand(new NickWhitelist());
         registerCommand(new Verify());
         registerCommand(new Hytale());
         registerCommand(new Rust());
