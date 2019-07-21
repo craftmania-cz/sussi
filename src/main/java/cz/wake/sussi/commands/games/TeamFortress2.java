@@ -10,19 +10,19 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class Paladins implements ICommand {
+public class TeamFortress2 implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("543905557581529089"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("543905557581529089")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("602257519439773728"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("602257519439773728")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Paladins`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Team Fortress 2`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("543905557581529089")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("602257519439773728")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Paladins`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Team Fortress 2`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class Paladins implements ICommand {
 
     @Override
     public String getCommand() {
-        return "paladins";
+        return "teamfortress2";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #paladins";
+        return "Získání role a přístupu do channelu #team-fortress-2";
     }
 
     @Override

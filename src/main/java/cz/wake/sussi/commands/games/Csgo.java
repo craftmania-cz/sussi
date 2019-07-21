@@ -10,19 +10,19 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class Apex implements ICommand {
+public class Csgo implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("543904846567440394"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("543904846567440394")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("602251092411154442"))) {
+                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("602251092411154442")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Apex Legends`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `CS:GO`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("543904846567440394")).queue();
+                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("602251092411154442")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Apex Legends`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `CS:GO`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class Apex implements ICommand {
 
     @Override
     public String getCommand() {
-        return "apex";
+        return "csgo";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #apex";
+        return "Získání role a přístupu do channelu #cs_go";
     }
 
     @Override
