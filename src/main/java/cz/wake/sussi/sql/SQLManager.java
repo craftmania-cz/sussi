@@ -163,13 +163,13 @@ public class SQLManager {
             }
     }
 
-    public final void addWhitelistedUUID(final String uuid, final String description) {
+    public final void addWhitelistedNick(final String nick, final String description) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("INSERT INTO uuid_whitelist (uuid, description) VALUES (?, ?);");
-            ps.setString(1, uuid);
+            ps = conn.prepareStatement("INSERT INTO nick_whitelist (nick, description) VALUES (?, ?);");
+            ps.setString(1, nick);
             ps.setString(2, description);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -179,13 +179,13 @@ public class SQLManager {
         }
     }
 
-    public final void removeWhitelistedUUID(final String uuid) {
+    public final void removeWhitelistedUUID(final String nick) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("DELETE FROM uuid_whitelist WHERE uuid = ?;");
-            ps.setString(1, uuid);
+            ps = conn.prepareStatement("DELETE FROM nick_whitelist WHERE nick = ?;");
+            ps.setString(1, nick);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,23 +213,23 @@ public class SQLManager {
         return whitelistedIPS;
     }
 
-    public final List<WhitelistedUUID> getWhitelistedUUIDs() {
-        List<WhitelistedUUID> whitelistedUUIDs = new ArrayList<>();
+    public final List<WhitelistedNick> getWhitelistedNicks() {
+        List<WhitelistedNick> whitelistedNicks = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM uuid_whitelist;");
+            ps = conn.prepareStatement("SELECT * FROM nick_whitelist;");
             ps.executeQuery();
             while (ps.getResultSet().next()) {
-                whitelistedUUIDs.add(new WhitelistedUUID(ps.getResultSet().getString("uuid"), ps.getResultSet().getString("description")));
+                whitelistedNicks.add(new WhitelistedNick(ps.getResultSet().getString("nick"), ps.getResultSet().getString("description")));
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             pool.close(conn, ps, null);
         }
-        return whitelistedUUIDs;
+        return whitelistedNicks;
     }
 
     public final void delete(final String change) {

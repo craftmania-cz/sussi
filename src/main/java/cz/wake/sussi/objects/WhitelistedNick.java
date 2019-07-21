@@ -1,20 +1,20 @@
 package cz.wake.sussi.objects;
 
-public class WhitelistedUUID {
+public class WhitelistedNick {
 
     // UUID (String)
-    private String uuid;
+    private String nick;
 
     // Description
     private String description;
 
-    public WhitelistedUUID(String uuid, String description){
-        this.uuid = uuid;
+    public WhitelistedNick(String nick, String description){
+        this.nick = nick;
         this.description = description;
     }
 
-    public String getUUID(){
-        return uuid;
+    public String getNick(){
+        return nick;
     }
 
     public String getDescription(){
