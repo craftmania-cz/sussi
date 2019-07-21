@@ -133,34 +133,34 @@ public class SQLManager {
     }
 
     public final void addWhitelistedIP(final String address, final String description) {
-            Connection conn = null;
-            PreparedStatement ps = null;
-            try {
-                conn = pool.getConnection();
-                ps = conn.prepareStatement("INSERT INTO ip_whitelist (address, description) VALUES (?, ?);");
-                ps.setString(1, address);
-                ps.setString(2, description);
-                ps.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                pool.close(conn, ps, null);
-            }
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO ip_whitelist (address, description) VALUES (?, ?);");
+            ps.setString(1, address);
+            ps.setString(2, description);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
     }
 
     public final void removeWhitelistedIP(final String address) {
-            Connection conn = null;
-            PreparedStatement ps = null;
-            try {
-                conn = pool.getConnection();
-                ps = conn.prepareStatement("DELETE FROM ip_whitelist WHERE address = ?;");
-                ps.setString(1, address);
-                ps.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                pool.close(conn, ps, null);
-            }
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("DELETE FROM ip_whitelist WHERE address = ?;");
+            ps.setString(1, address);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
     }
 
     public final void addWhitelistedNick(final String nick, final String description) {
@@ -426,7 +426,7 @@ public class SQLManager {
             ps.executeQuery();
             if (ps.getResultSet().next()) {
                 return new BlacklistName(nick, ps.getResultSet().getString("reason"), ps.getResultSet().getString("banned_by"),
-                    ps.getResultSet().getLong("time_start"), ps.getResultSet().getLong("time_end"));
+                        ps.getResultSet().getLong("time_start"), ps.getResultSet().getLong("time_end"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -569,8 +569,7 @@ public class SQLManager {
                 result.close();
                 if (value == 1) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             } else {
@@ -705,6 +704,42 @@ public class SQLManager {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public String getCraftBungeeConfigValue(String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT `value` FROM craftbungee_config WHERE `name` = ?;");
+            ps.setString(1, name);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("value");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return "";
+    }
+
+    public void updateCraftBungeeConfigValue(String name, String value) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE craftbungee_config SET `value`=? WHERE `name`=?;");
+            ps.setString(1, value);
+            ps.setString(2, name);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             pool.close(conn, ps, null);
         }

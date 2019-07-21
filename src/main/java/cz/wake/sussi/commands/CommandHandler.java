@@ -68,6 +68,7 @@ public class CommandHandler {
         registerCommand(new TeamFortress2());
         registerCommand(new Events());
         registerCommand(new ProfileCommand());
+        registerCommand(new BlockCountry());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
