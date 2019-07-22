@@ -31,12 +31,12 @@ public class EurotruckSimulator2 implements ICommand {
 
     @Override
     public String getCommand() {
-        return "eurotrucksimulator2";
+        return "ets2";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #euro_truck_simulator";
+        return "Získání role a přístupu do channelu #euro_truck_simulator2";
     }
 
     @Override

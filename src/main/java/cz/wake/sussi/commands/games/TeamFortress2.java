@@ -31,7 +31,7 @@ public class TeamFortress2 implements ICommand {
 
     @Override
     public String getCommand() {
-        return "teamfortress2";
+        return "tf2";
     }
 
     @Override

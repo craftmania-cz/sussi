@@ -31,7 +31,7 @@ public class DeadbyDaylight implements ICommand {
 
     @Override
     public String getCommand() {
-        return "deadbydaylight";
+        return "dbd";
     }
 
     @Override
