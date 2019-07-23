@@ -18,13 +18,14 @@ public class Link implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if (args.length < 1) {
-            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,link SUPERTAJNYKOD123`", channel);
+
+        if (Sussi.getInstance().getSql().isConnectedToMC(sender.getId())) {
+            MessageUtils.sendErrorMessage("Tento účet již je propojen s MC účtem " + Sussi.getInstance().getSql().getMinecraftNick(sender.getId()) + "!", channel);
             return;
         }
 
-        if (Sussi.getInstance().getSql().isConnectedToMC(sender.getId())) {
-            MessageUtils.sendErrorMessage("Tento účet již je propojen s MC účtem!", channel);
+        if (args.length < 1) {
+            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,link SUPERTAJNYKOD123`", channel);
             return;
         }
 

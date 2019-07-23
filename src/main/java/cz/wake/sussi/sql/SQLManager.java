@@ -707,6 +707,24 @@ public class SQLManager {
         return "";
     }
 
+    public final String getMinecraftNick(final String id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT nick FROM player_profile WHERE discord_user_id = '" + id + "';");
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("nick");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return "";
+    }
+
     public final void connectToMC(final String id, final String code) {
         Connection conn = null;
         PreparedStatement ps = null;
