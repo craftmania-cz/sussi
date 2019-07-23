@@ -60,6 +60,7 @@ public class CommandHandler {
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());
         registerCommand(new Link());
+        registerCommand(new Unlink());
         registerCommand(new Hytale());
         registerCommand(new Rust());
         registerCommand(new DeadbyDaylight());

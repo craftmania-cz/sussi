@@ -744,5 +744,20 @@ public class SQLManager {
         }
     }
 
+    public final void disconnectFromMC(final String id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_user_id = NULL WHERE discord_user_id = ?;");
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
 
 }
