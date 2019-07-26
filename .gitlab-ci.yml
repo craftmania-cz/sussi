@@ -11,6 +11,10 @@ before_script:
   - rm -f  .gradle/caches/modules-2/modules-2.lock
   - rm -fr .gradle/caches/*/plugin-resolution/
 
+# Docker Dind fix (https://gitlab.com/gitlab-org/gitlab-runner/issues/4501#note_194648457)
+variables:
+  DOCKER_TLS_CERTDIR: ""
+
 # Cache downloaded dependencies and plugins between builds.
 cache:
   paths:
