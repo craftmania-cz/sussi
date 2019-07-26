@@ -622,7 +622,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND nickname != '-1';");
+            ps = conn.prepareStatement("SELECT * FROM player_profile WHERE discord_user_id = '" + p + "';");
             ps.executeQuery();
             return ps.getResultSet().next();
         } catch (Exception e) {
@@ -638,11 +638,11 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = ? AND nickname != '-1';");
+            ps = conn.prepareStatement("SELECT nick FROM player_profile WHERE discord_user_id = ?;");
             ps.setString(1, p);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
-                return ps.getResultSet().getString("nickname");
+                return ps.getResultSet().getString("nick");
             }
         } catch (Exception e) {
             e.printStackTrace();
