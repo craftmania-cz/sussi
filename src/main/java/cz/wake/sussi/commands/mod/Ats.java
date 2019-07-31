@@ -24,11 +24,21 @@ public class Ats implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if (args.length < 1) {
+        if(args.length < 1) {
+            if(Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
+                String name = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
+                if(!Sussi.getInstance().getSql().isAT(name)) {
+                    MessageUtils.sendErrorMessage("Nelze použít ,ats pokud nejsi člen AT!", channel);
+                    return;
+                }
+                firstPage(sender, message, channel, w, name, false);
+                return;
+            }
+
             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - ats :question:")
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
-        } else if (args[0].equalsIgnoreCase("reset")) {
-            if (sender.getId().equals("177516608778928129")  || sender.getId().equals("238410025813540865")) {
+        } else if(args[0].equalsIgnoreCase("reset")) {
+            if(sender.getId().equals("177516608778928129") || sender.getId().equals("238410025813540865")) {
                 try {
                     Sussi.getInstance().getSql().resetATS("surv_chat_body");
                     Sussi.getInstance().getSql().resetATS("surv_played_time");
@@ -47,7 +57,7 @@ public class Ats implements ICommand {
                     Sussi.getInstance().getSql().resetATS("build_played_time");
                     Sussi.getInstance().getSql().resetATS("build_chat_body");
                     channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("ATS bylo úspěšně vyresetováno!").build()).queue();
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     channel.sendMessage(MessageUtils.getEmbed(Constants.RED).setDescription("Nastala chyba při resetu ATS!").build()).queue();
                 }
@@ -57,7 +67,7 @@ public class Ats implements ICommand {
         } else {
             String name = args[0];
 
-            if (!Sussi.getInstance().getSql().isAT(name)) {
+            if(!Sussi.getInstance().getSql().isAT(name)) {
                 MessageUtils.sendErrorMessage("Požadovaný člen není v AT nebo nebyl nalezen!", channel);
                 return;
             }
@@ -82,9 +92,9 @@ public class Ats implements ICommand {
     public String getHelp() {
         return ",ats [nick] - Zjištění aktivity pro zadaný nick\n" +
                 ",ats reset - Vyresetování ATS (Wake)";
-                //",ats build [nick] - Povolí/zakáže zadanému nicku přístup na build servery.\n" +
-                //",ats add [nick] - Přidá nick do ATS.\n" +
-                //",ats remove [nick] - Odebere nick z ATS.";
+        //",ats build [nick] - Povolí/zakáže zadanému nicku přístup na build servery.\n" +
+        //",ats add [nick] - Přidá nick do ATS.\n" +
+        //",ats remove [nick] - Odebere nick z ATS.";
     }
 
     @Override
@@ -97,7 +107,7 @@ public class Ats implements ICommand {
         return Rank.MODERATOR;
     }
 
-    private void firstPage(User s, Message message, MessageChannel ch, EventWaiter w, String name, boolean generated){
+    private void firstPage(User s, Message message, MessageChannel ch, EventWaiter w, String name, boolean generated) {
 
         int rank = Sussi.getInstance().getSql().getStalkerStats(name, "rank");
         int pristup_build = Sussi.getInstance().getSql().getStalkerStats(name, "pristup_build");
@@ -130,10 +140,10 @@ public class Ats implements ICommand {
         embed.addField("Celkem hodin", TimeUtils.formatTime("%d dni, %hh %mm", total_hours, false), true);
         embed.addField("Celkem aktivita", String.valueOf(total_activity) + " bodů", true);
         embed.addField("Možné body", String.valueOf(getChangePoints(total_hours, total_activity)), true);
-        embed.addField("Min. počet hodin", min_hours + " hodin (" + resolveTime(total_hours/60, min_hours) +  ")", true);
+        embed.addField("Min. počet hodin", min_hours + " hodin (" + resolveTime(total_hours / 60, min_hours) + ")", true);
         embed.setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null);
 
-        if(generated){
+        if(generated) {
             message.delete().queue();
             ch.sendMessage(embed.build()).queue((Message m) -> {
                 m.addReaction(Constants.BACK).queue();
@@ -149,7 +159,7 @@ public class Ats implements ICommand {
                 w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
                     return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.NEXT));
                 }, (MessageReactionAddEvent ev) -> {
-                    secondPage(s,m,ch,w,name);
+                    secondPage(s, m, ch, w, name);
                 }, 60, TimeUnit.SECONDS, null);
             });
         } else {
@@ -168,13 +178,13 @@ public class Ats implements ICommand {
                 w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
                     return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.NEXT));
                 }, (MessageReactionAddEvent ev) -> {
-                    secondPage(s,m,ch,w,name);
+                    secondPage(s, m, ch, w, name);
                 }, 60, TimeUnit.SECONDS, null);
             });
         }
     }
 
-    private void secondPage(User s, Message message, MessageChannel ch, EventWaiter w, String name){
+    private void secondPage(User s, Message message, MessageChannel ch, EventWaiter w, String name) {
 
         int rank = Sussi.getInstance().getSql().getStalkerStats(name, "rank");
 
@@ -231,46 +241,46 @@ public class Ats implements ICommand {
             w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
                 return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.BACK));
             }, (MessageReactionAddEvent ev) -> {
-                firstPage(s,message,ch,w,name, true);
+                firstPage(s, message, ch, w, name, true);
             }, 60, TimeUnit.SECONDS, null);
         });
     }
 
-    private String resolveTime(int hours, int min){
+    private String resolveTime(int hours, int min) {
         System.out.println(hours);
-        if(hours >= min){
+        if(hours >= min) {
             return "\u2705";
         }
         return "\u274C";
     }
 
-    private int getChangePoints(int hours, int total_activity){
+    private int getChangePoints(int hours, int total_activity) {
         int total_hours = hours / 60; // Jelikoz je to v minutach
         int points = 0;
-        if(total_hours == 0 || total_activity == 0){
+        if(total_hours == 0 || total_activity == 0) {
             points = -5;
-        } else if (total_hours > 0 && total_hours < 12){
+        } else if(total_hours > 0 && total_hours < 12) {
             points = -3;
-        } else if (total_hours > 12 && total_hours < 24){
+        } else if(total_hours > 12 && total_hours < 24) {
             points = -2;
-        } else if (total_hours > 24 && total_hours < 36){
+        } else if(total_hours > 24 && total_hours < 36) {
             points = -1;
-        } else if (total_hours > 36 && total_hours < 48){
+        } else if(total_hours > 36 && total_hours < 48) {
             points = 2;
-        } else if (total_hours > 48 && total_hours < 72){
+        } else if(total_hours > 48 && total_hours < 72) {
             points = 3;
         } else {
             points = 4;
         }
 
         //Calculate acitivy
-        if(total_activity >= 0 && total_activity <= 201){
+        if(total_activity >= 0 && total_activity <= 201) {
             points = points - -3;
-        } else if(total_activity >= 200 && total_activity <= 600){
+        } else if(total_activity >= 200 && total_activity <= 600) {
             points = points - -2;
-        } else if(total_activity >= 600 && total_activity <= 1200){
+        } else if(total_activity >= 600 && total_activity <= 1200) {
             // nic
-        } else if(total_activity >= 1200 && total_activity <= 2400){
+        } else if(total_activity >= 1200 && total_activity <= 2400) {
             points = points + 1;
         } else {
             points = points + 2;
@@ -286,59 +296,59 @@ public class Ats implements ICommand {
         return timeString;
     }
 
-    private String getResult(int result){
-        if(result == 1){
+    private String getResult(int result) {
+        if(result == 1) {
             return "Ano";
         }
         return "Ne";
     }
 
-    private Color getColorByRank(int rank){
-        if(rank == 12){
+    private Color getColorByRank(int rank) {
+        if(rank == 12) {
             return Constants.MAJITEL;
-        } else if (rank == 11){
+        } else if(rank == 11) {
             return Constants.MANAGER;
-        } else if (rank == 10){
+        } else if(rank == 10) {
             return Constants.HL_ADMIN;
-        } else if (rank == 9){
+        } else if(rank == 9) {
             return Constants.DEV;
-        } else if (rank == 2 || rank == 3){
+        } else if(rank == 2 || rank == 3) {
             return Constants.HELPER;
-        } else if (rank == 4 || rank == 5){
+        } else if(rank == 4 || rank == 5) {
             return Constants.ADMIN;
-        } else if (rank == 7){
+        } else if(rank == 7) {
             return Constants.EVENTER;
-        } else if (rank == 8){
+        } else if(rank == 8) {
             return Constants.MOD;
-        } else if (rank == 6){
+        } else if(rank == 6) {
             return Constants.BUILDER;
         } else {
             return Constants.GRAY;
         }
     }
 
-    private String getRankByID(int rank){
-        if(rank == 12){
+    private String getRankByID(int rank) {
+        if(rank == 12) {
             return "Majitel";
-        } else if (rank == 11){
+        } else if(rank == 11) {
             return "Manager";
-        } else if (rank == 10){
+        } else if(rank == 10) {
             return "Hl.Admin";
-        } else if (rank == 9){
+        } else if(rank == 9) {
             return "Developer";
-        } else if (rank == 2){
+        } else if(rank == 2) {
             return "Helper";
-        } else if (rank == 3){
+        } else if(rank == 3) {
             return "Helperka";
-        } else if (rank == 4){
+        } else if(rank == 4) {
             return "Admin";
-        } else if (rank == 5){
+        } else if(rank == 5) {
             return "Adminka";
-        } else if (rank == 7){
+        } else if(rank == 7) {
             return "Eventer";
-        } else if (rank == 8){
+        } else if(rank == 8) {
             return "Moderátor";
-        } else if (rank == 6){
+        } else if(rank == 6) {
             return "Builder";
         } else {
             return "Hajzlík s chybným ID!";
