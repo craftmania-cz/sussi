@@ -70,6 +70,7 @@ public class CommandHandler {
         registerCommand(new Events());
         registerCommand(new ProfileCommand());
         registerCommand(new BlockCountry());
+        registerCommand(new Poll());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

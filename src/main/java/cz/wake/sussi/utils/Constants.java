@@ -18,7 +18,9 @@ public class Constants {
     final public static String BACK = "\u25C0";
     final public static String NEXT = "\u25B6";
     final public static String DELETE = "\u274C";
-
+    final public static String GREEN_MARK = "\u2705";
+    final public static String CROSS_MARK = "\u274C";
+    
     // AT Rank Colors
     final public static Color MAJITEL = new Color(30, 144, 255);
     final public static Color MANAGER = new Color(255, 224, 102);
