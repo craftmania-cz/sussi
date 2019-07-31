@@ -168,7 +168,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("INSERT INTO nick_whitelist (nick, description) VALUES (?, ?);");
+            ps = conn.prepareStatement("INSERT INTO name_whitelist (nick, description) VALUES (?, ?);");
             ps.setString(1, nick);
             ps.setString(2, description);
             ps.executeUpdate();
@@ -184,7 +184,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("DELETE FROM nick_whitelist WHERE nick = ?;");
+            ps = conn.prepareStatement("DELETE FROM name_whitelist WHERE nick = ?;");
             ps.setString(1, nick);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -219,7 +219,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM nick_whitelist;");
+            ps = conn.prepareStatement("SELECT * FROM name_whitelist;");
             ps.executeQuery();
             while (ps.getResultSet().next()) {
                 whitelistedNicks.add(new WhitelistedNick(ps.getResultSet().getString("nick"), ps.getResultSet().getString("description")));
