@@ -82,7 +82,7 @@ public class Sussi {
         (instance = new Sussi()).init();
 
         // Metrics
-        Metrics.setup();
+        //Metrics.setup();
 
         // isBeta and MySQL
         if (!isBeta) {

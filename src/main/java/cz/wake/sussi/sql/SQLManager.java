@@ -3,6 +3,7 @@ package cz.wake.sussi.sql;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -617,98 +618,6 @@ public class SQLManager {
         return null;
     }
 
-    public final boolean isAlreadyLinked(String p) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND nickname != '-1';");
-            ps.executeQuery();
-            return ps.getResultSet().next();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            pool.close(conn, ps, null);
-        }
-    }
-
-    public String getLinkedNickname(String p) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = ? AND nickname != '-1';");
-            ps.setString(1, p);
-            ps.executeQuery();
-            if (ps.getResultSet().next()) {
-                return ps.getResultSet().getString("nickname");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        } finally {
-            pool.close(conn, ps, null);
-        }
-        return "";
-    }
-
-    public final boolean hasConnection(String p) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND expire > " + System.currentTimeMillis() + ";");
-            ps.executeQuery();
-            return ps.getResultSet().next();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            pool.close(conn, ps, null);
-        }
-    }
-
-    public ConnectTask getActiveConnectionTask(String p) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE userid = '" + p + "' AND expire > " + System.currentTimeMillis() + ";");
-            ps.executeQuery();
-            if (ps.getResultSet().next()) {
-                System.out.print(ps.getResultSet().toString());
-                return new ConnectTask(p, ps.getResultSet().getString("code"), ps.getResultSet().getLong("expire"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            pool.close(conn, ps, null);
-        }
-        return null;
-    }
-
-    public ConnectTask createConnectionTask(String p, String code) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = pool.getConnection();
-            ps = conn.prepareStatement("INSERT INTO player_discordconnections (userid, code, expire, nickname) VALUES (?, ?, ?, ?);");
-            ps.setString(1, p);
-            ps.setString(2, code);
-            ps.setLong(3, System.currentTimeMillis() + 15 * 60 * 1000); //15m
-            ps.setString(4, "-1");
-            ps.executeUpdate();
-            return new ConnectTask(p, code, System.currentTimeMillis() + 15 * 60 * 1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            pool.close(conn, ps, null);
-        }
-    }
-
     public String getCraftBungeeConfigValue(String name) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -744,4 +653,111 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    //Discord Connections
+
+    public final boolean isConnectedToMC(final String id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_profile WHERE discord_user_id = '" + id + "';");
+            //discord_user_id NULL
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final boolean doesConnectionExist(final String c) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_discordconnections WHERE code = '" + c + "';");
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final String getConnectionNick(final String c) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT nick FROM player_discordconnections WHERE code = '" + c + "';");
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("nick");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return "";
+    }
+
+    public final String getMinecraftNick(final String id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT nick FROM player_profile WHERE discord_user_id = '" + id + "';");
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("nick");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return "";
+    }
+
+    public final void connectToMC(final String id, final String code) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_user_id = ? WHERE nick = (SELECT nick FROM player_discordconnections WHERE code = ?);");
+            ps.setString(1, id);
+            ps.setString(2, code);
+            ps.executeUpdate();
+            ps = conn.prepareStatement("DELETE FROM player_discordconnections WHERE code = ?;");
+            ps.setString(1, code);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void disconnectFromMC(final String id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_user_id = NULL WHERE discord_user_id = ?;");
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+
 }
