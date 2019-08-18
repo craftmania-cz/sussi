@@ -15,7 +15,7 @@ public class Unban implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Formulář na unban").setDescription("Pokuď chceš unban, musíš si o to požádat [**ZDE**](https://craftmania.cz/forms/zadost-o-unban.6/respond)").setFooter("K odeslání žádosti musíš být na webu registrovaný!", null).build()).queue();
+        channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Formulář na unban").setDescription("Pokuď chceš unban, musíš si o to požádat [**ZDE**](https://craftmania.cz/forum/unban.18/)").setFooter("K odeslání žádosti musíš být na webu registrovaný!", null).build()).queue();
     }
 
     @Override
