@@ -23,12 +23,21 @@ public class ProfileCommand implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(args.length < 1){
+        String nick = "";
+        if(args.length < 1) {
+            if (Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
+                nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
+            }
             MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,profile MrWakeCZ`", channel);
             return;
         }
 
-        Profile profile = new Profile(args[0]);
+        Profile profile;
+        if (nick.length() == 0) {
+             profile = new Profile(args[0]);
+        } else {
+            profile = new Profile(nick);
+        }
 
         if(profile.getStatusId() == 404) {
             MessageUtils.sendErrorMessage("Hráč `" + args[0] + "` nebyl nalezen.", channel);
