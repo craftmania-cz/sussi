@@ -50,7 +50,7 @@ public class Sussi {
         LOGGER = getLog(Sussi.class);
     }
 
-    public static void main(String[] args) throws LoginException, InterruptedException, IOException, RateLimitedException {
+    public static void main(String[] args) throws LoginException, InterruptedException {
         // Startup info
         SussiLogger.infoMessage("Now will Sussi wake up!");
 
