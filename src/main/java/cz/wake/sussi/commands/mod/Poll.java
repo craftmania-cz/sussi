@@ -40,7 +40,7 @@ public class Poll implements ICommand {
 	    description = description.substring(0, description.lastIndexOf("-h"));
    	}
 	EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Poll");
+        embed.setTitle("Dotaznîk");
         embed.setColor(Color.YELLOW);
         embed.setDescription(description);
         msg.setEmbed(embed.build());
@@ -62,7 +62,7 @@ public class Poll implements ICommand {
 
     @Override
     public String getHelp() {
-        return ",poll [text] [-h] - Vytvoří poll s určeným textem + [-h] označî @here";
+        return ",poll [text] [-h] - Vytvoří poll s určeným textem + [-h] označí @here";
     }
 
     @Override
