@@ -69,7 +69,7 @@ public class HalloweenStats implements ICommand {
 
     @Override
     public String getCommand() {
-        return "hs";
+        return "hl";
     }
 
     @Override
@@ -79,7 +79,7 @@ public class HalloweenStats implements ICommand {
 
     @Override
     public String getHelp() {
-        return ",hs [nick]";
+        return ",hl [nick]";
     }
 
     @Override
