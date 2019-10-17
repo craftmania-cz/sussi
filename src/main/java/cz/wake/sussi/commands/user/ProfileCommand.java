@@ -25,11 +25,11 @@ public class ProfileCommand implements ICommand {
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         String nick = "";
         if(args.length < 1) {
-            if (Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
-                nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
-            }
-            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,profile MrWakeCZ`", channel);
-            return;
+            if (!Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
+                MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,profile MrWakeCZ`", channel);
+                return;
+            } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
+
         }
 
         Profile profile;
