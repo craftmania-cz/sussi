@@ -876,4 +876,21 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public final boolean hasPlayerHalloweenGame(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM halloween_players WHERE nick = '" + p + "';");
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
 }
