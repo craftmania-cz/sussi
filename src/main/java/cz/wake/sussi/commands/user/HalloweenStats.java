@@ -57,7 +57,7 @@ public class HalloweenStats implements ICommand {
 
         channel.sendMessage(MessageUtils.getEmbed(Color.ORANGE)
                 .setTitle("Statistiky pro: " + nick)
-                .setAuthor(EmoteList.JACK_O_LANTERN+ " Halloween Minigame 2018 " + EmoteList.JACK_O_LANTERN)
+                .setAuthor(EmoteList.JACK_O_LANTERN+ " Halloween Minigame 2019 " + EmoteList.JACK_O_LANTERN)
                 .addField("Nejlepší vlna", best_wave + ". vlna", true)
                 .addField("Odehráno", String.valueOf(played_games), true)
                 .addField("Celkem goldů", total_golds + "g", true)
