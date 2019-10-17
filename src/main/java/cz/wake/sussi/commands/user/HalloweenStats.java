@@ -21,11 +21,11 @@ public class HalloweenStats implements ICommand {
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         String nick = "";
         if(args.length < 1) {
-            if (Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
-                nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
-            }
-            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,hl MrWakeCZ`", channel);
-            return;
+            if (!Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
+                MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,hl MrWakeCZ`", channel);
+                return;
+            } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
+
         }
         if (nick == "") nick = args[0];
 
