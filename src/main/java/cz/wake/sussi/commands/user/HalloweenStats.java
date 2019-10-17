@@ -24,7 +24,7 @@ public class HalloweenStats implements ICommand {
             if (Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
                 nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
             }
-            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,profile MrWakeCZ`", channel);
+            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,hl MrWakeCZ`", channel);
             return;
         }
         if (nick == "") nick = args[0];
