@@ -2,7 +2,7 @@ image: maven:3.3.9-jdk-8
 
 stages:
   - build
-  - deploy
+  - release
 
 before_script:
   #  - echo `pwd` # debug
@@ -32,15 +32,36 @@ build:
     paths:
       - build/libs/*.jar
 
-registry:
+release:tag:
+  stage: release
+  only:
+    - master
+  when: manual
+  allow_failure: false
+  before_script: []
+  image: node:10
+  script:
+    - npm install -g auto-changelog
+    - export RELEASE_VERSION=`cat build.gradle | grep "def mainVersion" | cut -c 19- | cut -c2- | rev | cut -c2-`
+    - git config user.email "$GITLAB_USER_EMAIL"
+    - git config user.name "$GITLAB_USER_EMAIL"
+    - auto-changelog --template keepachangelog --package --commit-limit false
+    - git commit -m "Release v$RELEASE_VERSION" -a
+    - git push "https://${GIT_CI_USER}:${GIT_CI_PASS}@${CI_REPOSITORY_URL#*@}" "HEAD:master"
+    - git tag v${RELEASE_VERSION} -a -m "$(git log --pretty="%s" `git describe --abbrev=0 --tags`...HEAD)"
+    - git push "https://${GIT_CI_USER}:${GIT_CI_PASS}@${CI_REPOSITORY_URL#*@}" --tags
+
+release:docker:
   image: $CI_REGISTRY/craftmania/docker/java8-docker:latest
-  stage: deploy
+  stage: release
   services:
     - docker:dind
   tags:
     - privileged
   dependencies:
     - build
+  only:
+    - tags
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $CI_REGISTRY
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_PIPELINE_ID" .
