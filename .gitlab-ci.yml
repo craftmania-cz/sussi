@@ -42,10 +42,10 @@ release:tag:
   image: node:10
   script:
     - npm install -g auto-changelog
-    - export RELEASE_VERSION=`cat build.gradle | grep "def mainVersion" | cut -c 19- | cut -c2- | rev | cut -c2-`
+    - export RELEASE_VERSION=`cat build.gradle | grep "def version" | cut -c 15- | cut -c2- | rev | cut -c2- | rev`
     - git config user.email "$GITLAB_USER_EMAIL"
     - git config user.name "$GITLAB_USER_EMAIL"
-    - auto-changelog --template keepachangelog --package --commit-limit false
+    - auto-changelog --template keepachangelog --latest-version $RELEASE_VERSION --commit-limit false
     - git commit -m "Release v$RELEASE_VERSION" -a
     - git push "https://${GIT_CI_USER}:${GIT_CI_PASS}@${CI_REPOSITORY_URL#*@}" "HEAD:master"
     - git tag v${RELEASE_VERSION} -a -m "$(git log --pretty="%s" `git describe --abbrev=0 --tags`...HEAD)"
