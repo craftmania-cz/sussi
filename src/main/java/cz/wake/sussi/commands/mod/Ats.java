@@ -56,6 +56,7 @@ public class Ats implements ICommand {
                     Sussi.getInstance().getSql().resetATS("vanillasb_chat_body");
                     Sussi.getInstance().getSql().resetATS("build_played_time");
                     Sussi.getInstance().getSql().resetATS("build_chat_body");
+                    Sussi.getInstance().getSql().resetATS("events_played_time");
                     channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription("ATS bylo úspěšně vyresetováno!").build()).queue();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -127,8 +128,9 @@ public class Ats implements ICommand {
         int vsbChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
         int vsbTime = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_played_time");
         int buildTime = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
+        int eventsTime = Sussi.getInstance().getSql().getStalkerStats(name, "events_played_time");
 
-        int total_hours = survTime + skyTime + prisTime + creaTime + vanTime + minGTime + vsbTime + buildTime;
+        int total_hours = survTime + skyTime + prisTime + creaTime + vanTime + minGTime + vsbTime + buildTime + eventsTime;
         int total_activity = survChatBody + skyChatBody + creaChatBody + prisChatBody + vanChatBody + miniGChatBody + vsbChatBody;
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -220,6 +222,9 @@ public class Ats implements ICommand {
         int build_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
         long build_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "build_pos_aktivita");
 
+        int events_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "events_played_time");
+        long events_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "events_pos_aktivita");
+
         message.editMessage(MessageUtils.getEmbed(getColorByRank(rank)).setTitle("Přehled ATS pro - " + name)
                 .addField("Survival", "**Chat**: " + survival_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", survival_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(survival_posledni_aktivita), true)
                 .addField("Skyblock", "**Chat**: " + skyblock_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", skyblock_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(skyblock_posledni_aktivita), true)
@@ -229,6 +234,7 @@ public class Ats implements ICommand {
                 .addField("MiniGames", "**Chat**: " + minigames_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", minigames_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(minigames_posledni_aktivita), true)
                 .addField("Vanilla Skyblock", "**Chat**: " + vanillasb_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", vanillasb_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(vanillasb_posledni_aktivita), true)
                 .addField("Build servery", "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", build_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(build_posledni_aktivita), true)
+                .addField("Event server", "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", events_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(events_posledni_aktivita), true)
                 .setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null).build()).queue((Message m) -> {
 
             w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
