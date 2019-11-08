@@ -56,15 +56,15 @@ public class ProfileCommand implements ICommand {
 
         // Dočasné zastoupení ranku z SQL
         //TODO: Až bude rank v API, tak předělat
-        if (Sussi.getInstance().getSql().isAT(args[0])) {
-            int rank = Sussi.getInstance().getSql().getStalkerStats(args[0], "rank");
+        if (Sussi.getInstance().getSql().isAT(nick)) {
+            int rank = Sussi.getInstance().getSql().getStalkerStats(nick, "rank");
             color = getColorByRank(rank);
             role = getRankByID(rank);
         }
 
         builder.setColor(color);
         builder.setTitle("Informace o hráči: " + profile.getName());
-        builder.setThumbnail("https://mc-heads.net/head/" + args[0] + "/128.png");
+        builder.setThumbnail("https://mc-heads.net/head/" + nick + "/128.png");
         
         builder.addField("Role", role, true);
         builder.addField("Online", profile.isOnline() ? "Ano" : "Ne", true);
