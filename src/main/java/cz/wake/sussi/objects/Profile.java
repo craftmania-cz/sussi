@@ -29,12 +29,22 @@ public class Profile {
     private int crafttokens = 0;
     private int votetokens = 0;
     private long karma = 0;
-    private int achievment_points= 0;
+    private int achievement_points= 0;
 
     // Ranked
-    private int level = 0;
-    private int experience = 0;
-    private double total_experience = 0;
+    private int global_level = 1;
+    private int survival_level = 1;
+    private int survival_experience = 0;
+    private int skyblock_level = 1;
+    private int skyblock_experience = 0;
+    private int creative_level = 1;
+    private int creative_experience = 0;
+    private int vanilla_level = 1;
+    private int vanilla_experience = 0;
+    private int prison_level = 1;
+    private int prison_experience = 0;
+    private int skycloud_level = 1;
+    private int skycloud_experience = 1;
 
     // Votes
     private int total = 0;
@@ -95,12 +105,22 @@ public class Profile {
         this.crafttokens = economy.isNull("crafttokens") ? 0 : economy.getInt("crafttokens");
         this.votetokens = economy.isNull("votetokens") ? 0 : economy.getInt("votetokens");
         this.karma = economy.isNull("karma") ? 0 : economy.getLong("karma");
-        this.achievment_points = economy.isNull("achievement_points") ? 0 : economy.getInt("achievement_points");
+        this.achievement_points = economy.isNull("achievement_points") ? 0 : economy.getInt("achievement_points");
 
         // Ranked
-        this.level = ranked.isNull("level")? 0 : ranked.getInt("level");
-        this.experience = ranked.isNull("experience") ? 0 : ranked.getInt("experience");
-        this.total_experience = ranked.isNull("total_experience") ? 0 : ranked.getInt("total_experience");
+        this.global_level = ranked.isNull("global_level") ? 0 : ranked.getInt("global_level");
+        this.survival_level = ranked.isNull("survival_level") ? 0 : ranked.getInt("survival_level");
+        this.survival_experience = ranked.isNull("survival_experience") ? 0 : ranked.getInt("survival_experience");
+        this.skyblock_level = ranked.isNull("skyblock_level") ? 0 : ranked.getInt("skyblock_level");
+        this.skyblock_experience = ranked.isNull("skyblock_experience") ? 0 : ranked.getInt("skyblock_experience");
+        this.creative_level = ranked.isNull("creative_level") ? 0 : ranked.getInt("creative_level");
+        this.creative_experience = ranked.isNull("creative_experience") ? 0 : ranked.getInt("creative_experience");
+        this.vanilla_level = ranked.isNull("vanilla_level") ? 0 : ranked.getInt("vanilla_level");
+        this.vanilla_experience = ranked.isNull("vanilla_experience") ? 0 : ranked.getInt("vanilla_experience");
+        this.prison_level = ranked.isNull("prison_level") ? 0 : ranked.getInt("prison_level");
+        this.prison_experience = ranked.isNull("prison_experience") ? 0 : ranked.getInt("prison_experience");
+        this.skycloud_level = ranked.isNull("skycloud_level") ? 0 : ranked.getInt("skycloud_level");
+        this.skycloud_experience = ranked.isNull("skycloud_experience") ? 0 : ranked.getInt("skycloud_experience");
 
         // Votes
         this.total = votes.isNull("total") ? 0 : votes.getInt("total");
@@ -182,20 +202,60 @@ public class Profile {
         return karma;
     }
 
-    public int getAchievmentPoints() {
-        return achievment_points;
+    public int getAchievementPoints() {
+        return achievement_points;
     }
 
-    public int getLevel() {
-        return level;
+    public int getGlobal_level() {
+        return global_level;
     }
 
-    public int getExperience() {
-        return experience;
+    public int getCreative_level() {
+        return creative_level;
     }
 
-    public double getTotalExperience() {
-        return total_experience;
+    public int getPrison_level() {
+        return prison_level;
+    }
+
+    public int getSkyblock_level() {
+        return skyblock_level;
+    }
+
+    public int getSkycloud_level() {
+        return skycloud_level;
+    }
+
+    public int getSurvival_level() {
+        return survival_level;
+    }
+
+    public int getVanilla_level() {
+        return vanilla_level;
+    }
+
+    public int getCreative_experience() {
+        return creative_experience;
+    }
+
+    public int getPrison_experience() {
+        return prison_experience;
+    }
+
+    public int getSkyblock_experience() {
+        return skyblock_experience;
+    }
+
+    public int getSkycloud_experience() {
+        return skycloud_experience;
+    }
+
+    public int getSurvival_experience() {
+        return survival_experience;
+    }
+
+    public int getVanilla_experience() {
+        return vanilla_experience;
     }
 
     public int getTotalVotes() {
