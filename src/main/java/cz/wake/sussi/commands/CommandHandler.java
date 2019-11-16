@@ -68,7 +68,7 @@ public class CommandHandler {
         registerCommand(new Csgo());
         registerCommand(new TeamFortress2());
         registerCommand(new Events());
-        registerCommand(new ProfileCommand());
+        registerCommand(new NewProfile());
         registerCommand(new BlockCountry());
         registerCommand(new Poll());
         registerCommand(new Korean());
