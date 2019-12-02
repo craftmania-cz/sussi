@@ -126,7 +126,7 @@ public class Ats implements ICommand {
         int miniGChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "minigames_chat_body");
         int minGTime = Sussi.getInstance().getSql().getStalkerStats(name, "minigames_played_time");
         int vsbChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
-        int vsbTime = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_played_time");
+        int vsbTime = Sussi.getInstance().getSql().getStalkerStats(name, "skycloud_played_time");
         int buildTime = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
         int eventsTime = Sussi.getInstance().getSql().getStalkerStats(name, "events_played_time");
 
@@ -141,7 +141,7 @@ public class Ats implements ICommand {
         embed.addField("Přístup na Build", getResult(pristup_build), true);
         embed.addField("Celkem hodin", TimeUtils.formatTime("%d dni, %hh %mm", total_hours, false), true);
         embed.addField("Celkem aktivita", String.valueOf(total_activity) + " bodů", true);
-        embed.addField("Možné body", String.valueOf(getChangePoints(total_hours, total_activity)), true);
+        //embed.addField("Možné body", String.valueOf(getChangePoints(total_hours, total_activity)), true);
         embed.addField("Min. počet hodin", min_hours + " hodin (" + resolveTime(total_hours / 60, min_hours) + ")", true);
         embed.setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null);
 
@@ -214,9 +214,9 @@ public class Ats implements ICommand {
         int minigames_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "minigames_played_time");
         long minigames_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "minigames_pos_aktivita");
 
-        int vanillasb_chat = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
-        int vanillasb_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_played_time");
-        long vanillasb_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "vanillasb_pos_aktivita");
+        int vanillasb_chat = Sussi.getInstance().getSql().getStalkerStats(name, "skycloud_chat_body");
+        int vanillasb_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "skycloud_played_time");
+        long vanillasb_posledni_aktivita = Sussi.getInstance().getSql().getStalkerStatsTime(name, "skycloud_pos_aktivita");
 
         //int build_chat = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
         int build_odehrano = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
@@ -231,8 +231,8 @@ public class Ats implements ICommand {
                 .addField("Creative", "**Chat**: " + creative_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", creative_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(creative_posledni_aktivita), true)
                 .addField("Prison", "**Chat**: " + prison_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", prison_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(prison_posledni_aktivita), true)
                 .addField("Vanilla", "**Chat**: " + vanilla_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", vanilla_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(vanilla_posledni_aktivita), true)
-                .addField("MiniGames", "**Chat**: " + minigames_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", minigames_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(minigames_posledni_aktivita), true)
-                .addField("Vanilla Skyblock", "**Chat**: " + vanillasb_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", vanillasb_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(vanillasb_posledni_aktivita), true)
+                //.addField("MiniGames", "**Chat**: " + minigames_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", minigames_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(minigames_posledni_aktivita), true)
+                .addField("Skycloud", "**Chat**: " + vanillasb_chat + "\n" + "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", vanillasb_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(vanillasb_posledni_aktivita), true)
                 .addField("Build servery", "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", build_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(build_posledni_aktivita), true)
                 .addField("Event server", "**Odehráno**: " + TimeUtils.formatTime("%d dni, %hh %mm", events_odehrano, false) + "\n" + "**Poslední aktivita**: " + getDate(events_posledni_aktivita), true)
                 .setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null).build()).queue((Message m) -> {
