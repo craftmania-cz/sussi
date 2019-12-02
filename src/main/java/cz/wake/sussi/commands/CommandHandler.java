@@ -42,7 +42,6 @@ public class CommandHandler {
         registerCommand(new Cmarchiv());
         registerCommand(new Stop());
         registerCommand(new Pravidla());
-        registerCommand(new GGT());
         registerCommand(new CheckIP());
         registerCommand(new Unban());
         registerCommand(new CheckBan());
@@ -54,7 +53,6 @@ public class CommandHandler {
         registerCommand(new Osu());
         registerCommand(new RocketLeague());
         registerCommand(new Overwatch());
-        registerCommand(new Dotaznik());
         registerCommand(new Standa());
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
@@ -73,7 +71,6 @@ public class CommandHandler {
         registerCommand(new Poll());
         registerCommand(new Korean());
         registerCommand(new News());
-        registerCommand(new HalloweenStats());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
