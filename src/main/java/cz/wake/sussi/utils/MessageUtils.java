@@ -68,7 +68,7 @@ public class MessageUtils {
         return new EmbedBuilder().setFooter("Chyba při provádění akce CorgiBot", Sussi.getJda().getSelfUser().getAvatarUrl());
     }
 
-    public static void autoDeleteMessage(Message message, long delay) {
+    private static void autoDeleteMessage(Message message, long delay) {
         message.delete().queueAfter(delay, TimeUnit.MILLISECONDS);
     }
 

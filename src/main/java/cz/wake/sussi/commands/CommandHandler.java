@@ -69,6 +69,7 @@ public class CommandHandler {
         registerCommand(new Poll());
         registerCommand(new Korean());
         registerCommand(new News());
+        registerCommand(new Napad());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

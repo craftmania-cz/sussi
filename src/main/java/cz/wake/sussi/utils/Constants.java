@@ -20,6 +20,8 @@ public class Constants {
     final public static String DELETE = "\u274C";
     final public static String GREEN_MARK = "\u2705";
     final public static String CROSS_MARK = "\u274C";
+    final public static String THUMB_UP = "\uD83D\uDC4D";
+    final public static String THUMB_DOWN = "\uD83D\uDC4E";
     
     // AT Rank Colors
     final public static Color MAJITEL = new Color(30, 144, 255);
