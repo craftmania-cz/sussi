@@ -5,7 +5,7 @@ plugins {
 }
 
 def group = 'cz.wake.sussi'
-def version = '1.9.2'
+def version = '1.9.3'
 
 mainClassName = 'cz.wake.sussi.Sussi'
 
