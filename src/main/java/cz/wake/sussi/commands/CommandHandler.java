@@ -70,6 +70,7 @@ public class CommandHandler {
         registerCommand(new Korean());
         registerCommand(new News());
         registerCommand(new Napad());
+        registerCommand(new NickWordBlacklist());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
