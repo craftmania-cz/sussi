@@ -37,7 +37,7 @@ public class NickWordBlacklist implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         pBuilder.setEventWaiter(w);
-        if(sender.getId().equals("177516608778928129")) {
+        if(sender.getId().equals("177516608778928129") || sender.getId().equals("211749751475929088")) {
             if(args.length < 1) {
                 channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - NickWordBlacklist :question:")
                         .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
@@ -55,41 +55,42 @@ public class NickWordBlacklist implements ICommand {
                     for(String word : words) {
                         pBuilder.addItems("**" + word + "**");
                     }
+		    pBuilder.setText("Zde je seznam nepovolených slov ve jméně").build().paginate(channel, 1);
                     return;
                 }
 
-                if(args.length < 3) {
+                if(args.length > 1) {
                     if(args[1].equals("add")) {
-                        if(args.length < 4) {
+                        if(args.length < 3) {
                             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - NickWordBlacklist :question:")
                                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
                             return;
                         }
-                        String word = args[2];
+                        String word = args[2].toLowerCase();
                         if(words.contains(word)) {
                             channel.sendMessage(MessageUtils.getEmbed().setDescription("Toto slovo je již zakázané!").setColor(Color.RED).build()).queue();
                             return;
                         }
                         Sussi.getInstance().getSql().addBlacklistedNameWord(word);
-                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Slovo" + word + "bylo úspěšně zablokované!").setColor(Color.GREEN).build()).queue();
+                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Slovo " + args[2] + " bylo úspěšně zablokované!").setColor(Color.GREEN).build()).queue();
                         return;
                     }
                     if(args[1].equals("remove")) {
-                        if(args.length < 4) {
+                        if(args.length < 3) {
                             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - NickWordBlacklist :question:")
                                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
                             return;
                         }
-                        String word = args[2];
+                        String word = args[2].toLowerCase();
                         if(!words.contains(word)) {
                             channel.sendMessage(MessageUtils.getEmbed().setDescription("Toto slovo není zakázané!").setColor(Color.RED).build()).queue();
                             return;
                         }
                         Sussi.getInstance().getSql().removeBlacklistedNameWord(word);
-                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Slovo" + word + "bylo úspěšně odblokované!").setColor(Color.GREEN).build()).queue();
+                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Slovo " + args[2] + " bylo úspěšně odblokované!").setColor(Color.GREEN).build()).queue();
                         return;
                     } else {
-                        if(words.contains(args[1])) {
+                        if(words.contains(args[1].toLowerCase())) {
                             channel.sendMessage(MessageUtils.getEmbed().setDescription("Slovo " + args[1] + " je zakázané!").setColor(Color.YELLOW).build()).queue();
                             return;
                         }
@@ -110,40 +111,41 @@ public class NickWordBlacklist implements ICommand {
                         String blacklisted = containedWord(words, nick);
                         pBuilder.addItems("**" + nick + "** - " + (blacklisted.equals("") ? "Neobsahuje zablokované slovo" : ("Obsahuje slovo: " + blacklisted)));
                     }
+		    pBuilder.setText("Zde je seznam jmen, které jsou povolené i přes blacklist").build().paginate(channel, 1);
                     return;
                 }
-                if(args.length < 3) {
+                if(args.length > 1) {
                     if(args[1].equals("add")) {
-                        if(args.length < 4) {
+                        if(args.length < 3) {
                             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - NickWordBlacklist :question:")
                                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
                             return;
                         }
-                        String nick = args[2];
+                        String nick = args[2].toLowerCase();
                         if(nicks.contains(nick)) {
                             channel.sendMessage(MessageUtils.getEmbed().setDescription("Toto jméno je již povolené!").setColor(Color.RED).build()).queue();
                             return;
                         }
                         Sussi.getInstance().getSql().addAllowedBlacklistedName(nick);
-                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Jméno" + nick + "bylo úspěšně povolené!").setColor(Color.GREEN).build()).queue();
+                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Jméno " + args[2] + " bylo úspěšně povolené!").setColor(Color.GREEN).build()).queue();
                         return;
                     }
                     if(args[1].equals("remove")) {
-                        if(args.length < 4) {
+                        if(args.length < 3) {
                             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - NickWordBlacklist :question:")
                                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
                             return;
                         }
-                        String nick = args[2];
+                        String nick = args[2].toLowerCase();
                         if(!nicks.contains(nick)) {
                             channel.sendMessage(MessageUtils.getEmbed().setDescription("Toto jméno není povolené!").setColor(Color.RED).build()).queue();
                             return;
                         }
                         Sussi.getInstance().getSql().removeAllowedBlacklistedName(nick);
-                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Jméno" + nick + "bylo úspěšně zablokované!").setColor(Color.GREEN).build()).queue();
+                        channel.sendMessage(MessageUtils.getEmbed().setDescription("Jméno " + args[2] + " bylo úspěšně zablokované!").setColor(Color.GREEN).build()).queue();
                         return;
                     } else {
-                        if(nicks.contains(args[1])) {
+                        if(nicks.contains(args[1].toLowerCase())) {
                             channel.sendMessage(MessageUtils.getEmbed().setDescription("Jméno " + args[1] + " je povolené, i když obsahuje zakázané slovo " + containedWord(words, args[1]) + "!").setColor(Color.YELLOW).build()).queue();
                             return;
                         }

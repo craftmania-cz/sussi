@@ -936,7 +936,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("INSERT INTO blacklisted_name_words (word) VALUES ();");
+            ps = conn.prepareStatement("INSERT INTO blacklisted_name_words (word) VALUES (?);");
             ps.setString(1, word);
             ps.executeUpdate();
         } catch (Exception e) {
