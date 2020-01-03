@@ -37,7 +37,7 @@ public class NickWordBlacklist implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         pBuilder.setEventWaiter(w);
-        if(sender.getId().equals("177516608778928129") || sender.getId().equals("211749751475929088")) {
+        if(sender.getId().equals("177516608778928129")) {
             if(args.length < 1) {
                 channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - NickWordBlacklist :question:")
                         .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
