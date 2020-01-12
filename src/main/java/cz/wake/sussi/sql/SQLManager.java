@@ -893,4 +893,101 @@ public class SQLManager {
         }
     }
 
+    public final List<String> getAllowedBlacklistedNames() {
+        List<String> allowedNames = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM allowed_blacklisted_names;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                allowedNames.add(ps.getResultSet().getString("nick"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return allowedNames;
+    }
+
+    public final List<String> getBlacklistedNameWords() {
+        List<String> blacklistedWords = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM blacklisted_name_words;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                blacklistedWords.add(ps.getResultSet().getString("word"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return blacklistedWords;
+    }
+
+    public final void addBlacklistedNameWord(final String word) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO blacklisted_name_words (word) VALUES (?);");
+            ps.setString(1, word);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void removeBlacklistedNameWord(final String word) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("DELETE FROM blacklisted_name_words WHERE word = ?;");
+            ps.setString(1, word);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void addAllowedBlacklistedName(final String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO allowed_blacklisted_names (nick) VALUES (?);");
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void removeAllowedBlacklistedName(final String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("DELETE FROM allowed_blacklisted_names WHERE nick = ?;");
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
 }

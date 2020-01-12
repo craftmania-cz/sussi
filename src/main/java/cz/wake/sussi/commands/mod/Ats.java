@@ -38,7 +38,7 @@ public class Ats implements ICommand {
             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - ats :question:")
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
         } else if(args[0].equalsIgnoreCase("reset")) {
-            if(sender.getId().equals("177516608778928129") || sender.getId().equals("238410025813540865")) {
+            if(sender.getId().equals("177516608778928129")) {
                 try {
                     Sussi.getInstance().getSql().resetATS("surv_chat_body");
                     Sussi.getInstance().getSql().resetATS("surv_played_time");
@@ -63,7 +63,7 @@ public class Ats implements ICommand {
                     channel.sendMessage(MessageUtils.getEmbed(Constants.RED).setDescription("Nastala chyba při resetu ATS!").build()).queue();
                 }
             } else {
-                MessageUtils.sendErrorMessage("Toto může provádět pouze Wake a Krosta!", channel);
+                MessageUtils.sendErrorMessage("Toto může provádět pouze Wake!", channel);
             }
         } else {
             String name = args[0];

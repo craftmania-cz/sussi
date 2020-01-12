@@ -43,7 +43,7 @@ public class News implements ICommand {
         }
 
         if(args[0].equals("update")) {
-            if(sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129")) {
+            if(sender.getId().equals("177516608778928129")) {
                 if(args.length < 2) {
                     channel.sendMessage(MessageUtils.getEmbed().setTitle("Nedostatek argumentů!")
                             .setDescription(getDescription() + "\n\n**Příklad**\n" + getHelp()).build()).queue();
@@ -54,17 +54,17 @@ public class News implements ICommand {
                 Sussi.getInstance().getSql().resetNewsReads();
                 channel.sendMessage(MessageUtils.getEmbed().setDescription("Na lobby bylo nastaveno nové oznámení a všem bylo restartováno zobrazení. Nová zpráva: ``" + msg + "``").setColor(Color.GREEN).build()).queue();
             } else {
-                MessageUtils.sendErrorMessage("Na toto má práva pouze Krosta nebo Kwak!", channel);
+                MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
                 return;
             }
         }
 
         if(args[0].equals("reset")) {
-            if(sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129")) {
+            if(sender.getId().equals("177516608778928129")) {
                 Sussi.getInstance().getSql().resetNewsReads();
                 channel.sendMessage(MessageUtils.getEmbed().setDescription("Všem bylo restartováno zobrazení oznámení na lobby.").setColor(Color.GREEN).build()).queue();
             } else {
-                MessageUtils.sendErrorMessage("Na toto má práva pouze Krosta nebo Kwak!", channel);
+                MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
                 return;
             }
         }
