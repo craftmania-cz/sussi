@@ -9,21 +9,19 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.objects.WhitelistedIP;
 import cz.wake.sussi.objects.WhitelistedNick;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.awt.*;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class NickWhitelist implements ICommand {
 
     private Paginator.Builder pBuilder;
-
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
@@ -113,11 +111,9 @@ public class NickWhitelist implements ICommand {
                     }
                 }
                 channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Nick nenalezen").setDescription("Nick " + args[1] + " nebyl nalezen.").build()).queue();
-                return;
             }
         } else {
             MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
-            return;
         }
     }
 

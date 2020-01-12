@@ -6,10 +6,10 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 
@@ -19,7 +19,7 @@ public class BlockCountry implements ICommand {
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if (sender.getId().equals("238410025813540865") || sender.getId().equals("177516608778928129")) {
 
-            if (Boolean.valueOf(Sussi.getInstance().getSql().getCraftBungeeConfigValue("block_country"))) {
+            if (Boolean.parseBoolean(Sussi.getInstance().getSql().getCraftBungeeConfigValue("block_country"))) {
                 Sussi.getInstance().getSql().updateCraftBungeeConfigValue("block_country", "false");
                 channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Příkaz byl úspěsně vykonán").setDescription("BlockCountry byl vypnut").build()).queue();
             } else {

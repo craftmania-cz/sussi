@@ -6,28 +6,25 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
-import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.dv8tion.jda.core.utils.JDALogger.getLog;
+import static net.dv8tion.jda.internal.utils.JDALogger.getLog;
 
 public class Sussi {
 
@@ -72,10 +69,10 @@ public class Sussi {
         SussiLogger.infoMessage("Connecting to Discord API...");
         jda = new JDABuilder(AccountType.BOT)
                 .setToken(config.getBotToken())
-                .addEventListener(new MainListener(waiter))
-                .addEventListener(waiter)
-                .addEventListener(new DialogFlowListener(aiDataService))
-                .setGame(Game.of(Game.GameType.DEFAULT, "Načítání..."))
+                .addEventListeners(new MainListener(waiter))
+                .addEventListeners(waiter)
+                .addEventListeners(new DialogFlowListener(aiDataService))
+                .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
         // Register commands

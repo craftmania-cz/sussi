@@ -1,7 +1,7 @@
 package cz.wake.sussi.metrics;
 
 import cz.wake.sussi.Sussi;
-import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.api.OnlineStatus;
 
 public class BotMetrics {
 
@@ -12,7 +12,7 @@ public class BotMetrics {
     public boolean count() {
         this.memberCount = Sussi.getJda().getGuildById("207412074224025600").getMembers().size();
         this.memberOnlineCount = Sussi.getJda().getGuildById("207412074224025600").getMembers().stream().filter(u -> !u.getOnlineStatus().equals(OnlineStatus.OFFLINE)).count();
-        this.ping = Sussi.getJda().getPing();
+        this.ping = Sussi.getJda().getGatewayPing();
         return true;
     }
 

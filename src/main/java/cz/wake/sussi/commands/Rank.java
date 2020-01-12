@@ -1,9 +1,9 @@
 package cz.wake.sussi.commands;
 
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.utils.PermissionUtil;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.internal.utils.PermissionUtil;
 
 public enum Rank {
 
@@ -35,18 +35,18 @@ public enum Rank {
         return rankWeight;
     }
 
-    public static Rank getPermLevelForUser(User user, Channel ch) {
+    public static Rank getPermLevelForUser(User user, TextChannel ch) {
         if (user.getId().equals("177516608778928129")) {
             return BOT_OWNER;
+        }
+        if (!ch.getGuild().isMember(user)) {
+            return USER;
         }
         if (PermissionUtil.checkPermission(ch, ch.getGuild().getMember(user), Permission.ADMINISTRATOR)) {
             return ADMINISTRATOR;
         }
         if (PermissionUtil.checkPermission(ch, ch.getGuild().getMember(user), Permission.BAN_MEMBERS)) {
             return MODERATOR;
-        }
-        if (ch.getGuild() == null || !ch.getGuild().isMember(user)) {
-            return USER;
         }
         return USER;
     }

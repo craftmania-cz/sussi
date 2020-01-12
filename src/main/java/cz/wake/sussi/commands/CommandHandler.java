@@ -39,7 +39,7 @@ public class CommandHandler {
         SussiLogger.infoMessage("Loading all commands.");
         registerCommand(new Ats());
         registerCommand(new Help());
-        registerCommand(new Cmarchiv());
+        //registerCommand(new Cmarchiv());
         registerCommand(new Stop());
         registerCommand(new Pravidla());
         registerCommand(new CheckIP());
@@ -47,7 +47,6 @@ public class CommandHandler {
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
         registerCommand(new Fortnite());
-        registerCommand(new Satisfactory());
         registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
         registerCommand(new Osu());
@@ -60,7 +59,6 @@ public class CommandHandler {
         registerCommand(new Link());
         registerCommand(new Unlink());
         registerCommand(new Hytale());
-        registerCommand(new Rust());
         registerCommand(new DeadbyDaylight());
         registerCommand(new EurotruckSimulator2());
         registerCommand(new Events());

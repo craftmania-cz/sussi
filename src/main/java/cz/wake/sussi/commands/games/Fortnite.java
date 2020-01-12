@@ -5,10 +5,10 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class Fortnite implements ICommand {
 
@@ -16,11 +16,11 @@ public class Fortnite implements ICommand {
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
             if (!member.getRoles().contains(member.getGuild().getRoleById("430730941728817154"))) {
-                member.getGuild().getController().addRolesToMember(member, member.getGuild().getRoleById("430730941728817154")).queue();
+                member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("430730941728817154")).queue();
                 message.delete().queue();
                 MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Fortnite`!", 5000L, channel);
             } else {
-                member.getGuild().getController().removeRolesFromMember(member, member.getGuild().getRoleById("430730941728817154")).queue();
+                member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("430730941728817154")).queue();
                 message.delete().queue();
                 MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Fortnite`!", 5000L, channel);
             }

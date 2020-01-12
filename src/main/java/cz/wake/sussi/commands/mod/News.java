@@ -6,10 +6,10 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 
@@ -65,7 +65,6 @@ public class News implements ICommand {
                 channel.sendMessage(MessageUtils.getEmbed().setDescription("Všem bylo restartováno zobrazení oznámení na lobby.").setColor(Color.GREEN).build()).queue();
             } else {
                 MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
-                return;
             }
         }
     }

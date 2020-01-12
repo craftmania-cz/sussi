@@ -5,12 +5,13 @@ import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.ShutdownEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class MainListener extends ListenerAdapter {
@@ -41,7 +42,7 @@ public class MainListener extends ListenerAdapter {
                 if (cmd.getCommand().equalsIgnoreCase(command)) {
                     SussiLogger.commandMessage("'," + cmd.getCommand() + "', Guild: " + e.getGuild().getName() + ", Channel: " + e.getChannel().getName() + ", Sender: " + e.getAuthor().getName() + "#" + e.getAuthor().getDiscriminator() + " (" + e.getAuthor().getId() + ")");
                     String[] finalArgs = args;
-                    List<Permission> perms = e.getGuild().getSelfMember().getPermissions(e.getChannel());
+                    EnumSet<Permission> perms = e.getGuild().getSelfMember().getPermissions(e.getChannel());
                     if (!perms.contains(Permission.MESSAGE_EMBED_LINKS)) {
                         e.getChannel().sendMessage(":warning: | Nemám dostatečná práva na používání EMBED odkazů! Přiděl mi právo: `Vkládání odkazů` nebo `Embed Links`.").queue();
                         return;

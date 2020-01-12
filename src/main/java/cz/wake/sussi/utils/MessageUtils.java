@@ -1,15 +1,14 @@
 package cz.wake.sussi.utils;
 
 import cz.wake.sussi.Sussi;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
-import java.io.ByteArrayInputStream;
 import java.util.concurrent.TimeUnit;
 
 public class MessageUtils {
@@ -18,10 +17,10 @@ public class MessageUtils {
         message.editMessage(content).queue();
     }
 
-    public static Message sendFile(MessageChannel channel, String s, String fileContent, String filename) {
+    /*public static Message sendFile(MessageChannel channel, String s, String fileContent, String filename) {
         ByteArrayInputStream stream = new ByteArrayInputStream(fileContent.getBytes());
         return channel.sendFile(stream, filename, new MessageBuilder().append(s).build()).complete();
-    }
+    }*/
 
     public static String getTag(User user) {
         return user.getName() + '#' + user.getDiscriminator();

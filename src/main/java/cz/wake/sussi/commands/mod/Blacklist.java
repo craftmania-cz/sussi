@@ -9,12 +9,12 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.objects.BlacklistName;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -93,8 +93,7 @@ public class Blacklist implements ICommand {
     private String getDate(long time) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
-        final String timeString = new SimpleDateFormat("dd.MM.yyyy").format(cal.getTime());
-        return timeString;
+        return new SimpleDateFormat("dd.MM.yyyy").format(cal.getTime());
     }
 
     private void showPlayersInBlacklist(MessageChannel channel, EventWaiter w){
