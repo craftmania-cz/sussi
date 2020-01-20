@@ -5,7 +5,7 @@ plugins {
 }
 
 def group = 'cz.wake.sussi'
-def version = '1.9.4'
+def version = '1.9.4.1'
 
 mainClassName = 'cz.wake.sussi.Sussi'
 
@@ -27,8 +27,8 @@ clean { delete "./build" }
 repositories {
     //flatDir { dirs 'lib' }
     mavenCentral()
-    maven { url "http://jcenter.bintray.com" }
-    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://jcenter.bintray.com" }
+    maven { url "https://repo.maven.apache.org/maven2" }
     maven { url 'https://jitpack.io' }
 }
 
