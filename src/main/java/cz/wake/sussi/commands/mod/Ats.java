@@ -125,7 +125,7 @@ public class Ats implements ICommand {
         int vanTime = Sussi.getInstance().getSql().getStalkerStats(name, "vanilla_played_time");
         int miniGChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "minigames_chat_body");
         int minGTime = Sussi.getInstance().getSql().getStalkerStats(name, "minigames_played_time");
-        int vsbChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "vanillasb_chat_body");
+        int vsbChatBody = Sussi.getInstance().getSql().getStalkerStats(name, "skycloud_chat_body");
         int vsbTime = Sussi.getInstance().getSql().getStalkerStats(name, "skycloud_played_time");
         int buildTime = Sussi.getInstance().getSql().getStalkerStats(name, "build_played_time");
         int eventsTime = Sussi.getInstance().getSql().getStalkerStats(name, "events_played_time");
@@ -141,7 +141,7 @@ public class Ats implements ICommand {
         embed.addField("Přístup na Build", getResult(pristup_build), true);
         embed.addField("Celkem hodin", TimeUtils.formatTime("%d dni, %hh %mm", total_hours, false), true);
         embed.addField("Celkem aktivita", String.valueOf(total_activity) + " bodů", true);
-        //embed.addField("Možné body", String.valueOf(getChangePoints(total_hours, total_activity)), true);
+        embed.addField("Trestné body", String.valueOf(0), true);
         embed.addField("Min. počet hodin", min_hours + " hodin (" + resolveTime(total_hours / 60, min_hours) + ")", true);
         embed.setFooter("Platné pro: " + getDate(System.currentTimeMillis()), null);
 
