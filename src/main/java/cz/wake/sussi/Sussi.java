@@ -7,6 +7,7 @@ import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.BoosterListener;
 import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
+import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
@@ -81,7 +82,10 @@ public class Sussi {
         (instance = new Sussi()).init();
 
         // Metrics
-        //Metrics.setup();
+        if (config.isMetricsEnabled()) {
+            SussiLogger.infoMessage("Metrics enabled, now starts...");
+            Metrics.setup();
+        }
 
         // isBeta and MySQL
         if (!isBeta) {

@@ -11,7 +11,7 @@ public class LoadingProperties {
     private String botToken;
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
                     dialogFlowApiKey;
-    private boolean dialogFlowEnabled;
+    private boolean dialogFlowEnabled, metricsEnabled;
     private List<String> dialogFlowChannels;
 
     public LoadingProperties() {
@@ -35,9 +35,10 @@ public class LoadingProperties {
             ipHubKey = properties.getProperty("ipHubKey");
             proxycheckKey = properties.getProperty("proxycheckKey");
             beta = properties.getProperty("isBeta");
+            metricsEnabled = Boolean.parseBoolean(properties.getProperty("metrics.enabled", "false"));
 
             dialogFlowApiKey = properties.getProperty("dialogflow-api-key");
-            dialogFlowEnabled = Boolean.valueOf(properties.getProperty("dialogflow-enabled"));
+            dialogFlowEnabled = Boolean.parseBoolean(properties.getProperty("dialogflow-enabled", "false"));
             dialogFlowChannels = Collections.singletonList(properties.getProperty("dialogflow-channels"));
 
         } catch (Exception e) {
@@ -103,5 +104,13 @@ public class LoadingProperties {
 
     public List<String> getDialogFlowChannels() {
         return dialogFlowChannels;
+    }
+
+    public String getBeta() {
+        return beta;
+    }
+
+    public boolean isMetricsEnabled() {
+        return metricsEnabled;
     }
 }

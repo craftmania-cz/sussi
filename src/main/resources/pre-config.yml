@@ -22,6 +22,10 @@ proxycheckKey: kek
 # Beta
 isBeta: true
 
+# Prometheus Stats
+metrics:
+  enabled: false
+
 # Integrace s Dialogglow
 dialogflow-enabled: true
 dialogflow-api-key: some-key-yep
