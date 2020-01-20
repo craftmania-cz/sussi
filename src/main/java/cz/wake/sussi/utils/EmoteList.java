@@ -11,6 +11,7 @@ public class EmoteList {
     final public static String BACK = "\u25C0";
     final public static String NEXT = "\u25B6";
     final public static String DELETE = "\u274C";
+    final public static String ZABICKA_BOOSTER = "<a:zabickaBooster:666058180383735810>";
 
     // Numbers
     final public static String ONE = "\u0031\u20E3";

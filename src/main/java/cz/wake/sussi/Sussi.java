@@ -4,6 +4,7 @@ import ai.api.AIConfiguration;
 import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
+import cz.wake.sussi.listeners.BoosterListener;
 import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.runnable.StatusChanger;
@@ -72,6 +73,7 @@ public class Sussi {
                 .addEventListeners(new MainListener(waiter))
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))
+                .addEventListeners(new BoosterListener(waiter))
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 

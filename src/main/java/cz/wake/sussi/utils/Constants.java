@@ -46,6 +46,14 @@ public class Constants {
     final public static String NINE = "\u0039\u20E3";
     final public static String TEN = "\uD83D\uDD1F";
 
+    // Roles
+    final public static String BOOSTER_ROLE = "580680123091648523";
+    final public static String BOOSTER_COLOR_1 = "665574449541677057";
+    final public static String BOOSTER_COLOR_2 = "665574758011633686";
+    final public static String BOOSTER_COLOR_3 = "665575430677463060";
+    final public static String BOOSTER_COLOR_4 = "665575722542301214";
+    final public static String BOOSTER_COLOR_5 = "665576138277388288";
+
     private static int getColorCode() {
         int choice = ThreadLocalRandom.current().nextInt(0, 1 + 1);
         switch (choice) {

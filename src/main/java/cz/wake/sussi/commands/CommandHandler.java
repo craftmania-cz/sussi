@@ -69,6 +69,7 @@ public class CommandHandler {
         registerCommand(new News());
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
+        registerCommand(new Booster());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
