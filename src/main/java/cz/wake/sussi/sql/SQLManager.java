@@ -990,4 +990,22 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public boolean hasNotes(String player) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM bungeecord.notes_data WHERE player = ?;");
+            ps.setString(1, player);
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return false;
+    }
+
 }

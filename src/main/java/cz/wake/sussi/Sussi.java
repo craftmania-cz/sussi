@@ -8,6 +8,7 @@ import cz.wake.sussi.listeners.BoosterListener;
 import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.metrics.Metrics;
+import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
@@ -42,6 +43,7 @@ public class Sussi {
     private static boolean isBeta = true;
     private static final Map<String, Logger> LOGGERS;
     public static final Logger LOGGER;
+    public static NoteManager noteManager;
 
     static {
         new File("logs/latest.log").renameTo(new File("logs/log-" + getCurrentTimeStamp() + ".log"));
@@ -110,6 +112,8 @@ public class Sussi {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new StatusChanger(), 10, 60000);
 
+        if (!isBeta) noteManager = new NoteManager();
+
     }
 
     public static Sussi getInstance() {
@@ -156,5 +160,9 @@ public class Sussi {
 
     public static String getIpHubKey() {
         return ipHubKey;
+    }
+
+    public static NoteManager getNoteManager() {
+        return noteManager;
     }
 }
