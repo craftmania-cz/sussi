@@ -75,7 +75,7 @@ public class Napad implements ICommand {
 
     @Override
     public String[] getAliases() {
-        return new String[]{"idea"};
+        return new String[]{"idea", "navrh"};
     }
 
     @Override
