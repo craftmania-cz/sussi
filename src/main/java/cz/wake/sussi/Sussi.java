@@ -5,6 +5,7 @@ import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.BoosterListener;
+import cz.wake.sussi.listeners.CraftManiaArchiveListener;
 import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.metrics.Metrics;
@@ -73,7 +74,7 @@ public class Sussi {
         SussiLogger.infoMessage("Connecting to Discord API...");
         jda = new JDABuilder(AccountType.BOT)
                 .setToken(config.getBotToken())
-                .addEventListeners(new MainListener(waiter))
+                .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))
                 .addEventListeners(new BoosterListener(waiter))
