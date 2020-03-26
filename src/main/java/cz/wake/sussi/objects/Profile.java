@@ -4,7 +4,15 @@ import cz.wake.sussi.utils.SussiLogger;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 
 public class Profile {
 
@@ -29,7 +37,7 @@ public class Profile {
     private int crafttokens = 0;
     private int votetokens = 0;
     private long karma = 0;
-    private int achievement_points= 0;
+    private int achievement_points = 0;
 
     // Ranked
     private int global_level = 1;
@@ -60,6 +68,17 @@ public class Profile {
     private String steam = "";
     private String web = "";
 
+    private String discordID = "";
+
+    // Groups
+    private String globalVIP = "";
+    private Long globalVIPexpiry = -1L;
+    private ServerVIP globalVIPobj;
+    private List<ServerVIP> serverVIPs = new ArrayList<>();
+    private boolean hasAnyVIP = false;
+    private Map<ServerType, List<ServerVIP>> mappedServerVIPs = new HashMap<>();
+
+
     public Profile(String nick) {
         JSONObject json;
         try {
@@ -76,7 +95,7 @@ public class Profile {
 
         // Status
         this.statusId = json.getInt("status");
-        if(statusId == 404 || statusId == 500) {
+        if (statusId == 404 || statusId == 500) {
             return;
         }
 
@@ -86,6 +105,7 @@ public class Profile {
         JSONObject ranked = data.getJSONObject("ranked");
         JSONObject votes = data.getJSONObject("votes");
         JSONObject social = data.getJSONObject("social");
+        JSONObject groups = data.getJSONObject("groups").isNull("vip") ? null : data.getJSONObject("groups").getJSONObject("vip");
 
         // Data
         this.id = data.isNull("id") ? 0 : data.getInt("id");
@@ -133,9 +153,42 @@ public class Profile {
         //this.status = social.isNull("status") ? "" : social.getString("status");
         this.facebook = social.isNull("facebook") ? "" : social.getString("facebook");
         this.twitter = social.isNull("twitter") ? "" : social.getString("twitter");
-        this.twitch = social.isNull("twitch")  ? "" : social.getString("twitch");
-        this.steam = social.isNull("steam")  ? "" : social.getString("steam");
-        this.web = social.isNull("web")  ? "" : social.getString("web");
+        this.twitch = social.isNull("twitch") ? "" : social.getString("twitch");
+        this.steam = social.isNull("steam") ? "" : social.getString("steam");
+        this.web = social.isNull("web") ? "" : social.getString("web");
+
+        this.discordID = data.getJSONObject("discord").isNull("id") ? "" : data.getJSONObject("discord").getString("id");
+
+        // Groups
+        if (groups != null) {
+            this.globalVIP = groups.isNull("primary") ? null : groups.getString("primary");
+            if (VIPType.isValid(globalVIP)) {
+                this.globalVIPexpiry = groups.isNull("time") ? null : groups.getLong("time");
+                this.globalVIPobj = new ServerVIP(globalVIPexpiry, globalVIP);
+            } else globalVIP = null;
+
+            for (ServerType vip : ServerType.values()) {
+                mappedServerVIPs.put(vip, new ArrayList<>());
+            }
+
+            // Nemá global VIP
+            for (String serverName : groups.getJSONObject("servers").keySet()) {
+                JSONArray serverArray = groups.getJSONObject("servers").getJSONArray(serverName);
+                serverArray.forEach(serverObj -> {
+                    JSONObject jsonObject = new JSONObject(serverObj.toString());
+
+                    ServerVIP obj = new ServerVIP(jsonObject.getLong("time"), jsonObject.getString("group"));
+                    obj.setServerName(serverName);
+
+                    //System.out.println(obj.toString());
+
+                    serverVIPs.add(obj);
+                    mappedServerVIPs.get(obj.getServerType()).add(obj);
+                });
+            }
+
+            hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
+        }
     }
 
     public int getStatusId() {
@@ -296,5 +349,199 @@ public class Profile {
 
     public String getWeb() {
         return web;
+    }
+
+    /**
+     * Returns player's discord ID, if does not have returns empty string
+     *
+     * @return Discord ID in string
+     * @since 1.11.0
+     */
+    public String getDiscordID() {
+        return discordID;
+    }
+
+    /**
+     * First check if player really has this Global VIP
+     * using {@link Profile#hasGlobalVIP()}
+     *
+     * @return ServerVIP if exists
+     * @since 1.11.0
+     */
+    @Nullable
+    public ServerVIP getGlobalVIP() {
+        return globalVIPobj;
+    }
+
+    /**
+     * Checks if player has Global VIP
+     *
+     * @return boolean
+     * @since 1.11.0
+     */
+    public boolean hasGlobalVIP() {
+        if (globalVIP == null) return false;
+        if (globalVIP.equalsIgnoreCase("")) return false;
+        return VIPType.isValid(globalVIP);
+    }
+
+    /**
+     * Get all player's VIPs, these are not ordered
+     *
+     * @return List of ServerVIP objects
+     * @since 1.11.0
+     */
+    public List<ServerVIP> getServerVIPs() {
+        return serverVIPs;
+    }
+
+    /**
+     * Returns if player has any VIP including global
+     *
+     * @return boolean
+     * @since 1.11.0
+     */
+    public boolean hasAnyVIP() {
+        return this.hasAnyVIP;
+    }
+
+    /**
+     * Returns one highest server VIP from each server where
+     * player has activated server VIP
+     *
+     * @return List of Server VIPs
+     * @since 1.11.0
+     */
+    public Set<ServerVIP> getHighestVIPs() {
+        Set<ServerVIP> out = new HashSet<>();
+        for (ServerType type : ServerType.values()) {
+            Optional<ServerVIP> opt = serverVIPs.stream()
+                    .filter(serverVIP -> serverVIP.getServerType() == type)
+                    .max(Comparator.comparingInt(serverVIP -> serverVIP.getVIPType().priority));
+            opt.ifPresent(out::add);
+        }
+        return out;
+    }
+
+    /**
+     * Server VIP object that stores server name, expire date
+     * and type of VIP
+     *
+     * @since 1.11.0
+     */
+    public static class ServerVIP {
+
+        private Long time;
+        private String group;
+        private String serverName;
+
+        public ServerVIP(Long time, String group) {
+            this.time = time;
+            this.group = group;
+        }
+
+        public Long getTime() {
+            return time;
+        }
+
+        public String getGroup() {
+            return StringUtils.capitalize(group);
+        }
+
+        @Nullable
+        public Profile.VIPType getVIPType() {
+            return Arrays.stream(VIPType.values())
+                    .filter(e -> e.name().equalsIgnoreCase(group)).findAny().orElse(null);
+        }
+
+        @Nullable
+        public Profile.ServerType getServerType() {
+            return ServerType.get(serverName);
+        }
+
+        public boolean isPermanent() {
+            return this.time == 0L;
+        }
+
+        public String getServerName() {
+            return StringUtils.capitalize(serverName);
+        }
+
+        public void setServerName(String serverName) {
+            this.serverName = serverName;
+        }
+
+        public String getFormattedDate() {
+            if (isPermanent()) return "";
+            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd.MM.yyy HH:mm");
+            return dateTimeFormatter.format(this.time);
+        }
+
+        @Override
+        public String toString() {
+            return "ServerVIP{" +
+                    "time=" + time +
+                    ", group='" + group + '\'' +
+                    ", serverName='" + serverName + '\'' +
+                    ", vipEnum='" + getVIPType() + '\'' +
+                    '}';
+        }
+    }
+
+    /**
+     * All types of VIPs
+     *
+     * @since 1.11.0
+     */
+    public static enum VIPType {
+
+        GOLD("gold", 1, "#d4a01d"),
+        DIAMOND("diamond", 2, "#87cefa"),
+        EMERALD("emerald", 3, "#6cf1c6"),
+        OBSIDIAN("obsidian", 4, "#8953ff");
+
+        private String groupName;
+        private int priority;
+        private String colour;
+
+        VIPType(String groupName, int priority, String colour) {
+            this.groupName = groupName;
+            this.priority = priority;
+            this.colour = colour;
+        }
+
+        public static boolean isValid(String groupName) {
+            for (VIPType vips : values()) {
+                if (groupName.equalsIgnoreCase(vips.groupName)) return true;
+            }
+            return false;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+
+        public Color getColor() {
+            return Color.decode(colour);
+        }
+    }
+
+    public static enum ServerType {
+
+        GLOBAL,
+        SURVIVAL,
+        SKYBLOCK,
+        CREATIVE,
+        VANILLA;
+
+        ServerType() {}
+
+        @Nullable
+        public static Profile.ServerType get(String serverName) {
+            for (ServerType vipType : values()) {
+                if (vipType.name().equalsIgnoreCase(serverName)) return vipType;
+            }
+            return null;
+        }
     }
 }
