@@ -9,11 +9,13 @@ import cz.wake.sussi.objects.Profile;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.TimeUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
@@ -21,6 +23,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class NewProfile implements ICommand {
 
@@ -66,8 +69,8 @@ public class NewProfile implements ICommand {
             role = getRankByID(rank);
         }
 
-        ch.sendMessage(MessageUtils.getEmbed(color)
-                .setTitle("Informace o hráči: " + profile.getName() + " (lvl:" + profile.getGlobal_level() + ")")
+        EmbedBuilder embedBuilder = MessageUtils.getEmbed(profile.hasGlobalVIP() ? profile.getGlobalVIP().getVIPType().getColor() : color)
+                .setTitle("Informace o hráči: " + profile.getName() + " (lvl: " + profile.getGlobal_level() + ")")
                 .setThumbnail("https://mc-heads.net/head/" + profile.getName() + "/128.png")
 
                 .addField("Globální statistiky",
@@ -75,26 +78,41 @@ public class NewProfile implements ICommand {
                                 "Role: " + role + "\n" +
                                 "Celkově odehraný čas: " + TimeUtils.formatTime("%d dni, %hh %mm", profile.getPlayedTime(), false) + "\n" +
                                 getOnlineString(profile) + "\n" +
-                                (profile.isOnline() ? "" : "Naposledy viděn: " + getDate(profile.getLastOnline()))
-
+                                (profile.isOnline() ? "" : "Naposledy viděn: " + getDate(profile.getLastOnline())) +
+                                (profile.getDiscordID() == "" ? "" : "\nDiscord: <@" + profile.getDiscordID() + ">")
                         , false)
                 .addField("Ekonomika",
                         "CraftCoins: " + profile.getCraftCoins() + "\n" +
                                 "CraftTokeny: " + profile.getCraftTokens() + "\n" +
                                 "VoteTokeny: " + profile.getVoteTokens() + "\n" +
-                                "AchievementPointy: " + profile.getAchievementPoints()
+                                "Ach. pointy: " + profile.getAchievementPoints()
                         , true)
                 .addField("Hlasování",
-                            "Celkem hlasů: " + profile.getTotalVotes() + "\n" +
-                                    "Měsíční hlasy: " + profile.getMonthVotes() + "\n" +
-                                    "Týdenní hlasy: " + profile.getWeekVotes() + "\n" +
-                                    "Poslední hlas: " + getDate(profile.getLastVote())
-
+                        "Celkem hlasů: " + profile.getTotalVotes() + "\n" +
+                                "Měsíční hlasy: " + profile.getMonthVotes() + "\n" +
+                                "Týdenní hlasy: " + profile.getWeekVotes() + "\n" +
+                                "Poslední hlas: " + getDate(profile.getLastVote())
                         , true)
+                .addField("Levely",
+                        "Survival: " + profile.getSurvival_level() + " (" + profile.getSurvival_experience() + "XP)" + "\n" +
+                                "SkyBlock: " + profile.getSkyblock_level() + " (" + profile.getSkyblock_experience() + "XP)" + "\n" +
+                                "Creative: " + profile.getCreative_level() + " (" + profile.getCreative_experience() + "XP)" + "\n" +
+                                "Vanilla: " + profile.getVanilla_level() + " (" + profile.getVanilla_experience() + "XP)" + "\n"
+                        , true)
+                .setFooter("CraftMania.cz Stats")
+                .setTimestamp(Instant.from(ZonedDateTime.now()));
 
-                .setFooter("CraftMania.cz Stats 1/2", Sussi.getJda().getSelfUser().getAvatarUrl())
-                .setTimestamp(Instant.from(ZonedDateTime.now()))
-                .build()).queue((Message m) -> {
+        if (profile.hasAnyVIP()) {
+            embedBuilder.addField("VIP",
+                    (profile.hasGlobalVIP() ? "Global: " + StringUtils.capitalize(profile.getGlobalVIP().getGroup()) + " VIP " + (profile.getGlobalVIP().isPermanent() ? "\n" : "(expirace: " + profile.getGlobalVIP().getFormattedDate() + ")\n") : "") +
+                            (profile.getHighestVIPs().stream().map(vip -> vip.getServerName() + ": " + StringUtils.capitalize(vip.getGroup()) + " VIP " + (vip.isPermanent() ? "\n" : "(expirace: " + vip.getFormattedDate() + ")\n")).collect(Collectors.joining())),
+                    false);
+        }
+
+        ch.sendMessage(embedBuilder.build()).queue();
+
+        // Reactions
+        /*ch.sendMessage(embedBuilder .build()).queue((Message m) -> {
                     m.addReaction(Constants.BACK).queue();
                     m.addReaction(Constants.NEXT).queue();
                     m.addReaction(Constants.DELETE).queue();
@@ -110,9 +128,10 @@ public class NewProfile implements ICommand {
                     }, (MessageReactionAddEvent ev) -> {
                         secondPage(s, m, ch, w, profile);
                     }, 60, TimeUnit.SECONDS, null);
-        });
+        });*/
     }
 
+    @Deprecated
     private void secondPage(User s, Message message, MessageChannel ch, EventWaiter w, Profile profile) {
         Color color = Color.WHITE;
 
@@ -121,19 +140,27 @@ public class NewProfile implements ICommand {
             color = getColorByRank(rank);
         }
 
-        message.editMessage(MessageUtils.getEmbed(color)
+        EmbedBuilder embed = MessageUtils.getEmbed(color)
                 .setTitle("Informace o hráči: " + profile.getName() + " (lvl:" + profile.getGlobal_level() + ")")
                 .setThumbnail("https://mc-heads.net/head/" + profile.getName() + "/128.png")
 
                 .addField("Levely",
-                                "Survival: " + profile.getSurvival_level() + " (" + profile.getSurvival_experience() + "XP)" + "\n" +
+                        "Survival: " + profile.getSurvival_level() + " (" + profile.getSurvival_experience() + "XP)" + "\n" +
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + profile.getSkyblock_experience() + "XP)" + "\n" +
                                 "Creative: " + profile.getCreative_level() + " (" + profile.getCreative_experience() + "XP)" + "\n" +
                                 "Vanilla: " + profile.getVanilla_level() + " (" + profile.getVanilla_experience() + "XP)" + "\n"
                         , false)
                 .setFooter("CraftMania.cz Stats 2/2", Sussi.getJda().getSelfUser().getAvatarUrl())
-                .setTimestamp(Instant.from(ZonedDateTime.now()))
-                .build()).queue((Message m) -> {
+                .setTimestamp(Instant.from(ZonedDateTime.now()));
+
+        if (profile.hasAnyVIP()) {
+            embed.addField("VIP",
+                    (profile.hasGlobalVIP() ? "Global: " + StringUtils.capitalize(profile.getGlobalVIP().getGroup()) + " VIP " + (profile.getGlobalVIP().isPermanent() ? "\n" : "(expirace: " + profile.getGlobalVIP().getFormattedDate() + ")\n") : "") +
+                            (profile.getHighestVIPs().stream().map(vip -> vip.getServerName() + ": " + StringUtils.capitalize(vip.getGroup()) + " VIP " + (vip.isPermanent() ? "\n" : "(expirace: " + vip.getFormattedDate() + ")\n")).collect(Collectors.joining())),
+                    false);
+        }
+
+        message.editMessage(embed.build()).queue((Message m) -> {
                     w.waitForEvent(MessageReactionAddEvent.class, (MessageReactionAddEvent e) -> {
                         return e.getUser().equals(s) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.DELETE));
                     }, (MessageReactionAddEvent ev) -> {
