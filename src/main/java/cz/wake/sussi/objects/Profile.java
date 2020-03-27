@@ -510,7 +510,8 @@ public class Profile {
             this.colour = colour;
         }
 
-        public static boolean isValid(String groupName) {
+        public static boolean isValid(@Nullable String groupName) {
+            if (groupName == null) return false;
             for (VIPType vips : values()) {
                 if (groupName.equalsIgnoreCase(vips.groupName)) return true;
             }
