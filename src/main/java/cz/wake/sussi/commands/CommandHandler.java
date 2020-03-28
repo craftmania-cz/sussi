@@ -60,7 +60,6 @@ public class CommandHandler {
         registerCommand(new Unlink());
         registerCommand(new Hytale());
         registerCommand(new DeadbyDaylight());
-        registerCommand(new EurotruckSimulator2());
         registerCommand(new Events());
         registerCommand(new NewProfile());
         registerCommand(new BlockCountry());
