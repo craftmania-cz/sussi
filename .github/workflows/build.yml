@@ -34,7 +34,7 @@ jobs:
         with:
           IMAGE_NAME: 'sussi'
           BRANCH_TAG: true
-          DOCKERFILE_PATH: './Dockerfile'
-          BUILD_CONTEXT: 'build/libs'
+          DOCKERFILE_PATH: 'Dockerfile'
+          BUILD_CONTEXT: './'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
