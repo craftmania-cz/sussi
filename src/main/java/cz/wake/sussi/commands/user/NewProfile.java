@@ -77,8 +77,8 @@ public class NewProfile implements ICommand {
                         "Registrován: " + getDate(profile.getRegistred()) + "\n" +
                                 "Role: " + role + "\n" +
                                 "Celkově odehraný čas: " + TimeUtils.formatTime("%d dni, %hh %mm", profile.getPlayedTime(), false) + "\n" +
-                                getOnlineString(profile) + "\n" +
-                                (profile.isOnline() ? "" : "Naposledy viděn: " + getDate(profile.getLastOnline())) +
+                                getOnlineString(profile) +
+                                (profile.isOnline() ? "" : "\nNaposledy viděn: " + getDate(profile.getLastOnline())) +
                                 (profile.getDiscordID() == "" ? "" : "\nDiscord: <@" + profile.getDiscordID() + ">")
                         , false)
                 .addField("Ekonomika",
