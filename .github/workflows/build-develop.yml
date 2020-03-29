@@ -1,6 +1,9 @@
-name: Build
+name: Build Develop
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   build:
@@ -34,7 +37,7 @@ jobs:
         id: docker
         with:
           IMAGE_NAME: 'sussi'
-          BRANCH_TAG: true
+          TAG: 'develop'
           DOCKERFILE_PATH: 'Dockerfile'
           BUILD_CONTEXT: './'
         env:
