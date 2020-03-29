@@ -48,15 +48,29 @@ public class NewAts implements ICommand {
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
             return;
         } else if (args[0].equalsIgnoreCase("evaluate")) {
-            if (args.length > 1) {
-                String name = args[1];
-                if (name.equalsIgnoreCase("all")) {
-                    if (args.length >= 3) {
-                        if (args[2].equalsIgnoreCase("-r")) {
+            if (sender.getId().equalsIgnoreCase("177516608778928129")) {
+                if (args.length > 1) {
+                    String name = args[1];
+                    if (name.equalsIgnoreCase("all")) {
+                        if (args.length >= 3) {
+                            if (args[2].equalsIgnoreCase("-r")) {
+                                channel.sendMessage(MessageUtils.getEmbed()
+                                        .setTitle("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
+                                        .setDescription("Vyhodnocuji a resetuji ATS...").build()).queue(msg -> {
+                                    Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(true);
+                                    msg.editMessage(pair.getLeft().build()).queue();
+                                    if (!pair.getRight().isEmpty())
+                                        channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
+                                    MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSManager.PRIVATE_CHANNEL_ID);
+                                    if (secretChannel == null) return;
+                                    secretChannel.sendMessage(pair.getMiddle().build()).queue();
+                                });
+                            }
+                        } else {
                             channel.sendMessage(MessageUtils.getEmbed()
                                     .setTitle("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
-                                    .setDescription("Vyhodnocuji a resetuji ATS...").build()).queue(msg -> {
-                                Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(true);
+                                    .setDescription("Vyhodnocuji ATS...").build()).queue(msg -> {
+                                Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(false);
                                 msg.editMessage(pair.getLeft().build()).queue();
                                 if (!pair.getRight().isEmpty())
                                     channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
@@ -64,35 +78,26 @@ public class NewAts implements ICommand {
                                 if (secretChannel == null) return;
                                 secretChannel.sendMessage(pair.getMiddle().build()).queue();
                             });
-                        }
-                    } else {
-                        channel.sendMessage(MessageUtils.getEmbed()
-                                .setTitle("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
-                                .setDescription("Vyhodnocuji ATS...").build()).queue(msg -> {
-                            Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(false);
-                            msg.editMessage(pair.getLeft().build()).queue();
-                            if (!pair.getRight().isEmpty())
-                                channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
-                            MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSManager.PRIVATE_CHANNEL_ID);
-                            if (secretChannel == null) return;
-                            secretChannel.sendMessage(pair.getMiddle().build()).queue();
-                        });
 
+                        }
+                        message.delete();
+                        return;
                     }
-                    message.delete();
+                    if (!Sussi.getATSManager().isInATS(name)) {
+                        MessageUtils.sendErrorMessage("Nelze použít ,ats pokud nejsi člen AT!", channel);
+                        return;
+                    }
+                    if (!Sussi.getInstance().getSql().isAlreadyLinkedByID(name)) {
+                        MessageUtils.sendErrorMessage("Nick není propojen s Discord účtem.", channel);
+                        return;
+                    }
+                    ATS ats = new ATS(name);
+                    channel.sendMessage(MessageUtils.getEmbed().setDescription("Evaluation sending to DM...").build()).queue();
+                    ats.evaluate();
                     return;
                 }
-                if (!Sussi.getATSManager().isInATS(name)) {
-                    MessageUtils.sendErrorMessage("Nelze použít ,ats pokud nejsi člen AT!", channel);
-                    return;
-                }
-                if (!Sussi.getInstance().getSql().isAlreadyLinkedByID(name)) {
-                    MessageUtils.sendErrorMessage("Nick není propojen s Discord účtem.", channel);
-                    return;
-                }
-                ATS ats = new ATS(name);
-                channel.sendMessage(MessageUtils.getEmbed().setDescription("Evaluation sending to DM...").build()).queue();
-                ats.evaluate();
+            } else {
+                MessageUtils.sendErrorMessage("Na toto má oprávnění pouze Kwak!", channel);
                 return;
             }
         } else {
@@ -204,7 +209,7 @@ public class NewAts implements ICommand {
     public String getHelp() {
         return ",ats [nick] - Zjištění aktivity pro zadaný nick\n" +
                 ",ats reset - Vyresetování ATS (Wake)\n" +
-                ",ats evaluate - Ručné vyhodnocení ATS (Wake)";
+                ",ats evaluate [-r]- Ručné vyhodnocení ATS (Wake)";
     }
 
     @Override
