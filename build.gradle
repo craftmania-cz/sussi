@@ -48,5 +48,6 @@ dependencies {
     compile group: 'io.prometheus', name: 'simpleclient', version: '0.6.0'
     compile group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.6.0'
     compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: '0.6.0'
+    compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
     testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version:'1.7.25'
 }

@@ -37,7 +37,7 @@ public class CommandHandler {
 
     public void register() {
         SussiLogger.infoMessage("Loading all commands.");
-        registerCommand(new Ats());
+        //registerCommand(new Ats());
         registerCommand(new Help());
         //registerCommand(new Cmarchiv());
         registerCommand(new Stop());
@@ -71,6 +71,7 @@ public class CommandHandler {
         registerCommand(new Booster());
         registerCommand(new NoteCommand());
         registerCommand(new StaffList());
+        registerCommand(new NewAts());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

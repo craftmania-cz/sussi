@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -759,12 +760,13 @@ public class SQLManager {
         }
     }
 
-    public final boolean isAlreadyLinked(String p) {
+    public final boolean isAlreadyLinkedByID(String id) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT * FROM player_profile WHERE discord_user_id = '" + p + "';");
+            ps = conn.prepareStatement("SELECT * FROM player_profile WHERE discord_user_id = ?");
+            ps.setString(1, id);
             ps.executeQuery();
             return ps.getResultSet().next();
         } catch (Exception e) {
@@ -773,6 +775,43 @@ public class SQLManager {
         } finally {
             pool.close(conn, ps, null);
         }
+    }
+
+    public final boolean isAlreadyLinkedByNick(String nick) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM player_profile WHERE nick = ?;");
+            ps.setString(1, nick);
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    @Nullable
+    public final String getLinkedDiscordID(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_user_id FROM player_profile WHERE nick = ?");
+            ps.setString(1, p);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getString("discord_user_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
     }
 
     public String getLinkedNickname(String p) {
@@ -1008,4 +1047,20 @@ public class SQLManager {
         return false;
     }
 
+    public boolean isATSArchived(String date) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT * FROM ?;");
+            ps.setString(1, "ats_archive_" + date);
+            ps.executeQuery();
+            return ps.getResultSet().next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return false;
+    }
 }
