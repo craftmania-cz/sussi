@@ -1,5 +1,6 @@
 package cz.wake.sussi.commands.mod;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
@@ -7,7 +8,6 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.TimeUtils;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -25,7 +25,7 @@ public class Ats implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if(args.length < 1) {
-            if(Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
+            if(Sussi.getInstance().getSql().isAlreadyLinkedByID(sender.getId())) {
                 String name = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
                 if(!Sussi.getInstance().getSql().isAT(name)) {
                     MessageUtils.sendErrorMessage("Nelze použít ,ats pokud nejsi člen AT!", channel);
@@ -68,7 +68,7 @@ public class Ats implements ICommand {
         } else {
             String name = args[0];
 
-            if(!Sussi.getInstance().getSql().isAT(name)) {
+            if (!Sussi.getInstance().getSql().isAT(name)) {
                 MessageUtils.sendErrorMessage("Požadovaný člen není v AT nebo nebyl nalezen!", channel);
                 return;
             }
@@ -81,7 +81,7 @@ public class Ats implements ICommand {
 
     @Override
     public String getCommand() {
-        return "ats";
+        return "oldats";
     }
 
     @Override

@@ -19,8 +19,8 @@ public class Poll implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if (!sender.getId().equals("177516608778928129")) {
-            channel.sendMessage("Na toto mají právo pouze Kwak!").queue();
+        if (!sender.getId().equals("177516608778928129") || member.getRoles().contains(member.getGuild().getRoleById("649927113964650496"))) {
+            channel.sendMessage("Na toto má práva Wake, Staff & Moderator!").queue();
             return;
         }
 
