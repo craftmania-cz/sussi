@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 
 public class ATSManager implements Job {
 
-    //todo: change to production
-    public static final String PRIVATE_CHANNEL_ID = "559046366157078528";
-    public static final String AT_POKEC_ID = "571970919669694484";
+    // TODO: Do configu
+    public static final String PRIVATE_CHANNEL_ID = "694263824584540211";
+    public static final String AT_POKEC_ID = "236749682229903360";
 
     public Triple<EmbedBuilder, EmbedBuilder, List<ATS>> evaluate(boolean reset) {
         Set<ATS> cache = new HashSet<>();
