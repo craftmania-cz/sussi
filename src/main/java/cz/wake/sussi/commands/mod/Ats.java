@@ -38,7 +38,7 @@ public class Ats implements ICommand {
             channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - ats :question:")
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
         } else if(args[0].equalsIgnoreCase("reset")) {
-            if(sender.getId().equals("177516608778928129")) {
+            if(sender.getId().equals(Sussi.getConfig().getOwnerID())) {
                 try {
                     Sussi.getInstance().getSql().resetATS("surv_chat_body");
                     Sussi.getInstance().getSql().resetATS("surv_played_time");

@@ -48,7 +48,7 @@ public class NewAts implements ICommand {
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
             return;
         } else if (args[0].equalsIgnoreCase("evaluate")) {
-            if (sender.getId().equalsIgnoreCase("234700305831428106")) {
+            if (sender.getId().equalsIgnoreCase(Sussi.getConfig().getOwnerID())) {
                 if (args.length > 1) {
                     String name = args[1];
                     if (name.equalsIgnoreCase("all")) {

@@ -43,7 +43,7 @@ public class News implements ICommand {
         }
 
         if(args[0].equals("update")) {
-            if(sender.getId().equals("177516608778928129")) {
+            if(sender.getId().equals(Sussi.getConfig().getOwnerID())) {
                 if(args.length < 2) {
                     channel.sendMessage(MessageUtils.getEmbed().setTitle("Nedostatek argumentů!")
                             .setDescription(getDescription() + "\n\n**Příklad**\n" + getHelp()).build()).queue();
@@ -60,7 +60,7 @@ public class News implements ICommand {
         }
 
         if(args[0].equals("reset")) {
-            if(sender.getId().equals("177516608778928129")) {
+            if(sender.getId().equals(Sussi.getConfig().getOwnerID())) {
                 Sussi.getInstance().getSql().resetNewsReads();
                 channel.sendMessage(MessageUtils.getEmbed().setDescription("Všem bylo restartováno zobrazení oznámení na lobby.").setColor(Color.GREEN).build()).queue();
             } else {

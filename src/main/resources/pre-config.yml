@@ -30,3 +30,10 @@ metrics:
 dialogflow-enabled: true
 dialogflow-api-key: some-key-yep
 dialogflow-channels: "kek", "kek"
+
+# IDs
+cm_guild: "207412074224025600"
+navrhy_diskuze: "648576105619521537"
+owner: "177516608778928129"
+at_pokec: "236749682229903360"
+secret_channel_ats: ""
