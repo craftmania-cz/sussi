@@ -15,7 +15,7 @@ public class Udrzba implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals("177516608778928129")){
+        if(sender.getId().equals(Sussi.getConfig().getOwnerID())){
             if (args.length == 0) {
                 channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - udrzba :question:")
                         .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();

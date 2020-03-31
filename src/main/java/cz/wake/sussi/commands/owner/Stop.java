@@ -1,5 +1,6 @@
 package cz.wake.sussi.commands.owner;
 
+import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
@@ -15,7 +16,7 @@ public class Stop implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals("177516608778928129")){
+        if(sender.getId().equals(Sussi.getConfig().getOwnerID())){
             channel.sendMessage(MessageUtils.getEmbed(Constants.RED).setDescription(":skull_crossbones: | Vypínám se...").build()).queue();
             System.exit(0);
         }

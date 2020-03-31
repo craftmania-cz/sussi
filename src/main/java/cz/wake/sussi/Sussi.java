@@ -52,6 +52,7 @@ public class Sussi {
     public static final Logger LOGGER;
     public static NoteManager noteManager;
     public static ATSManager atsManager;
+    public static LoadingProperties config;
 
     static {
         new File("logs/latest.log").renameTo(new File("logs/log-" + getCurrentTimeStamp() + ".log"));
@@ -65,7 +66,7 @@ public class Sussi {
 
         // Config
         SussiLogger.infoMessage("Loading config...");
-        LoadingProperties config = new LoadingProperties();
+        config = new LoadingProperties();
         ipHubKey = config.getIpHubKey();
         isBeta = config.isBeta();
 
@@ -196,5 +197,9 @@ public class Sussi {
 
     public static ATSManager getATSManager() {
         return atsManager;
+    }
+
+    public static LoadingProperties getConfig() {
+        return config;
     }
 }

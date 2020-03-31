@@ -1,5 +1,6 @@
 package cz.wake.sussi.commands;
 
+import cz.wake.sussi.Sussi;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -36,7 +37,7 @@ public enum Rank {
     }
 
     public static Rank getPermLevelForUser(User user, TextChannel ch) {
-        if (user.getId().equals("177516608778928129")) {
+        if (user.getId().equals(Sussi.getConfig().getOwnerID())) {
             return BOT_OWNER;
         }
         if (!ch.getGuild().isMember(user)) {
