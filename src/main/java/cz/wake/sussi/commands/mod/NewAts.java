@@ -48,7 +48,7 @@ public class NewAts implements ICommand {
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
             return;
         } else if (args[0].equalsIgnoreCase("evaluate")) {
-            if (sender.getId().equalsIgnoreCase("177516608778928129")) {
+            if (sender.getId().equalsIgnoreCase("234700305831428106")) {
                 if (args.length > 1) {
                     String name = args[1];
                     if (name.equalsIgnoreCase("all")) {
@@ -59,8 +59,7 @@ public class NewAts implements ICommand {
                                         .setDescription("Vyhodnocuji a resetuji ATS...").build()).queue(msg -> {
                                     Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(true);
                                     msg.editMessage(pair.getLeft().build()).queue();
-                                    if (!pair.getRight().isEmpty())
-                                        channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
+                                    if (!pair.getRight().isEmpty()) channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
                                     MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSManager.PRIVATE_CHANNEL_ID);
                                     if (secretChannel == null) return;
                                     secretChannel.sendMessage(pair.getMiddle().build()).queue();
@@ -72,8 +71,7 @@ public class NewAts implements ICommand {
                                     .setDescription("Vyhodnocuji ATS...").build()).queue(msg -> {
                                 Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(false);
                                 msg.editMessage(pair.getLeft().build()).queue();
-                                if (!pair.getRight().isEmpty())
-                                    channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
+                                if (!pair.getRight().isEmpty()) channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
                                 MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSManager.PRIVATE_CHANNEL_ID);
                                 if (secretChannel == null) return;
                                 secretChannel.sendMessage(pair.getMiddle().build()).queue();
@@ -87,7 +85,7 @@ public class NewAts implements ICommand {
                         MessageUtils.sendErrorMessage("Nelze použít ,ats pokud nejsi člen AT!", channel);
                         return;
                     }
-                    if (!Sussi.getInstance().getSql().isAlreadyLinkedByID(name)) {
+                    if (!Sussi.getInstance().getSql().isAlreadyLinkedByNick(name)) {
                         MessageUtils.sendErrorMessage("Nick není propojen s Discord účtem.", channel);
                         return;
                     }

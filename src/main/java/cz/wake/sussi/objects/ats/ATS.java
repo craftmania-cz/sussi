@@ -4,6 +4,8 @@ import cz.wake.sussi.Sussi;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class ATS {
@@ -104,31 +105,25 @@ public class ATS {
      * @return Returns true if could send evaluation in DMs, returns false if could not
      */
     public boolean evaluate() {
-        AtomicBoolean ret = new AtomicBoolean(false);
-        if (getDiscordID() == null) return false;
         if (getDiscordID() == null) return false;
         try {
-            Sussi.getJda().retrieveUserById(getDiscordID()).queue(user -> {
-                if (user == null) return;
-                user.openPrivateChannel().queue(msg -> {
-                    EmbedBuilder embedBuilder = new EmbedBuilder()
-                            .setAuthor("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
-                            .setThumbnail("https://mc-heads.net/head/" + getName() + "/128.png")
-                            .setColor((isComplete() ? Color.decode("#38b559") : Color.RED))
-                            .setDescription("**Odehraný čas:** " + TimeUtils.formatTime("%d dni, %hh %mm", getTotalTime(), false) + " (min: " + getMin_hours() + "h)" + "\n" +
-                                    "**Aktivita:** " + String.valueOf(getTotalActivity() + " bodů") + "\n\n" +
-                                    (isComplete() ? "Vypadá to, že jsi odehral minimální počet hodin na serveru. Skvělá práce." :
-                                            "Vypadá to, že jsi neodehral minimální počet hodin na serveru. Kontaktuj Waka když si tak ještě neudělal a vysvětluj proč."));
-                    msg.sendMessage(embedBuilder.build()).queue(success -> {ret.set(true);}, failure -> {
-                        ret.set(false);});
-                });
-            }, failure -> {
-                ret.set(false);
+            User user = Sussi.getJda().retrieveUserById(getDiscordID()).complete();
+            if (user == null) return false;
+            user.openPrivateChannel().submit().thenAccept(msg -> {
+                EmbedBuilder embedBuilder = new EmbedBuilder()
+                        .setAuthor("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
+                        .setThumbnail("https://mc-heads.net/head/" + getName() + "/128.png")
+                        .setColor((isComplete() ? Color.decode("#38b559") : Color.RED))
+                        .setDescription("**Odehraný čas:** " + TimeUtils.formatTime("%d dni, %hh %mm", getTotalTime(), false) + " (min: " + getMin_hours() + "h)" + "\n" +
+                                "**Aktivita:** " + String.valueOf(getTotalActivity() + " bodů") + "\n\n" +
+                                (isComplete() ? "Vypadá to, že jsi odehral minimální počet hodin na serveru. Skvělá práce." :
+                                        "Vypadá to, že jsi neodehral minimální počet hodin na serveru. Kontaktuj Waka když si tak ještě neudělal a vysvětluj proč."));
+                Message message = msg.sendMessage(embedBuilder.build()).complete();
             });
         } catch (Exception e) {
             return false;
         }
-        return ret.get();
+        return true;
     }
 
     public boolean isComplete() {
