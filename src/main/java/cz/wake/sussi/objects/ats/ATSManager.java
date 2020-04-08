@@ -76,33 +76,42 @@ public class ATSManager implements Job {
         }
 
         int totalCompleted = ((int) cache.stream().filter(ATS::isComplete).count());
-        int incomplete = ((int) cache.stream().filter(ats -> !ats.isComplete()).count());
-        double percentage = ((double) totalCompleted / cache.size()) * 100.00;
+        int incompleteCount = ((int) cache.stream().filter(ats -> !ats.isComplete()).count());
+        double percentage = ((double) totalCompleted / cache.size()) * 100;
         long totalPlayedTime = cache.stream().mapToInt(ATS::getTotalTime).sum();
         int getTotalChatPoints = cache.stream().mapToInt(ATS::getTotalActivity).sum();
         Set<ATS> highestPlayTime5 = cache.stream().sorted(Comparator.comparingInt(ATS::getTotalTime).reversed()).limit(5).collect(Collectors.toSet());
         Set<ATS> lowestPlayTime5 = cache.stream().sorted(Comparator.comparingInt(ATS::getTotalTime)).limit(5).collect(Collectors.toSet());
-        Set<ATS> compeleted = cache.stream().filter(ATS::isComplete).sorted(Comparator.comparingInt(ATS::getTotalTime).reversed()).collect(Collectors.toSet());
-        Set<ATS> incompleted = cache.stream().filter(ats -> !ats.isComplete()).sorted(Comparator.comparingInt(ATS::getTotalTime).reversed()).collect(Collectors.toSet());
+        Set<ATS> completed = cache.stream().filter(ATS::isComplete).sorted(Comparator.comparingInt(ATS::getTotalTime).reversed()).collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<ATS> incomplete = cache.stream().filter(ats -> !ats.isComplete()).sorted(Comparator.comparingInt(ATS::getTotalTime).reversed()).collect(Collectors.toCollection(LinkedHashSet::new));
+        long playTimeAverage = (long) cache.stream().mapToInt(ATS::getTotalTime).average().getAsDouble();
+        long chatPointsAverage = (long) cache.stream().mapToInt(ATS::getTotalActivity).average().getAsDouble();
 
         return Triple.of(
                 new EmbedBuilder()
-                        .setColor((totalCompleted > incomplete) ? Color.decode("#38b559") : Color.RED)
+                        .setColor((totalCompleted > incompleteCount) ? Color.decode("#38b559") : Color.RED)
                         .setTitle("Shrnutí vyhodnocení ATS - " + date)
-                        .addField("Splnění ATS", "**" + totalCompleted + "** splněných z **" + cache.size() + "** (" + String.format("%.2f", percentage) + "%)", true)
+                        .addField("Splnění ATS", "**" + totalCompleted + "** splněných z **" + cache.size() + "** (" + String.format("%.0f", percentage) + "%)", true)
                         .addField("Celkový odehraný čas", TimeUtils.formatTime("%d dni, %hh %mm", totalPlayedTime, false), true)
-                        .addField("Celková aktivita", getTotalChatPoints + " bodů", true)
+                        .addField("Celková aktivita", getTotalChatPoints + " bodů ", true)
+                        .addBlankField(true)
+                        .addField("Průměrný odehraný čas", "~ " + TimeUtils.formatTime("%d dni, %hh %mm", playTimeAverage, false), true)
+                        .addField("Průměrná aktivita", "~ " + chatPointsAverage + " bodů", true)
                         .addField("Nejvíce odehráli \uD83E\uDC13", getPlayTimes(highestPlayTime5), true)
                         .addField("Nejméně odehráli \uD83E\uDC11", getPlayTimes(lowestPlayTime5), true)
-                        .setFooter("v1.0"),
+                        .setFooter("v1.1"),
                 new EmbedBuilder()
-                        .setColor((totalCompleted > incomplete) ? Color.decode("#38b559") : Color.RED)
+                        .setColor((totalCompleted > incompleteCount) ? Color.decode("#38b559") : Color.RED)
                         .setTitle("Plné shrnutí vyhodnocení ATS - " + date)
                         .addField("Splnění ATS", "**" + totalCompleted + "** splněných z **" + cache.size() + "** (" + String.format("%.2f", percentage) + "%)", true)
                         .addField("Celkový odehraný čas", TimeUtils.formatTime("%d dni, %hh %mm", totalPlayedTime, false), true)
                         .addField("Celková aktivita", getTotalChatPoints + " bodů", true)
-                        .addField("Tabulka splněných ATS \uD83E\uDC13", getPlayTimes(compeleted), true)
-                        .addField("Tabulka nesplněných ATS \uD83E\uDC13", getPlayTimes(incompleted), true)
+                        .addBlankField(true)
+                        .addField("Průměrný odehraný čas", "~ " + TimeUtils.formatTime("%d dni, %hh %mm", playTimeAverage, false), true)
+                        .addField("Průměrná aktivita", "~ " + chatPointsAverage + " bodů", true)
+                        .addField("Tabulka splněných ATS \uD83E\uDC13", getPlayTimes(completed), true)
+                        .addField("Tabulka nesplněných ATS \uD83E\uDC13", getPlayTimes(incomplete), true)
+                        .setFooter("v1.1")
                 , notEvaluated);
     }
 
@@ -111,6 +120,7 @@ public class ATSManager implements Job {
         for (ATS ats : atsList) {
             stringBuilder.append((ats.getDiscordID() == null ? ats.getName() : "<@" + ats.getDiscordID() + ">") + " (" + TimeUtils.formatTime("%d dni, %hh %mm", ats.getTotalTime(), false) + ")\n");
         }
+        if (stringBuilder.toString().equalsIgnoreCase("")) return "N/A";
         return stringBuilder.toString();
     }
     // ❌❌❌	\u274C
