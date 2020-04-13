@@ -9,8 +9,10 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -76,6 +78,14 @@ public class MainListener extends ListenerAdapter {
         if (message.getTextChannel().getGuild().getSelfMember()
                 .getPermissions(message.getTextChannel()).contains(Permission.MESSAGE_MANAGE)) {
             message.delete().queue();
+        }
+    }
+
+    @Override
+    public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
+        super.onMessageReactionAdd(event);
+        if(event.getChannel().getId().equals(Sussi.getConfig().getNavrhyDiskuzeID()) && event.getReaction().getReactionEmote().getName().equals("\u2705") && event.getMember().isOwner()) {
+            event.getChannel().editMessageById(event.getMessageId(), "**Přijato \u2705**").queue();
         }
     }
 }
