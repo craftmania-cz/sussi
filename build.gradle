@@ -1,11 +1,11 @@
 plugins {
     id'java'
     id'application'
-    id'com.github.johnrengelman.shadow' version '2.0.4'
+    id'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 def group = 'cz.wake.sussi'
-def version = '1.10.2'
+def version = '1.10.3'
 
 mainClassName = 'cz.wake.sussi.Sussi'
 
@@ -33,8 +33,8 @@ repositories {
 }
 
 dependencies {
-    compile group: 'net.dv8tion', name: 'JDA', version:'4.1.0_96'
-    compile group: 'com.jagrosh', name: 'jda-utilities', version:'3.0.2'
+    compile group: 'net.dv8tion', name: 'JDA', version:'4.1.1_126'
+    compile group: 'com.jagrosh', name: 'jda-utilities', version:'3.0.3'
     compile group: 'com.zaxxer', name: 'HikariCP', version:'3.2.0'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.25'
     compile group: 'mysql', name: 'mysql-connector-java', version:'8.0.13'
@@ -48,5 +48,6 @@ dependencies {
     compile group: 'io.prometheus', name: 'simpleclient', version: '0.6.0'
     compile group: 'io.prometheus', name: 'simpleclient_httpserver', version: '0.6.0'
     compile group: 'io.prometheus', name: 'simpleclient_hotspot', version: '0.6.0'
+    compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
     testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version:'1.7.25'
 }

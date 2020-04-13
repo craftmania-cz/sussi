@@ -9,6 +9,7 @@ import cz.wake.sussi.listeners.CraftManiaArchiveListener;
 import cz.wake.sussi.listeners.DialogFlowListener;
 import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.metrics.Metrics;
+import cz.wake.sussi.objects.ats.ATSManager;
 import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
@@ -18,15 +19,20 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 
 import static net.dv8tion.jda.internal.utils.JDALogger.getLog;
 
@@ -45,6 +51,8 @@ public class Sussi {
     private static final Map<String, Logger> LOGGERS;
     public static final Logger LOGGER;
     public static NoteManager noteManager;
+    public static ATSManager atsManager;
+    public static LoadingProperties config;
 
     static {
         new File("logs/latest.log").renameTo(new File("logs/log-" + getCurrentTimeStamp() + ".log"));
@@ -58,7 +66,7 @@ public class Sussi {
 
         // Config
         SussiLogger.infoMessage("Loading config...");
-        LoadingProperties config = new LoadingProperties();
+        config = new LoadingProperties();
         ipHubKey = config.getIpHubKey();
         isBeta = config.isBeta();
 
@@ -115,6 +123,26 @@ public class Sussi {
 
         if (!isBeta) noteManager = new NoteManager();
 
+        atsManager = new ATSManager();
+        /*while (LogManager.getLogManager().getLoggerNames().hasMoreElements()) {
+            String logger = LogManager.getLogManager().getLoggerNames().nextElement();
+            //LogManager.getLogManager().getLogger(logger).setLevel(Level.SEVERE);
+        }*/
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(ATSManager.class)
+                    .withIdentity("atsEvaluation")
+                    .build();
+            CronTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("atsEvaluation")
+                    .withSchedule(CronScheduleBuilder.monthlyOnDayAndHourAndMinute(5, 8, 0))
+                    .build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Sussi getInstance() {
@@ -165,5 +193,13 @@ public class Sussi {
 
     public static NoteManager getNoteManager() {
         return noteManager;
+    }
+
+    public static ATSManager getATSManager() {
+        return atsManager;
+    }
+
+    public static LoadingProperties getConfig() {
+        return config;
     }
 }

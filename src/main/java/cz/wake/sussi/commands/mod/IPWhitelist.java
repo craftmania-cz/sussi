@@ -25,7 +25,7 @@ public class IPWhitelist implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals("177516608778928129")) {
+        if(sender.getId().equals(Sussi.getConfig().getOwnerID()) || member.getRoles().contains(member.getGuild().getRoleById("649927113964650496"))) {
             List<WhitelistedIP> ips = Sussi.getInstance().getSql().getWhitelistedIPs();
 
             if(args.length < 1) {
@@ -113,7 +113,7 @@ public class IPWhitelist implements ICommand {
                 channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("IP Nenalezena").setDescription("IP adresa " + args[1] + " nebyla nalezena.").build()).queue();
             }
         } else {
-            MessageUtils.sendErrorMessage("Na toto má práva pouzeKwak!", channel);
+            MessageUtils.sendErrorMessage("Na toto má práva Wake, Staff & Moderator!", channel);
         }
     }
 

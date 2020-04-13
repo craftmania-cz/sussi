@@ -25,7 +25,7 @@ public class NickWhitelist implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals("177516608778928129")) {
+        if(sender.getId().equals(Sussi.getConfig().getOwnerID()) || member.getRoles().contains(member.getGuild().getRoleById("649927113964650496"))) {
             List<WhitelistedNick> nicks = Sussi.getInstance().getSql().getWhitelistedNicks();
 
             if(args.length < 1) {
@@ -113,7 +113,7 @@ public class NickWhitelist implements ICommand {
                 channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Nick nenalezen").setDescription("Nick " + args[1] + " nebyl nalezen.").build()).queue();
             }
         } else {
-            MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
+            MessageUtils.sendErrorMessage("Na toto má práva Wake, Staff & Moderator!", channel);
         }
     }
 

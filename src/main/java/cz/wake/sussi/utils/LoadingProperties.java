@@ -10,7 +10,7 @@ public class LoadingProperties {
 
     private String botToken;
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
-                    dialogFlowApiKey;
+                    dialogFlowApiKey, cmGuildID, navrhyDiskuzeID, ownerID, atPokecID, secretChannelAtsID;
     private boolean dialogFlowEnabled, metricsEnabled;
     private List<String> dialogFlowChannels;
 
@@ -40,6 +40,12 @@ public class LoadingProperties {
             dialogFlowApiKey = properties.getProperty("dialogflow-api-key");
             dialogFlowEnabled = Boolean.parseBoolean(properties.getProperty("dialogflow-enabled", "false"));
             dialogFlowChannels = Collections.singletonList(properties.getProperty("dialogflow-channels"));
+
+            cmGuildID = properties.getProperty("cm_guild");
+            navrhyDiskuzeID = properties.getProperty("navrhy_diskuze");
+            ownerID = properties.getProperty("owner");
+            atPokecID = properties.getProperty("at_pokec");
+            secretChannelAtsID = properties.getProperty("secret_channel_ats");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,5 +118,25 @@ public class LoadingProperties {
 
     public boolean isMetricsEnabled() {
         return metricsEnabled;
+    }
+
+    public String getCmGuildID() {
+        return cmGuildID;
+    }
+
+    public String getNavrhyDiskuzeID() {
+        return navrhyDiskuzeID;
+    }
+
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public String getAtPokecID() {
+        return atPokecID;
+    }
+
+    public String getSecretChannelAtsID() {
+        return secretChannelAtsID;
     }
 }

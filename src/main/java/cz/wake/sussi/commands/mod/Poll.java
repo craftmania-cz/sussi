@@ -1,6 +1,7 @@
 package cz.wake.sussi.commands.mod;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
@@ -19,8 +20,8 @@ public class Poll implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if (!sender.getId().equals("177516608778928129")) {
-            channel.sendMessage("Na toto mají právo pouze Kwak!").queue();
+        if (!sender.getId().equals(Sussi.getConfig().getOwnerID()) || member.getRoles().contains(member.getGuild().getRoleById("649927113964650496"))) {
+            channel.sendMessage("Na toto má práva Wake, Staff & Moderator!").queue();
             return;
         }
 

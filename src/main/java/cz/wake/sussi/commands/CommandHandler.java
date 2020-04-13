@@ -37,7 +37,7 @@ public class CommandHandler {
 
     public void register() {
         SussiLogger.infoMessage("Loading all commands.");
-        registerCommand(new Ats());
+        //registerCommand(new Ats());
         registerCommand(new Help());
         //registerCommand(new Cmarchiv());
         registerCommand(new Stop());
@@ -60,7 +60,6 @@ public class CommandHandler {
         registerCommand(new Unlink());
         registerCommand(new Hytale());
         registerCommand(new DeadbyDaylight());
-        registerCommand(new EurotruckSimulator2());
         registerCommand(new Events());
         registerCommand(new NewProfile());
         registerCommand(new BlockCountry());
@@ -72,6 +71,7 @@ public class CommandHandler {
         registerCommand(new Booster());
         registerCommand(new NoteCommand());
         registerCommand(new StaffList());
+        registerCommand(new NewAts());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

@@ -30,7 +30,7 @@ public class NoteCommand implements ICommand {
             return;
         }
 
-        if(!Sussi.getInstance().getSql().isAlreadyLinked(sender.getId())) {
+        if(!Sussi.getInstance().getSql().isAlreadyLinkedByID(sender.getId())) {
             String name = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
             if (!Sussi.getInstance().getSql().isAT(name)) {
                 channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Pro použití tohoto příkazu musíš mít propojený MC účet.").build()).queue();

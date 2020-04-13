@@ -21,7 +21,7 @@ public class Napad implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
 
-        if (Sussi.getJda().getGuildById("207412074224025600").getTextChannelById("648576105619521537") != channel) {
+        if (Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyDiskuzeID()) != channel) {
             MessageUtils.sendAutoDeletedMessage(MessageUtils.getEmbed(Constants.RED).setDescription("Tento příkaz lze použít pouze v #navrhy_diskuze").build(), 5000, channel);
             return;
         }
@@ -40,7 +40,7 @@ public class Napad implements ICommand {
         embed.setDescription(description);
         embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
         msg.setEmbed(embed.build());
-        Sussi.getJda().getGuildById("207412074224025600").getTextChannelById("651205289894215728").sendMessage(msg.build()).queue(m -> {
+        Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyDiskuzeID()).sendMessage(msg.build()).queue(m -> {
             m.addReaction(Constants.THUMB_UP).queue();
             m.addReaction(Constants.THUMB_DOWN).queue();
         });
