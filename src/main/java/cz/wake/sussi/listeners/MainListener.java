@@ -84,7 +84,7 @@ public class MainListener extends ListenerAdapter {
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
         super.onMessageReactionAdd(event);
-        if(event.getChannel().getId().equals(Sussi.getConfig().getNavrhyDiskuzeID()) && event.getReaction().getReactionEmote().getName().equals("\u2705") && event.getMember().isOwner()) {
+        if(event.getChannel().getId().equals(Sussi.getConfig().getNavrhyDiskuzeID()) && event.getReaction().getReactionEmote().getName().equals("\u2705") && event.getUserId().equals(Sussi.getConfig().getOwnerID())) {
             event.getChannel().editMessageById(event.getMessageId(), "**Přijato \u2705**").queue();
         }
     }
