@@ -34,6 +34,7 @@ dialogflow-channels: "kek", "kek"
 # IDs
 cm_guild: "207412074224025600"
 navrhy_diskuze: "648576105619521537"
+navrhy_hlasovani: "651205289894215728"
 owner: "177516608778928129"
 at_pokec: "236749682229903360"
 secret_channel_ats: ""

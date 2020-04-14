@@ -10,7 +10,7 @@ public class LoadingProperties {
 
     private String botToken;
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
-                    dialogFlowApiKey, cmGuildID, navrhyDiskuzeID, ownerID, atPokecID, secretChannelAtsID;
+                    dialogFlowApiKey, cmGuildID, navrhyDiskuzeID, navrhyHlasovaniID, ownerID, atPokecID, secretChannelAtsID;
     private boolean dialogFlowEnabled, metricsEnabled;
     private List<String> dialogFlowChannels;
 
@@ -43,6 +43,7 @@ public class LoadingProperties {
 
             cmGuildID = properties.getProperty("cm_guild");
             navrhyDiskuzeID = properties.getProperty("navrhy_diskuze");
+            navrhyHlasovaniID = properties.getProperty("navrhy_hlasovani");
             ownerID = properties.getProperty("owner");
             atPokecID = properties.getProperty("at_pokec");
             secretChannelAtsID = properties.getProperty("secret_channel_ats");
@@ -138,5 +139,9 @@ public class LoadingProperties {
 
     public String getSecretChannelAtsID() {
         return secretChannelAtsID;
+    }
+
+    public String getNavrhyHlasovaniID() {
+        return navrhyHlasovaniID;
     }
 }

@@ -38,9 +38,9 @@ public class Napad implements ICommand {
         embed.setTitle("Hlasování o nápadu");
         embed.setColor(Color.PINK);
         embed.setDescription(description);
-        embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
+        //embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
         msg.setEmbed(embed.build());
-        Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyDiskuzeID()).sendMessage(msg.build()).queue(m -> {
+        Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(msg.build()).queue(m -> {
             m.addReaction(Constants.THUMB_UP).queue();
             m.addReaction(Constants.THUMB_DOWN).queue();
         });
