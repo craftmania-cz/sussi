@@ -19,7 +19,7 @@ public class BoosterListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdateBoostTime(GuildMemberUpdateBoostTimeEvent e) {
-        if(e.getNewTimeBoosted() != null) {
+        if(e.getNewTimeBoosted() != null && e.getOldTimeBoosted() == null) {
             Member member = e.getMember();
             member.getUser().openPrivateChannel().queue(msg -> msg.sendMessage(
                     MessageUtils.getEmbed(new Color(255, 80, 255))
