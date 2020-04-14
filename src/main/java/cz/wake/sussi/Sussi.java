@@ -85,7 +85,7 @@ public class Sussi {
                 .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))
-                .addEventListeners(new BoosterListener(waiter))
+                .addEventListeners(new BoosterListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
