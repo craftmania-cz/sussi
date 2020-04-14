@@ -10,8 +10,9 @@ public class LoadingProperties {
 
     private String botToken;
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
-                    dialogFlowApiKey, cmGuildID, navrhyDiskuzeID, navrhyHlasovaniID, ownerID, atPokecID, secretChannelAtsID;
+                    dialogFlowApiKey;
     private boolean dialogFlowEnabled, metricsEnabled;
+    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID;
     private List<String> dialogFlowChannels;
 
     public LoadingProperties() {
@@ -41,12 +42,12 @@ public class LoadingProperties {
             dialogFlowEnabled = Boolean.parseBoolean(properties.getProperty("dialogflow-enabled", "false"));
             dialogFlowChannels = Collections.singletonList(properties.getProperty("dialogflow-channels"));
 
-            cmGuildID = properties.getProperty("cm_guild");
-            navrhyDiskuzeID = properties.getProperty("navrhy_diskuze");
-            navrhyHlasovaniID = properties.getProperty("navrhy_hlasovani");
-            ownerID = properties.getProperty("owner");
-            atPokecID = properties.getProperty("at_pokec");
-            secretChannelAtsID = properties.getProperty("secret_channel_ats");
+            cmGuildID = Long.parseLong(properties.getProperty("cm_guild"));
+            navrhyDiskuzeID = Long.parseLong(properties.getProperty("navrhy_diskuze"));
+            navrhyHlasovaniID = Long.parseLong(properties.getProperty("navrhy_hlasovani"));
+            ownerID = Long.parseLong(properties.getProperty("owner"));
+            atPokecID = Long.parseLong(properties.getProperty("at_pokec"));
+            secretChannelAtsID = Long.parseLong(properties.getProperty("secret_channel_ats"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,15 +79,15 @@ public class LoadingProperties {
     }
 
     public int getMinConnections() {
-        return Integer.valueOf(minConnections);
+        return Integer.parseInt(minConnections);
     }
 
     public int getMaxConnections() {
-        return Integer.valueOf(maxConnections);
+        return Integer.parseInt(maxConnections);
     }
 
     public int getTimeout() {
-        return Integer.valueOf(timeout);
+        return Integer.parseInt(timeout);
     }
 
     public String getIpHubKey() {
@@ -113,35 +114,31 @@ public class LoadingProperties {
         return dialogFlowChannels;
     }
 
-    public String getBeta() {
-        return beta;
-    }
-
     public boolean isMetricsEnabled() {
         return metricsEnabled;
     }
 
-    public String getCmGuildID() {
+    public Long getCmGuildID() {
         return cmGuildID;
     }
 
-    public String getNavrhyDiskuzeID() {
+    public Long getNavrhyDiskuzeID() {
         return navrhyDiskuzeID;
     }
 
-    public String getOwnerID() {
+    public Long getOwnerID() {
         return ownerID;
     }
 
-    public String getAtPokecID() {
+    public Long getAtPokecID() {
         return atPokecID;
     }
 
-    public String getSecretChannelAtsID() {
+    public Long getSecretChannelAtsID() {
         return secretChannelAtsID;
     }
 
-    public String getNavrhyHlasovaniID() {
+    public Long getNavrhyHlasovaniID() {
         return navrhyHlasovaniID;
     }
 }

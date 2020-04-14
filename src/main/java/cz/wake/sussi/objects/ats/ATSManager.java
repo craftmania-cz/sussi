@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 public class ATSManager implements Job {
 
     // TODO: Do configu
-    public static final String PRIVATE_CHANNEL_ID = Sussi.getConfig().getSecretChannelAtsID();
-    public static final String AT_POKEC_ID = Sussi.getConfig().getAtPokecID();
+    public static final Long PRIVATE_CHANNEL_ID = Sussi.getConfig().getSecretChannelAtsID();
+    public static final Long AT_POKEC_ID = Sussi.getConfig().getAtPokecID();
 
     public Triple<EmbedBuilder, EmbedBuilder, List<ATS>> evaluate(boolean reset) {
         Set<ATS> cache = new HashSet<>();
