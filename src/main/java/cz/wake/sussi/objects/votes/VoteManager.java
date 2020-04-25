@@ -88,9 +88,8 @@ public class VoteManager implements Job {
         String month = new SimpleDateFormat("M").format(System.currentTimeMillis());
         String year = new SimpleDateFormat("yyyy").format(System.currentTimeMillis());
         channel.sendMessage(MessageUtils.getEmbed(Color.decode("#3cab59"))
-                //todo: zmenit description
                 .setTitle("Výsledky hlasování: " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
-                .setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in leo vestibulum, sodales leo vitae, pulvinar odio. Nam condimentum viverra ligula, eget cursus libero consectetur ultrices.")
+                .setDescription("Zde jsou výslekdy hlasování za minulý měsíc - " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
                 .addField("1.-5.",
                         cache.stream().limit(5).map(voteplayer -> {
                             return voteplayer.getPosition() + ". **" + voteplayer.getNick() + "** (" + voteplayer.getMonthlyVotes() + " hlasů)";

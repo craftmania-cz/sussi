@@ -152,7 +152,7 @@ public class Sussi {
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("monthVotesEvaluation")
-                    .withSchedule(CronScheduleBuilder.monthlyOnDayAndHourAndMinute(17, 23, 0))
+                    .withSchedule(CronScheduleBuilder.monthlyOnDayAndHourAndMinute(1, 1, 0))
                     .build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
