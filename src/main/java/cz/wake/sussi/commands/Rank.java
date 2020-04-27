@@ -14,7 +14,7 @@ public enum Rank {
     ADMINISTRATOR(4),
     BOT_OWNER(5);
 
-    private int rankWeight;
+    private final int rankWeight;
 
     Rank(int rankWeight) {
         this.rankWeight = rankWeight;
@@ -37,7 +37,7 @@ public enum Rank {
     }
 
     public static Rank getPermLevelForUser(User user, TextChannel ch) {
-        if (user.getId().equals(Sussi.getConfig().getOwnerID())) {
+        if (user.getIdLong() == Sussi.getConfig().getOwnerID()) {
             return BOT_OWNER;
         }
         if (!ch.getGuild().isMember(user)) {
