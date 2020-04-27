@@ -25,11 +25,11 @@ public class IPWhitelist implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals(Sussi.getConfig().getOwnerID()) || member.getRoles().contains(member.getGuild().getRoleById("649927113964650496"))) {
+        if (sender.getIdLong() == Sussi.getConfig().getOwnerID() || member.getRoles().contains(member.getGuild().getRoleById("649927113964650496"))) {
             List<WhitelistedIP> ips = Sussi.getInstance().getSql().getWhitelistedIPs();
 
-            if(args.length < 1) {
-                if(ips.isEmpty()) {
+            if (args.length < 1) {
+                if (ips.isEmpty()) {
                     MessageUtils.sendErrorMessage("No, nikdo na IPWhitelistu není!", channel);
                     return;
                 }
@@ -50,7 +50,7 @@ public class IPWhitelist implements ICommand {
                         .setEventWaiter(w)
                         .setTimeout(1, TimeUnit.MINUTES);
 
-                for(WhitelistedIP ip : ips) {
+                for (WhitelistedIP ip : ips) {
                     pBuilder.addItems("**" + ip.getAddress() + "** - " + ip.getDescription());
                 }
 
@@ -59,14 +59,14 @@ public class IPWhitelist implements ICommand {
                 return;
             }
 
-            if(args[0].equals("add")) {
-                if(args.length < 3) {
+            if (args[0].equals("add")) {
+                if (args.length < 3) {
                     channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Nesprávně napsané argumenty! Př. ,ipwl add 1.1.1.1 Testovaci Zprava").build()).queue();
                     return;
                 }
 
-                for(WhitelistedIP ip : Sussi.getInstance().getSql().getWhitelistedIPs()) {
-                    if(args[1].equals(ip.getAddress())) {
+                for (WhitelistedIP ip : Sussi.getInstance().getSql().getWhitelistedIPs()) {
+                    if (args[1].equals(ip.getAddress())) {
                         channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("IP Nalezena").setDescription("IP adresa " + args[1] + " již existuje.").build()).queue();
                         return;
                     }
@@ -74,7 +74,7 @@ public class IPWhitelist implements ICommand {
 
                 String description = args[2];
 
-                for(int i = 3; i != args.length; i++) {
+                for (int i = 3; i != args.length; i++) {
                     description += " " + args[i];
                 }
 
@@ -82,14 +82,14 @@ public class IPWhitelist implements ICommand {
                 channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Příkaz byl úspěsně vykonán").setDescription("IP Adresa " + args[1] + " byla úspěšně přidána!").build()).queue();
             }
 
-            if(args[0].equals("remove")) {
-                if(args.length < 2) {
+            if (args[0].equals("remove")) {
+                if (args.length < 2) {
                     channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Nesprávně napsané argumenty! Př. ,ipwl remove 1.1.1.1").build()).queue();
                     return;
                 }
 
-                for(WhitelistedIP ip : Sussi.getInstance().getSql().getWhitelistedIPs()) {
-                    if(args[1].equals(ip.getAddress())) {
+                for (WhitelistedIP ip : Sussi.getInstance().getSql().getWhitelistedIPs()) {
+                    if (args[1].equals(ip.getAddress())) {
                         Sussi.getInstance().getSql().removeWhitelistedIP(args[1]);
                         channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Příkaz byl úspěsně vykonán").setDescription("IP Adresa " + args[1] + " byla úspěšně odebrána!").build()).queue();
                         return;
@@ -98,14 +98,14 @@ public class IPWhitelist implements ICommand {
                 channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("IP Nenalezena").setDescription("IP adresa " + args[1] + " nebyla nalezena.").build()).queue();
             }
 
-            if(args[0].equals("check")) {
-                if(args.length < 2) {
+            if (args[0].equals("check")) {
+                if (args.length < 2) {
                     channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazů").setDescription("Nesprávně napsané argumenty! Př. ,ipwl check 1.1.1.1").build()).queue();
                     return;
                 }
 
-                for(WhitelistedIP ip : Sussi.getInstance().getSql().getWhitelistedIPs()) {
-                    if(args[1].equals(ip.getAddress())) {
+                for (WhitelistedIP ip : Sussi.getInstance().getSql().getWhitelistedIPs()) {
+                    if (args[1].equals(ip.getAddress())) {
                         channel.sendMessage(MessageUtils.getEmbed(Color.yellow).setTitle("Informace o IP").setDescription("**" + ip.getAddress() + "** - " + ip.getDescription()).build()).queue();
                         return;
                     }
@@ -118,7 +118,7 @@ public class IPWhitelist implements ICommand {
     }
 
     @Override
-        public String getCommand() {
+    public String getCommand() {
         return "ipwl";
     }
 
