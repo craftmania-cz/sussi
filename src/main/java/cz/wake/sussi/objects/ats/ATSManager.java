@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 public class ATSManager implements Job {
 
-    // TODO: Do configu
     public static final Long PRIVATE_CHANNEL_ID = Sussi.getConfig().getSecretChannelAtsID();
     public static final Long AT_POKEC_ID = Sussi.getConfig().getAtPokecID();
 

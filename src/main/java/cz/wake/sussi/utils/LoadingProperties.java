@@ -12,7 +12,7 @@ public class LoadingProperties {
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
                     dialogFlowApiKey;
     private boolean dialogFlowEnabled, metricsEnabled;
-    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID;
+    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID, oznameniID;
     private List<String> dialogFlowChannels;
 
     public LoadingProperties() {
@@ -48,6 +48,7 @@ public class LoadingProperties {
             ownerID = Long.parseLong(properties.getProperty("owner"));
             atPokecID = Long.parseLong(properties.getProperty("at_pokec"));
             secretChannelAtsID = Long.parseLong(properties.getProperty("secret_channel_ats"));
+            oznameniID = Long.parseLong(properties.getProperty("oznameni"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,5 +141,9 @@ public class LoadingProperties {
 
     public Long getNavrhyHlasovaniID() {
         return navrhyHlasovaniID;
+    }
+
+    public Long getOznameniID() {
+        return oznameniID;
     }
 }
