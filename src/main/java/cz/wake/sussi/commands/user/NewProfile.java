@@ -18,10 +18,12 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -70,7 +72,7 @@ public class NewProfile implements ICommand {
         }
 
         EmbedBuilder embedBuilder = MessageUtils.getEmbed(profile.hasGlobalVIP() ? profile.getGlobalVIP().getVIPType().getColor() : color)
-                .setTitle("Informace o hráči: " + profile.getName() + " (lvl: " + profile.getGlobal_level() + ")")
+                .setTitle("Informace o hráči: " + profile.getName() + "#" + profile.getDiscriminator () + " (lvl: " + profile.getGlobal_level() + ")")
                 .setThumbnail("https://mc-heads.net/head/" + profile.getName() + "/128.png")
 
                 .addField("Globální statistiky",
@@ -82,22 +84,23 @@ public class NewProfile implements ICommand {
                                 (profile.getDiscordID() == "" ? "" : "\nDiscord: <@" + profile.getDiscordID() + ">")
                         , false)
                 .addField("Ekonomika",
-                        "CraftCoins: " + profile.getCraftCoins() + "\n" +
-                                "CraftTokeny: " + profile.getCraftTokens() + "\n" +
-                                "VoteTokeny: " + profile.getVoteTokens() + "\n" +
-                                "Ach. pointy: " + profile.getAchievementPoints()
+                        "CraftCoins: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftCoins()) + "\n" +
+                                "CraftTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftTokens()) + "\n" +
+                                "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
+                                "Ach. pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints())
                         , true)
                 .addField("Hlasování",
-                        "Celkem hlasů: " + profile.getTotalVotes() + "\n" +
-                                "Měsíční hlasy: " + profile.getMonthVotes() + "\n" +
-                                "Týdenní hlasy: " + profile.getWeekVotes() + "\n" +
+                        "Celkem hlasů: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getTotalVotes()) + "\n" +
+                                "Měsíční hlasy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getMonthVotes()) + "\n" +
+                                "Týdenní hlasy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getWeekVotes()) + "\n" +
                                 "Poslední hlas: " + getDate(profile.getLastVote())
                         , true)
                 .addField("Levely",
-                        "Survival: " + profile.getSurvival_level() + " (" + profile.getSurvival_experience() + "XP)" + "\n" +
-                                "SkyBlock: " + profile.getSkyblock_level() + " (" + profile.getSkyblock_experience() + "XP)" + "\n" +
-                                "Creative: " + profile.getCreative_level() + " (" + profile.getCreative_experience() + "XP)" + "\n" +
-                                "Vanilla: " + profile.getVanilla_level() + " (" + profile.getVanilla_experience() + "XP)" + "\n"
+                        "Survival: " + profile.getSurvival_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSurvival_experience()) + "XP)" + "\n" +
+                                "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
+                                "Creative: " + profile.getCreative_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCreative_experience()) + "XP)" + "\n" +
+                                "Vanilla: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
+                                "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n"
                         , true)
                 .setFooter("CraftMania.cz Stats")
                 .setTimestamp(Instant.from(ZonedDateTime.now()));
