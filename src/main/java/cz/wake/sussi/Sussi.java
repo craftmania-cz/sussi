@@ -137,7 +137,7 @@ public class Sussi {
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("atsEvaluation")
-                    .withSchedule(CronScheduleBuilder.monthlyOnDayAndHourAndMinute(5, 8, 0))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 8 5 1/1 ? *")) // 5th day of every month on 8am
                     .build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
@@ -152,7 +152,7 @@ public class Sussi {
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("monthVotesEvaluation")
-                    .withSchedule(CronScheduleBuilder.monthlyOnDayAndHourAndMinute(1, 1, 0))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1/1 ? *")) // every 1st of month on 1am
                     .build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
