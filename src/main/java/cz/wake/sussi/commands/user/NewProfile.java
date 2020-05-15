@@ -89,6 +89,7 @@ public class NewProfile implements ICommand {
                         "CraftCoins: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftCoins()) + "\n" +
                                 "CraftTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftTokens()) + "\n" +
                                 "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
+                                "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(Sussi.getInstance().getSql().getEventPoints(profile.getName())) + "\n" +
                                 "Ach. pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints())
                         , true)
                 .addField("Hlasování",
