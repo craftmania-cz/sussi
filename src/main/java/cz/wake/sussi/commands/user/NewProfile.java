@@ -69,9 +69,11 @@ public class NewProfile implements ICommand {
             int rank = Sussi.getInstance().getSql().getStalkerStats(profile.getName(), "rank");
             color = getColorByRank(rank);
             role = getRankByID(rank);
+        } else if(profile.hasGlobalVIP()) {
+            color = profile.getGlobalVIP().getVIPType().getColor();
         }
 
-        EmbedBuilder embedBuilder = MessageUtils.getEmbed(profile.hasGlobalVIP() ? profile.getGlobalVIP().getVIPType().getColor() : color)
+        EmbedBuilder embedBuilder = MessageUtils.getEmbed(color)
                 .setTitle("Informace o hráči: " + profile.getName() + "#" + profile.getDiscriminator () + " (lvl: " + profile.getGlobal_level() + ")")
                 .setThumbnail("https://mc-heads.net/head/" + profile.getName() + "/128.png")
 
@@ -87,6 +89,7 @@ public class NewProfile implements ICommand {
                         "CraftCoins: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftCoins()) + "\n" +
                                 "CraftTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftTokens()) + "\n" +
                                 "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
+                                "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(Sussi.getInstance().getSql().getEventPoints(profile.getName())) + "\n" +
                                 "Ach. pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints())
                         , true)
                 .addField("Hlasování",
