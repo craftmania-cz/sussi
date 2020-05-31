@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
+import java.io.File;
 
 public class Napad implements ICommand {
 
@@ -38,8 +39,12 @@ public class Napad implements ICommand {
         embed.setTitle("Hlasování o nápadu");
         embed.setColor(Color.PINK);
         embed.setDescription(description);
-        if(message.getAttachments().size() > 0) {
-            embed.setImage(message.getAttachments().get(0).getUrl());
+        if(message.getAttachments().size() > 0 && message.getAttachments().get(0).isImage()) {
+            Message.Attachment attachment = message.getAttachments().get(0);
+            File temp = new File(attachment.getFileName());
+            attachment.downloadToFile(temp);
+            embed.setImage("attachment://"+attachment.getFileName());
+            temp.delete();
         }
         //embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
         msg.setEmbed(embed.build());
