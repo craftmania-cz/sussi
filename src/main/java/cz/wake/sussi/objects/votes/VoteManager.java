@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,8 +86,10 @@ public class VoteManager implements Job {
         TextChannel channel = Sussi.getJda().getTextChannelById(OZNAMENI_ID);
         assert channel != null;
         List<VotePlayer> cache = evaluate(true);
-        String month = new SimpleDateFormat("M").format(System.currentTimeMillis());
-        String year = new SimpleDateFormat("yyyy").format(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        String month = new SimpleDateFormat("M").format(calendar.getTime());
+        String year = new SimpleDateFormat("yyyy").format(calendar.getTime());
         channel.sendMessage(MessageUtils.getEmbed(Color.decode("#3cab59"))
                 .setTitle("Výsledky hlasování: " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
                 .setDescription("Zde jsou výslekdy hlasování za minulý měsíc - " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
