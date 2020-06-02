@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 public class Napad implements ICommand {
 
@@ -33,7 +34,6 @@ public class Napad implements ICommand {
             return;
         }
 
-        MessageBuilder msg = new MessageBuilder();
         String description = message.getContentRaw().substring(message.getContentRaw().indexOf(" "));
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Hlasování o nápadu");
@@ -43,14 +43,21 @@ public class Napad implements ICommand {
             Message.Attachment attachment = message.getAttachments().get(0);
             String filename = attachment.getFileName();
             File temp = new File(filename);
+            try {
+                temp.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             attachment.downloadToFile(temp);
-            channel.sendFile(temp, filename).queue();
             embed.setImage("attachment://"+filename);
             temp.delete();
+            Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendFile(temp, filename).embed(embed.build()).queue(m -> {
+                m.addReaction(Constants.THUMB_UP).queue();
+                m.addReaction(Constants.THUMB_DOWN).queue();
+            });
         }
         //embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
-        msg.setEmbed(embed.build());
-        Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(msg.build()).queue(m -> {
+        Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(embed.build()).queue(m -> {
             m.addReaction(Constants.THUMB_UP).queue();
             m.addReaction(Constants.THUMB_DOWN).queue();
         });
