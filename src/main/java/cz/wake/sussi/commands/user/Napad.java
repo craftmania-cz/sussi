@@ -50,17 +50,17 @@ public class Napad implements ICommand {
             }
             attachment.downloadToFile(temp);
             embed.setImage("attachment://"+filename);
-            temp.delete();
             Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendFile(temp, filename).embed(embed.build()).queue(m -> {
                 m.addReaction(Constants.THUMB_UP).queue();
                 m.addReaction(Constants.THUMB_DOWN).queue();
             });
+            temp.delete();
+        } else {
+            Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(embed.build()).queue(m -> {
+                m.addReaction(Constants.THUMB_UP).queue();
+                m.addReaction(Constants.THUMB_DOWN).queue();
+            });
         }
-        //embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
-        Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(embed.build()).queue(m -> {
-            m.addReaction(Constants.THUMB_UP).queue();
-            m.addReaction(Constants.THUMB_DOWN).queue();
-        });
 
         MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " tvůj nápad byl přidán do #navrhy_hlasovani", 3000, channel);
     }
