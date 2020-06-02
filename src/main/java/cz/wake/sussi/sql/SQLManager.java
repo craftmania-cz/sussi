@@ -1063,4 +1063,23 @@ public class SQLManager {
         }
         return false;
     }
+
+    public final int getEventPoints(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT event_points FROM player_profile WHERE nick = ?");
+            ps.setString(1, p);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getInt("event_points");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return 0;
+    }
 }

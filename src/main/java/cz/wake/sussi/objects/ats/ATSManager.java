@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 public class ATSManager implements Job {
 
-    // TODO: Do configu
     public static final Long PRIVATE_CHANNEL_ID = Sussi.getConfig().getSecretChannelAtsID();
     public static final Long AT_POKEC_ID = Sussi.getConfig().getAtPokecID();
 
@@ -56,7 +55,9 @@ public class ATSManager implements Job {
             if (!evaluated) notEvaluated.add(ats);
         }
 
-        String date = new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        String date = new SimpleDateFormat("MM/yyyy").format(calendar.getTime());
 
         if (reset) {
             SussiLogger.infoMessage("Resetting ATS...");

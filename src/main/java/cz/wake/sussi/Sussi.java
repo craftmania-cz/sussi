@@ -11,6 +11,8 @@ import cz.wake.sussi.listeners.MainListener;
 import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.objects.ats.ATSManager;
 import cz.wake.sussi.objects.notes.NoteManager;
+import cz.wake.sussi.objects.votes.VoteManager;
+import cz.wake.sussi.objects.votes.WeekVotesJob;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.LoadingProperties;
@@ -52,6 +54,7 @@ public class Sussi {
     public static final Logger LOGGER;
     public static NoteManager noteManager;
     public static ATSManager atsManager;
+    public static VoteManager voteManager;
     public static LoadingProperties config;
 
     static {
@@ -124,10 +127,8 @@ public class Sussi {
         if (!isBeta) noteManager = new NoteManager();
 
         atsManager = new ATSManager();
-        /*while (LogManager.getLogManager().getLoggerNames().hasMoreElements()) {
-            String logger = LogManager.getLogManager().getLoggerNames().nextElement();
-            //LogManager.getLogManager().getLogger(logger).setLevel(Level.SEVERE);
-        }*/
+        voteManager = new VoteManager();
+
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();
@@ -136,7 +137,37 @@ public class Sussi {
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("atsEvaluation")
-                    .withSchedule(CronScheduleBuilder.monthlyOnDayAndHourAndMinute(5, 8, 0))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 8 5 1/1 ? *")) // 5th day of every month on 8am
+                    .build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(VoteManager.class)
+                    .withIdentity("monthVotesEvaluation")
+                    .build();
+            CronTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("monthVotesEvaluation")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1/1 ? *")) // every 1st of month on 1am
+                    .build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(WeekVotesJob.class)
+                    .withIdentity("weekVotesReset")
+                    .build();
+            CronTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("weekVotesReset")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * MON"))
                     .build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
@@ -197,6 +228,10 @@ public class Sussi {
 
     public static ATSManager getATSManager() {
         return atsManager;
+    }
+
+    public static VoteManager getVoteManager() {
+        return voteManager;
     }
 
     public static LoadingProperties getConfig() {

@@ -14,6 +14,7 @@ public class StaffList implements ICommand {
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         MessageEmbed embed = MessageUtils.getEmbed(Constants.BLUE).setTitle("Seznam všech členů AT + jejich ID")
                 .addField("Owner", generateStaffList(member, "207423116861767681"), false)
+                .addField("Staff", generateStaffList(member, "208227643714306050"), false)
                 .addField("Admins", generateStaffList(member, "272454769975754753"), false)
                 .addField("Helpers", generateStaffList(member, "207638528757202945"), false)
                 .addField("Developers", generateStaffList(member, "364085114172604426"), false)
