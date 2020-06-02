@@ -41,9 +41,11 @@ public class Napad implements ICommand {
         embed.setDescription(description);
         if(message.getAttachments().size() > 0 && message.getAttachments().get(0).isImage()) {
             Message.Attachment attachment = message.getAttachments().get(0);
-            File temp = new File(attachment.getFileName());
+            String filename = attachment.getFileName();
+            File temp = new File(filename);
             attachment.downloadToFile(temp);
-            embed.setImage("attachment://"+attachment.getFileName());
+            channel.sendFile(temp, filename).queue();
+            embed.setImage("attachment://"+filename);
             temp.delete();
         }
         //embed.setFooter("Navrhl(a): " + member.getEffectiveName(), sender.getAvatarUrl());
