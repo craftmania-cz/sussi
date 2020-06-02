@@ -55,7 +55,9 @@ public class ATSManager implements Job {
             if (!evaluated) notEvaluated.add(ats);
         }
 
-        String date = new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        String date = new SimpleDateFormat("MM/yyyy").format(calendar.getTime());
 
         if (reset) {
             SussiLogger.infoMessage("Resetting ATS...");

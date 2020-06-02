@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -110,8 +111,11 @@ public class ATS {
             User user = Sussi.getJda().retrieveUserById(getDiscordID()).complete();
             if (user == null) return false;
             user.openPrivateChannel().submit().thenAccept(msg -> {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MONTH, -1);
+                String date = new SimpleDateFormat("MM/yyyy").format(calendar.getTime());
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setAuthor("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
+                        .setAuthor("Vyhodnocení ATS - " + date)
                         .setThumbnail("https://mc-heads.net/head/" + getName() + "/128.png")
                         .setColor((isComplete() ? Color.decode("#38b559") : Color.RED))
                         .setDescription("**Odehraný čas:** " + TimeUtils.formatTime("%d dni, %hh %mm", getTotalTime(), false) + " (min: " + getMin_hours() + "h)" + "\n" +
