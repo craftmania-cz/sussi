@@ -1082,4 +1082,60 @@ public class SQLManager {
         }
         return 0;
     }
+
+    public final int getBugPoints(String p) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT bug_points FROM player_profile WHERE nick = ?");
+            ps.setString(1, p);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getInt("bug_points");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return 0;
+    }
+
+    public final void giveBugPoints(String p, int count) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET bug_points = bug_points + ? WHERE nick = ?");
+            ps.setInt(1, count);
+            ps.setString(2, p);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void removeBugPoints(String p, int count) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            if (getBugPoints(p) - count < 0) {
+                ps = conn.prepareStatement("UPDATE player_profile SET bug_points = 0 WHERE nick = ?");
+                ps.setString(1, p);
+            } else {
+                ps = conn.prepareStatement("UPDATE player_profile SET bug_points = bug_points - ? WHERE nick = ?");
+                ps.setInt(1, count);
+                ps.setString(2, p);
+            }
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
 }

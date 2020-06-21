@@ -73,6 +73,7 @@ public class CommandHandler {
         registerCommand(new Valorant());
         registerCommand(new Apple());
         registerCommand(new English());
+        registerCommand(new BugPoints());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
