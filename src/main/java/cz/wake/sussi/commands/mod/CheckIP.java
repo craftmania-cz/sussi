@@ -37,9 +37,9 @@ public class CheckIP implements ICommand {
                     checkIP(playerIP, channel);
                     return;
                 }
-                MessageUtils.sendErrorMessage("Pro zadany nick nebyla nelezena zadna IP!", channel);
+                MessageUtils.sendErrorMessage("Pro zadaný nick nebyla nelezena žádná IP!", channel);
             } else {
-                MessageUtils.sendErrorMessage("Zadaná IP není validativní typ IP!", channel);
+                MessageUtils.sendErrorMessage("Zadaná IP nesplňuje formát IP!", channel);
             }
         }
     }
@@ -139,7 +139,7 @@ public class CheckIP implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Kontrola IP, zda je VPN/Proxy nebo normální.";
+        return "Kontrola, zda je IP VPN/Proxy nebo normální.";
     }
 
     @Override

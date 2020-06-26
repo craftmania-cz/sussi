@@ -24,7 +24,7 @@ public class Booster implements ICommand {
         }
 
         if (args.length < 1) {
-            channel.sendMessage(MessageUtils.getEmbed(new Color(255, 80, 255)).setTitle("Booster").setDescription("Díky boostování našeho serveru, si můžeš vybrat pár odměn! " + EmoteList.ZABICKA_BOOSTER)
+            channel.sendMessage(MessageUtils.getEmbed(new Color(255, 80, 255)).setTitle("Booster").setDescription("Díky boostování našeho serveru si můžeš vybrat pár odměn! " + EmoteList.ZABICKA_BOOSTER)
                 .addField("Výhody a příkazy", "- Růžová role\n- Volba barvy nicku `,booster color`", false).build()).queue();
             return;
         }
@@ -38,7 +38,7 @@ public class Booster implements ICommand {
                             "- " + member.getGuild().getRoleById(Constants.BOOSTER_COLOR_3).getAsMention() + ": " + Constants.THREE + "\n" +
                             "- " + member.getGuild().getRoleById(Constants.BOOSTER_COLOR_4).getAsMention() + ": " + Constants.FOUR + "\n" +
                             "- " + member.getGuild().getRoleById(Constants.BOOSTER_COLOR_5).getAsMention() + ": " + Constants.FIVE + "\n", false)
-                            .setFooter("Pro smazání barevné role, klikni na křížek!").build();
+                            .setFooter("Pro smazání barevné role klikni na křížek!").build();
             channel.sendMessage(embed).queue((Message m) -> {
                 m.addReaction(Constants.ONE).queue();
                 m.addReaction(Constants.TWO).queue();
@@ -52,7 +52,7 @@ public class Booster implements ICommand {
                     return e.getUser().equals(sender) && e.getMessageId().equals(m.getId()) && (e.getReaction().getReactionEmote().getName().equals(Constants.DELETE));
                 }, (MessageReactionAddEvent ev) -> {
                     removeAllRoles(member);
-                    channel.sendMessage(sender.getAsMention() + " všechny barevné role, které jsi měl(a) byly odebrány!").queue();
+                    channel.sendMessage(sender.getAsMention() + " všechny barevné role, které jsi měl(a), byly odebrány!").queue();
                     m.delete().queue();
                 }, 60, TimeUnit.SECONDS, null);
 

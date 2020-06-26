@@ -124,7 +124,7 @@ public class IPWhitelist implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Sprava IPWhitelistu na serveru";
+        return "Správa IPWhitelistu na serveru";
     }
 
     @Override

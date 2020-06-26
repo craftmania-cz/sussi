@@ -30,7 +30,7 @@ public class Link implements ICommand {
 
         String code = args[0].toUpperCase();
         if (!Sussi.getInstance().getSql().doesConnectionExist(code)) {
-            MessageUtils.sendErrorMessage("Tento kód nebyl nalezen v naši databázi!", channel);
+            MessageUtils.sendErrorMessage("Tento kód nebyl nalezen v naší databázi!", channel);
             return;
         }
 

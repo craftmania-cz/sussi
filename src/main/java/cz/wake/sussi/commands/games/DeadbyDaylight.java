@@ -18,11 +18,11 @@ public class DeadbyDaylight implements ICommand {
             if (!member.getRoles().contains(member.getGuild().getRoleById("602257373851287572"))) {
                 member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("602257373851287572")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Dead by Daylight`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `Dead by Daylight`!", 5000L, channel);
             } else {
                 member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("602257373851287572")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Dead by Daylight`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `Dead by Daylight`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();

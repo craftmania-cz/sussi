@@ -18,11 +18,11 @@ public class English implements ICommand {
             if (!member.getRoles().contains(member.getGuild().getRoleById("701487194316996710"))) {
                 member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("701487194316996710")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `English`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `English`!", 5000L, channel);
             } else {
                 member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("701487194316996710")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `English`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `English`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();

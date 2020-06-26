@@ -76,7 +76,7 @@ public class CheckBan implements ICommand {
 
             } catch (Exception e){
                 e.printStackTrace();
-                MessageUtils.sendErrorMessage("Nastala chyba při získávání dat hráče, zkus to zachvilku...", channel);
+                MessageUtils.sendErrorMessage("Nastala chyba při získávání dat hráče, zkus to za chvilku...", channel);
             }
         }
     }
