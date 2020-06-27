@@ -52,7 +52,7 @@ public class News implements ICommand {
                 String msg = message.getContentRaw().substring(13);
                 Sussi.getInstance().getSql().updateLatestNews(msg);
                 Sussi.getInstance().getSql().resetNewsReads();
-                channel.sendMessage(MessageUtils.getEmbed().setDescription("Na lobby bylo nastaveno nové oznámení a všem bylo restartováno zobrazení. Nová zpráva: ``" + msg + "``").setColor(Color.GREEN).build()).queue();
+                channel.sendMessage(MessageUtils.getEmbed().setDescription("Na lobby bylo nastaveno nové oznámení a všem bylo resetováno zobrazení. Nová zpráva: ``" + msg + "``").setColor(Color.GREEN).build()).queue();
             } else {
                 MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
                 return;
@@ -62,7 +62,7 @@ public class News implements ICommand {
         if(args[0].equals("reset")) {
             if(sender.getId().equals(Sussi.getConfig().getOwnerID())) {
                 Sussi.getInstance().getSql().resetNewsReads();
-                channel.sendMessage(MessageUtils.getEmbed().setDescription("Všem bylo restartováno zobrazení oznámení na lobby.").setColor(Color.GREEN).build()).queue();
+                channel.sendMessage(MessageUtils.getEmbed().setDescription("Všem bylo resetováno zobrazení oznámení na lobby.").setColor(Color.GREEN).build()).queue();
             } else {
                 MessageUtils.sendErrorMessage("Na toto má práva pouze Kwak!", channel);
             }
@@ -76,7 +76,7 @@ public class News implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Zobrazí, zda hráč přečetl oznámení, nastaví novou zprávu nebo všem restartuje přečtení zprávy.";
+        return "Zobrazí, zda hráč přečetl oznámení, nastaví novou zprávu nebo všem resetuje přečtení zprávy.";
     }
 
     @Override
@@ -84,7 +84,7 @@ public class News implements ICommand {
         return ",news show - Zobrazí aktuální oznámení na lobby" +
                 ",news seen [nick] - Vypíše, zda si hráč zobrazil oznámení na lobby.\n" +
                 ",news update [text] - Nastaví nové oznámení na lobby.\n" +
-                ",news reset - Restartuje všem zobrazení oznámení na lobby (Jen wake a krosta)";
+                ",news reset - Resetuje všem zobrazení oznámení na lobby (Jen wake a krosta)";
     }
 
     @Override

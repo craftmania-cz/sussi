@@ -83,7 +83,7 @@ public class NoteCommand implements ICommand {
                             channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Příkaz byl úspěsně vykonán").setDescription("Poznámka s ID " + id + " hráče '" + player + "' byla vymazána.").build()).queue();
                             break;
                         } catch (Exception e) {
-                            channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Nastala chyba pri vymazávaní poznámky s ID: " + id + ".").build()).queue();
+                            channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Nastala chyba při vymazávaní poznámky s ID: " + id + ".").build()).queue();
                             e.printStackTrace();
                             break;
                         }
@@ -93,15 +93,15 @@ public class NoteCommand implements ICommand {
                     }
                 case "clear":
                     if (!notePlayer.hasNotes()) {
-                        channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Tento hráč nemá žádne poznámky.").build()).queue();
+                        channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Tento hráč nemá žádné poznámky.").build()).queue();
                         return;
                     }
                     notePlayer.clearNotes();
-                    channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Příkaz byl úspěsně vykonán").setDescription("Poznámka hráče '" + player + "' byly vymazány.").build()).queue();
+                    channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Příkaz byl úspěsně vykonán").setDescription("Poznámky hráče '" + player + "' byly vymazány.").build()).queue();
                     break;
                 case "list":
                     if (!notePlayer.hasNotes()) {
-                        channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Tento hráč nemá žádne poznámky.").build()).queue();
+                        channel.sendMessage(MessageUtils.getEmbed(Color.RED).setTitle("Chyba při vykonávání příkazu").setDescription("Tento hráč nemá žádné poznámky.").build()).queue();
                         return;
                     }
 

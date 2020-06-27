@@ -36,7 +36,7 @@ public class BlockCountry implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Nastaveni, jestli server bude blokovat pripojeni z jinych zemi nez CZ/SK";
+        return "Nastavení, jestli server bude blokováno připojení z jiných zemí než CZ/SK";
     }
 
     @Override

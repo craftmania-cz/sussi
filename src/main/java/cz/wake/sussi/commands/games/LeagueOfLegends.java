@@ -18,11 +18,11 @@ public class LeagueOfLegends implements ICommand {
             if (!member.getRoles().contains(member.getGuild().getRoleById("431100350431363102"))) {
                 member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("431100350431363102")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `League of Legends`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `League of Legends`!", 5000L, channel);
             } else {
                 member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("431100350431363102")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `League of Legends`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `League of Legends`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();

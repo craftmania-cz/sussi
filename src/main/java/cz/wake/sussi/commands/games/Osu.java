@@ -18,11 +18,11 @@ public class Osu implements ICommand {
             if (!member.getRoles().contains(member.getGuild().getRoleById("432195093857042433"))) {
                 member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("432195093857042433")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a jsi si roli `Osu`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `Osu`!", 5000L, channel);
             } else {
                 member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("432195093857042433")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a jsi si roli `Osu`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `Osu`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
