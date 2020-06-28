@@ -96,6 +96,8 @@ public class MainListener extends ListenerAdapter {
                 embedBuilder.addField("Přidáno", getStringDate(), true);
 
                 message.editMessage(embedBuilder.build()).queue();
+
+                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Proběhlo přidání nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
             }));
         }
 
@@ -108,6 +110,8 @@ public class MainListener extends ListenerAdapter {
                 embedBuilder.addField("Schváleno", getStringDate(), true);
 
                 message.editMessage(embedBuilder.build()).queue();
+
+                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(MessageUtils.getEmbed(Constants.BLUE).setDescription(Constants.THUMB_UP + " | Proběhlo schválení nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
             }));
         }
     }
