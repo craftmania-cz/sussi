@@ -4,10 +4,7 @@ import ai.api.AIConfiguration;
 import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
-import cz.wake.sussi.listeners.BoosterListener;
-import cz.wake.sussi.listeners.CraftManiaArchiveListener;
-import cz.wake.sussi.listeners.DialogFlowListener;
-import cz.wake.sussi.listeners.MainListener;
+import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.objects.ats.ATSManager;
 import cz.wake.sussi.objects.notes.NoteManager;
@@ -89,6 +86,7 @@ public class Sussi {
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))
                 .addEventListeners(new BoosterListener())
+                .addEventListeners(new ChangelogReactionsListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
