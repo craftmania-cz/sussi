@@ -4,7 +4,7 @@ import ai.api.AIDataService;
 import ai.api.AIServiceException;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
-import cz.wake.sussi.utils.LoadingProperties;
+import cz.wake.sussi.utils.ConfigProperties;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -16,12 +16,12 @@ import java.util.Map;
 public class DialogFlowListener extends ListenerAdapter {
 
     private final AIDataService aiDataService;
-    private final LoadingProperties config;
+    private final ConfigProperties config;
     private final ArrayList<String> channels;
 
     public DialogFlowListener(AIDataService aiDataService) {
         this.aiDataService = aiDataService;
-        this.config =  new LoadingProperties();
+        this.config =  new ConfigProperties();
         this.channels = new ArrayList<>();
         this.channels.add("236749682229903360"); // at_pokec
         this.channels.add("440906414248951809"); // mc_problemy

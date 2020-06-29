@@ -6,7 +6,7 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
-import cz.wake.sussi.utils.LoadingProperties;
+import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -54,7 +54,7 @@ public class CheckIP implements ICommand {
         int risk = 0;
         Object city;
 
-        LoadingProperties properties = new LoadingProperties();
+        ConfigProperties properties = new ConfigProperties();
 
         String finalUrl = "https://proxycheck.io/v2/" + ip + "?key=" + properties.getProxycheckKey()  + "&vpn=1&asn=1&node=1&time=1&inf=0&risk=1&port=1&seen=1&days=7&tag=Sussi_kontrola";
 

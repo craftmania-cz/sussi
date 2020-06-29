@@ -3,7 +3,7 @@ package cz.wake.sussi.sql;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
-import cz.wake.sussi.utils.LoadingProperties;
+import cz.wake.sussi.utils.ConfigProperties;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +30,7 @@ public class ConnectionPoolManager {
     }
 
     private void init() {
-        LoadingProperties config = new LoadingProperties();
+        ConfigProperties config = new ConfigProperties();
         host = config.getHost();
         port = config.getPort();
         database = config.getDbname();

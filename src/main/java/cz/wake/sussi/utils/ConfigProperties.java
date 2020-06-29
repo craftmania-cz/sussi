@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-public class LoadingProperties {
+public class ConfigProperties {
 
     private String botToken;
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
@@ -15,7 +15,7 @@ public class LoadingProperties {
     private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID, oznameniID;
     private List<String> dialogFlowChannels;
 
-    public LoadingProperties() {
+    public ConfigProperties() {
         try {
             File configFile = new File("config.yml");
 

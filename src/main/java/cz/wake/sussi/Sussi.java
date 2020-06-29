@@ -12,7 +12,7 @@ import cz.wake.sussi.objects.votes.VoteManager;
 import cz.wake.sussi.objects.votes.WeekVotesJob;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
-import cz.wake.sussi.utils.LoadingProperties;
+import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
@@ -25,13 +25,10 @@ import org.slf4j.Logger;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 
 import static net.dv8tion.jda.internal.utils.JDALogger.getLog;
 
@@ -52,7 +49,7 @@ public class Sussi {
     public static NoteManager noteManager;
     public static ATSManager atsManager;
     public static VoteManager voteManager;
-    public static LoadingProperties config;
+    public static ConfigProperties config;
 
     static {
         new File("logs/latest.log").renameTo(new File("logs/log-" + getCurrentTimeStamp() + ".log"));
@@ -66,7 +63,7 @@ public class Sussi {
 
         // Config
         SussiLogger.infoMessage("Loading config...");
-        config = new LoadingProperties();
+        config = new ConfigProperties();
         ipHubKey = config.getIpHubKey();
         isBeta = config.isBeta();
 
@@ -232,7 +229,7 @@ public class Sussi {
         return voteManager;
     }
 
-    public static LoadingProperties getConfig() {
+    public static ConfigProperties getConfig() {
         return config;
     }
 }
