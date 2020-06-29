@@ -55,6 +55,7 @@ public class ATS {
                 this.serverATS.put(Server.VANILLA, new ServerATS(Server.VANILLA, rs));
                 this.serverATS.put(Server.MINIGAMES, new ServerATS(Server.MINIGAMES, rs));
                 this.serverATS.put(Server.SKYCLOUD, new ServerATS(Server.SKYCLOUD, rs));
+                this.serverATS.put(Server.HARDCORE_VANILLA, new ServerATS(Server.HARDCORE_VANILLA, rs));
                 this.serverATS.put(Server.BUILD, new ServerATS(Server.BUILD, rs));
                 this.serverATS.put(Server.EVENTS, new ServerATS(Server.EVENTS, rs));
             }
@@ -90,6 +91,7 @@ public class ATS {
                 this.serverATS.put(Server.VANILLA, new ServerATS(Server.VANILLA, rs));
                 this.serverATS.put(Server.MINIGAMES, new ServerATS(Server.MINIGAMES, rs));
                 this.serverATS.put(Server.SKYCLOUD, new ServerATS(Server.SKYCLOUD, rs));
+                this.serverATS.put(Server.HARDCORE_VANILLA, new ServerATS(Server.HARDCORE_VANILLA, rs));
                 this.serverATS.put(Server.BUILD, new ServerATS(Server.BUILD, rs));
                 this.serverATS.put(Server.EVENTS, new ServerATS(Server.EVENTS, rs));
             }
@@ -265,6 +267,7 @@ public class ATS {
         SKYCLOUD(true, "skycloud"),
         BUILD(false, "build"),
         EVENTS(false, "events"),
+        HARDCORE_VANILLA(true, "hardcore_vanilla"),
         MINIGAMES(true, "minigames");
 
         private boolean hasChatPoints;
