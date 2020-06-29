@@ -48,7 +48,6 @@ public class CommandHandler {
         registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
         registerCommand(new Osu());
-        registerCommand(new RocketLeague());
         registerCommand(new Overwatch());
         registerCommand(new Standa());
         registerCommand(new Udrzba());
