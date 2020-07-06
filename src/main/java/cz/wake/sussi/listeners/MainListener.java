@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -48,7 +49,7 @@ public class MainListener extends ListenerAdapter {
                 args = message.substring(message.indexOf(" ") + 1).split(" ");
             }
             for (ICommand cmd : Sussi.getInstance().getCommandHandler().getCommands()) {
-                if (cmd.getCommand().equalsIgnoreCase(command)) {
+                if (cmd.getCommand().equalsIgnoreCase(command) || Arrays.asList(cmd.getAliases()).contains(command)) {
                     SussiLogger.commandMessage("'," + cmd.getCommand() + "', Guild: " + e.getGuild().getName() + ", Channel: " + e.getChannel().getName() + ", Sender: " + e.getAuthor().getName() + "#" + e.getAuthor().getDiscriminator() + " (" + e.getAuthor().getId() + ")");
                     String[] finalArgs = args;
                     EnumSet<Permission> perms = e.getGuild().getSelfMember().getPermissions(e.getChannel());
