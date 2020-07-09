@@ -37,7 +37,7 @@ public class NewProfile implements ICommand {
             } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
         }
 
-        if (args[0].startsWith("<@!") && args[0].endsWith(">")) {
+        if (args[0].startsWith("<@") && args[0].endsWith(">")) {
             List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
             if (mentions.size() > 0) {
                 if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
