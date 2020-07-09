@@ -11,10 +11,7 @@ import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -99,14 +96,37 @@ public class NewAts implements ICommand {
                 return;
             }
         } else {
-            String name = args[0];
+            String arg = args[0];
+            String nick = "";
 
-            if (!Sussi.getATSManager().isInATS(name)) {
+            if (arg.startsWith("<@!") && arg.endsWith(">")) {
+                List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
+                if (mentions.size() > 0) {
+                    if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
+                        nick = Sussi.getInstance().getSql().getLinkedNickname(mentions.get(0).getId());
+                    else {
+                        MessageUtils.sendErrorMessage("Uživatel " + mentions.get(0).getAsMention() + " nemá propojený MC účet.", channel);
+                        return;
+                    }
+
+                }
+            } else {
+                nick = arg;
+            }
+
+            if (!Sussi.getATSManager().isInATS(nick)) {
                 MessageUtils.sendErrorMessage("Požadovaný člen není v AT nebo nebyl nalezen!", channel);
                 return;
             }
 
-            firstPage(sender, message, channel, w, Sussi.getATSManager().getATS(name), false);
+            ATS ats = Sussi.getATSManager().getATS(nick);
+
+            if (ats == null) {
+                MessageUtils.sendErrorMessage("Požadovaný člen není v AT nebo nebyl nalezen!", channel);
+                return;
+            }
+
+            firstPage(sender, message, channel, w, ats, false);
         }
     }
 
