@@ -10,10 +10,7 @@ import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -37,7 +35,19 @@ public class NewProfile implements ICommand {
                 MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,profile MrWakeCZ`", channel);
                 return;
             } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
+        }
 
+        if (args[0].startsWith("<@!") && args[0].endsWith(">")) {
+            List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
+            if (mentions.size() > 0) {
+                if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
+                    nick = Sussi.getInstance().getSql().getLinkedNickname(mentions.get(0).getId());
+                else {
+                    MessageUtils.sendErrorMessage("Uživatel " + mentions.get(0).getAsMention() + " nemá propojený MC účet.", channel);
+                    return;
+                }
+
+            }
         }
 
         Profile profile;
