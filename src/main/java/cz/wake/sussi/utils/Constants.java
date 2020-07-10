@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Constants {
 
     // Colors
+    final public static Color LIGHT_BLUE = new Color(93, 133, 252);
     final public static Color BLUE = new Color(58, 95, 205);
     final public static Color RED = new Color(220, 20, 60);
     final public static Color GREEN = new Color(60, 179, 90);
