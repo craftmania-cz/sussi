@@ -172,22 +172,24 @@ public class Profile {
             }
 
             // Nemá global VIP
-            for (String serverName : groups.getJSONObject("servers").keySet()) {
-                JSONArray serverArray = groups.getJSONObject("servers").getJSONArray(serverName);
-                serverArray.forEach(serverObj -> {
-                    JSONObject jsonObject = new JSONObject(serverObj.toString());
+            if (!groups.isNull("servers")) {
+                for (String serverName : groups.getJSONObject("servers").keySet()) {
+                    JSONArray serverArray = groups.getJSONObject("servers").getJSONArray(serverName);
+                    serverArray.forEach(serverObj -> {
+                        JSONObject jsonObject = new JSONObject(serverObj.toString());
 
-                    ServerVIP obj = new ServerVIP(jsonObject.getLong("time"), jsonObject.getString("group"));
-                    obj.setServerName(serverName);
+                        ServerVIP obj = new ServerVIP(jsonObject.getLong("time"), jsonObject.getString("group"));
+                        obj.setServerName(serverName);
 
-                    //System.out.println(obj.toString());
+                        //System.out.println(obj.toString());
 
-                    serverVIPs.add(obj);
-                    mappedServerVIPs.get(obj.getServerType()).add(obj);
-                });
+                        serverVIPs.add(obj);
+                        mappedServerVIPs.get(obj.getServerType()).add(obj);
+                    });
+                }
+
+                hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
             }
-
-            hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
         }
     }
 
@@ -370,6 +372,7 @@ public class Profile {
      */
     @Nullable
     public ServerVIP getGlobalVIP() {
+        if (!hasGlobalVIP()) return null;
         return globalVIPobj;
     }
 
@@ -475,6 +478,10 @@ public class Profile {
             if (isPermanent()) return "";
             SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd.MM.yyy HH:mm");
             return dateTimeFormatter.format(this.time);
+        }
+
+        public String getDiscordRoleName() {
+            return getGroup() + " VIP";
         }
 
         @Override

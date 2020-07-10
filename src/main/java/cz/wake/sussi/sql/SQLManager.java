@@ -11,7 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SQLManager {
 
@@ -1137,5 +1139,25 @@ public class SQLManager {
         } finally {
             pool.close(conn, ps, null);
         }
+    }
+
+    public final Set<String> getLinkedProfiles() {
+        Set<String> profiles = new HashSet<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT nick FROM player_profile WHERE discord_user_id IS NOT null;");
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                profiles.add(resultSet.getString("nick"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return profiles;
     }
 }

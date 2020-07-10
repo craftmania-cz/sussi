@@ -1,4 +1,4 @@
-package cz.wake.sussi.objects.votes;
+package cz.wake.sussi.objects.jobs;
 
 import cz.wake.sussi.Sussi;
 import org.quartz.Job;

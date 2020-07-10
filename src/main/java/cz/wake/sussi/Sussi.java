@@ -6,10 +6,12 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.metrics.Metrics;
+import cz.wake.sussi.objects.VIPManager;
 import cz.wake.sussi.objects.ats.ATSManager;
+import cz.wake.sussi.objects.jobs.VIPCheckJob;
 import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.objects.votes.VoteManager;
-import cz.wake.sussi.objects.votes.WeekVotesJob;
+import cz.wake.sussi.objects.jobs.WeekVotesJob;
 import cz.wake.sussi.runnable.StatusChanger;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
@@ -49,6 +51,7 @@ public class Sussi {
     public static NoteManager noteManager;
     public static ATSManager atsManager;
     public static VoteManager voteManager;
+    public static VIPManager vipManager;
     public static ConfigProperties config;
 
     static {
@@ -123,6 +126,7 @@ public class Sussi {
 
         atsManager = new ATSManager();
         voteManager = new VoteManager();
+        vipManager = new VIPManager();
 
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         try {
@@ -163,6 +167,21 @@ public class Sussi {
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("weekVotesReset")
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * MON"))
+                    .build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
+                    .withIdentity("vipCheck")
+                    .build();
+            CronTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("vipCheck")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 8,20 * * ?"))
                     .build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
@@ -227,6 +246,10 @@ public class Sussi {
 
     public static VoteManager getVoteManager() {
         return voteManager;
+    }
+
+    public static VIPManager getVIPManager() {
+        return vipManager;
     }
 
     public static ConfigProperties getConfig() {
