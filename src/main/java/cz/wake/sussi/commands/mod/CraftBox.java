@@ -5,6 +5,7 @@ import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
+import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.Member;
@@ -41,7 +42,7 @@ public class CraftBox implements ICommand {
                 String nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
 
                 if (!Sussi.getATSManager().isInATS(nick)) {
-                    MessageUtils.sendErrorMessage("Nelze použít ,craftbox register pokud nejsi člen AT!", channel);
+                    MessageUtils.sendErrorMessage("Nelze použít `,craftbox register` pokud nejsi člen AT!", channel);
                     break;
                 }
 
@@ -83,11 +84,13 @@ public class CraftBox implements ICommand {
                                     return;
                                 }
 
+                                ConfigProperties config = new ConfigProperties();
+
                                 OkHttpClient client = new OkHttpClient();
                                 RequestBody requestBody = new FormBody.Builder()
                                         .add("username", nick)
                                         .add("password", password)
-                                        .add("adminKey", Sussi.getConfig().getCraftBoxAdminKey())
+                                        .add("adminKey", config.getCraftBoxAdminKey())
                                         .build();
                                 Request request = new Request.Builder()
                                         .url("https://api.craftmania.cz/account/register")
