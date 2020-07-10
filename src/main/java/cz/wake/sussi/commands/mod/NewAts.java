@@ -99,7 +99,7 @@ public class NewAts implements ICommand {
             String arg = args[0];
             String nick = "";
 
-            if (arg.startsWith("<@!") && arg.endsWith(">")) {
+            if (arg.startsWith("<@") && arg.endsWith(">")) {
                 List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
                 if (mentions.size() > 0) {
                     if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))

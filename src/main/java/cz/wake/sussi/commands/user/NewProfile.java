@@ -37,16 +37,18 @@ public class NewProfile implements ICommand {
             } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
         }
 
-        if (args[0].startsWith("<@!") && args[0].endsWith(">")) {
-            List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
-            if (mentions.size() > 0) {
-                if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
-                    nick = Sussi.getInstance().getSql().getLinkedNickname(mentions.get(0).getId());
-                else {
-                    MessageUtils.sendErrorMessage("Uživatel " + mentions.get(0).getAsMention() + " nemá propojený MC účet.", channel);
-                    return;
-                }
+        if (args.length > 0 || message.getMentions(Message.MentionType.USER).size() > 0) {
+            if (args[0].startsWith("<@") && args[0].endsWith(">")) {
+                List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
+                if (mentions.size() > 0) {
+                    if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
+                        nick = Sussi.getInstance().getSql().getLinkedNickname(mentions.get(0).getId());
+                    else {
+                        MessageUtils.sendErrorMessage("Uživatel " + mentions.get(0).getAsMention() + " nemá propojený MC účet.", channel);
+                        return;
+                    }
 
+                }
             }
         }
 
