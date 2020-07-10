@@ -115,7 +115,8 @@ public class NewProfile implements ICommand {
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
                                 "Creative: " + profile.getCreative_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCreative_experience()) + "XP)" + "\n" +
                                 "Vanilla: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
-                                "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n"
+                                "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n" +
+                                "Hardcore Vanilla: " + profile.getHardcore_vanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getHardcore_vanilla_experience()) + "XP)" + "\n"
                         , true)
                 .setFooter("CraftMania.cz Stats")
                 .setTimestamp(Instant.from(ZonedDateTime.now()));
