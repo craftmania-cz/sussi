@@ -34,7 +34,7 @@ public class VIPManager {
      */
     private CompletableFuture<Set<Profile>> cache() {
         SussiLogger.infoMessage("Caching VIPs...");
-        Long now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         CompletableFuture<Set<Profile>> completableFuture = new CompletableFuture<>();
         try {
             Set<String> nicknames = Sussi.getInstance().getSql().getLinkedProfiles();
@@ -43,8 +43,8 @@ public class VIPManager {
                 Profile profile = new Profile(nickname);
                 if (profile.hasGlobalVIP()) vipProfiles.add(profile);
             }
-            Long then = System.currentTimeMillis();
-            Long diff = then - now;
+            long then = System.currentTimeMillis();
+            long diff = then - now;
             SussiLogger.greatMessage("VIPs cached (" + vipProfiles.size() + ") [" + diff + "ms].");
             completableFuture.complete(vipProfiles);
         } catch (Exception e) {
@@ -55,6 +55,7 @@ public class VIPManager {
     }
 
     private void check() {
+        long now = System.currentTimeMillis();
         SussiLogger.infoMessage("Checking for VIPs...");
         Guild guild = Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID());
         if (guild == null) return;
@@ -68,6 +69,7 @@ public class VIPManager {
 
                 Profile profile = optionalProfile.get();
                 if (!profile.hasGlobalVIP()) continue;
+                // Has expired Global VIP (it did not refresh lol)
                 if (profile.getGlobalVIP().getTime() < System.currentTimeMillis()) continue;
 
                 //SussiLogger.debugMessage("1");
@@ -105,6 +107,9 @@ public class VIPManager {
                 ).queue());
             }
         }
+        long then = System.currentTimeMillis();
+        long diff = then - now;
+        SussiLogger.greatMessage("VIP checking finished (" + diff + "ms).");
     }
 
     /**
