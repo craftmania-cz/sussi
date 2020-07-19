@@ -23,6 +23,9 @@ public class VIPManager {
         this.cache().thenAcceptAsync(x -> this.check());
     }
 
+    /**
+     * Reloads cache (clears and loads again). Then checks for all available VIPs to give.
+     */
     public void recheck() {
         this.cache().thenAcceptAsync(x -> this.check());
     }
