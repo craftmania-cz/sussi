@@ -56,7 +56,7 @@ public class CommandHandler {
         registerCommand(new Link());
         registerCommand(new Unlink());
         registerCommand(new Hytale());
-        registerCommand(new DeadbyDaylight());
+        registerCommand(new Fallguys());
         registerCommand(new Events());
         registerCommand(new NewProfile());
         registerCommand(new BlockCountry());
