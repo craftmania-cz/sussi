@@ -47,7 +47,7 @@ public class CommandHandler {
         registerCommand(new Fortnite());
         registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
-        registerCommand(new Osu());
+        registerCommand(new Crypto());
         registerCommand(new Overwatch());
         registerCommand(new Standa());
         registerCommand(new Udrzba());
@@ -74,6 +74,7 @@ public class CommandHandler {
         registerCommand(new English());
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
+        registerCommand(new Android());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
