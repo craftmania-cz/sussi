@@ -9,9 +9,10 @@ import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -121,5 +122,30 @@ public class MainListener extends ListenerAdapter {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
+    }
+
+    @Override
+    public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
+        super.onGuildVoiceJoin(event);
+        if(event.getChannelJoined().getIdLong()  == Sussi.getConfig().getVytvoritVoiceID()) {
+            String name = event.getMember().getUser().getName();
+            if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
+                event.getGuild().createVoiceChannel(name).queue(voiceChannel -> {
+                    Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
+                    event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
+                });
+            } else {
+                event.getGuild().kickVoiceMember(event.getMember()).queue();
+            }
+        }
+    }
+
+    @Override
+    public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
+        super.onGuildVoiceLeave(event);
+        if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getChannelLeft().getIdLong()) != 0 && event.getChannelLeft().getMembers().size() == 0) {
+            Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
+            event.getChannelLeft().delete().queue();
+        }
     }
 }
