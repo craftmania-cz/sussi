@@ -22,13 +22,15 @@ public class Room implements ICommand {
 
         if (Sussi.getInstance().getSql().getPlayerVoiceRoomIdByOwnerId(sender.getIdLong()) == 0) {
             MessageUtils.sendErrorMessage("Nemáš žádnou místnost! Vytvoříš si ji připojením do kanálu <room>", channel);
+            return;
         }
 
         VoiceChannel voiceChannel = member.getGuild().getVoiceChannelById(Sussi.getInstance().getSql().getPlayerVoiceRoomIdByOwnerId(sender.getIdLong()));
-
         if (args.length < 1) {
-            boolean locked = !voiceChannel.getPermissionOverride(member.getGuild().getPublicRole()).getAllowed().contains(Permission.VOICE_CONNECT);
-            EmbedBuilder embedBuilder = new EmbedBuilder()             //TODO: Banned, added people
+            EnumSet<Permission> allowed = voiceChannel.getPermissionOverride(member.getGuild().getPublicRole()).getAllowed();
+            boolean locked = !(allowed.size() > 0 && allowed.contains(Permission.VOICE_CONNECT));
+
+            EmbedBuilder embedBuilder = new EmbedBuilder()
                     .setTitle("Informace o voice místnosti uživatele " + sender.getAsTag())
                     .addField("Základní informace",
                             "Název: " + voiceChannel.getName() + "\n" +
@@ -49,7 +51,11 @@ public class Room implements ICommand {
                 case "add":
                     if (args.length == 2 || message.getMentions(Message.MentionType.USER).size() > 0) {
                         Member toAdd = member.getGuild().getMemberById(message.getMentions(Message.MentionType.USER).get(0).getId());
-                        voiceChannel.getManager().getChannel().createPermissionOverride(toAdd).setAllow(Permission.VOICE_CONNECT).queue();
+                        if(toAdd.getIdLong() == sender.getIdLong()) {
+                            MessageUtils.sendErrorMessage("Nemůžeš přidat sám sebe! Jsi majitel místnosti.", channel);
+                            break;
+                        }
+                        voiceChannel.getManager().getChannel().putPermissionOverride(toAdd).setAllow(Permission.VOICE_CONNECT).queue();
                         MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " uživatel byl přidán.", 3000, channel);
                     } else {
                         MessageUtils.sendErrorMessage("Musíš označit uživatele, kterého chceš přidat!", channel);
@@ -57,8 +63,12 @@ public class Room implements ICommand {
                     break;
                 case "remove":
                     if (args.length == 2 || message.getMentions(Message.MentionType.USER).size() > 0) {
-                        Member toAdd = member.getGuild().getMemberById(message.getMentions(Message.MentionType.USER).get(0).getId());
-                        voiceChannel.getManager().getChannel().createPermissionOverride(toAdd).setDeny(Permission.VOICE_CONNECT).queue();
+                        Member toRemove = member.getGuild().getMemberById(message.getMentions(Message.MentionType.USER).get(0).getId());
+                        if(toRemove.getIdLong() == sender.getIdLong()) {
+                            MessageUtils.sendErrorMessage("Nemůžeš odebrat sám sebe! Jsi majitel místnosti.", channel);
+                            break;
+                        }
+                        voiceChannel.getManager().getChannel().putPermissionOverride(toRemove).setDeny(Permission.VOICE_CONNECT).queue();
                         MessageUtils.sendAutoDeletedMessage("Uživatel byl odebrán.", 3000, channel);
                     } else {
                         MessageUtils.sendErrorMessage("Musíš označit uživatele, kterého chceš odebrat!", channel);
@@ -79,11 +89,13 @@ public class Room implements ICommand {
                 case "kick":
                     if (args.length == 2 || message.getMentions(Message.MentionType.USER).size() > 0) {
                         Member toKick = member.getGuild().getMemberById(message.getMentions(Message.MentionType.USER).get(0).getId());
-                        if (toKick.getVoiceState().inVoiceChannel() && toKick.getVoiceState().getChannel().getId().equals(voiceChannel.getId())) {
+                        if(toKick.getIdLong() == sender.getIdLong()) {
+                            MessageUtils.sendErrorMessage("Nemůžeš vyhodit sám sebe! Proč bys to dělal?", channel);
+                        } else if (toKick.getVoiceState().inVoiceChannel() && toKick.getVoiceState().getChannel().getId().equals(voiceChannel.getId())) {
                             voiceChannel.getGuild().kickVoiceMember(toKick).queue();
                             MessageUtils.sendAutoDeletedMessage("Uživatel byl vykopnut.", 3000, channel);
                         } else {
-                            MessageUtils.sendErrorMessage("Uživatel není ve stejném kanálu", channel);
+                            MessageUtils.sendErrorMessage("Uživatel není ve stejném kanálu.", channel);
                         }
                     } else {
                         MessageUtils.sendErrorMessage("Musíš označit uživatele, kterého chceš vykopnout!", channel);
@@ -92,11 +104,15 @@ public class Room implements ICommand {
                 case "ban":
                     if (args.length == 2 || message.getMentions(Message.MentionType.USER).size() > 0) {
                         Member toBan = member.getGuild().getMemberById(message.getMentions(Message.MentionType.USER).get(0).getId());
+                        if(toBan.getIdLong() == sender.getIdLong()) {
+                            MessageUtils.sendErrorMessage("Nemůžeš zabanovat sám sebe!", channel);
+                            break;
+                        }
                         if (toBan.getVoiceState().inVoiceChannel() && toBan.getVoiceState().getChannel().getId().equals(voiceChannel.getId())) {
                             voiceChannel.getGuild().kickVoiceMember(toBan).queue();
-                            MessageUtils.sendAutoDeletedMessage("Uživatel byl zabanován.", 3000, channel);
                         }
-                        voiceChannel.getManager().getChannel().createPermissionOverride(toBan).setDeny(Permission.VIEW_CHANNEL).queue();
+                        voiceChannel.getManager().getChannel().putPermissionOverride(toBan).setDeny(Permission.VIEW_CHANNEL).queue();
+                        MessageUtils.sendAutoDeletedMessage("Uživatel byl zabanován.", 3000, channel);
                     } else {
                         MessageUtils.sendErrorMessage("Musíš označit uživatele, kterého chceš zabanovat!", channel);
                     }

@@ -1206,16 +1206,4 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
-
-    public final void asd(Long roomId) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            pool.close(conn, ps, null);
-        }
-    }
 }

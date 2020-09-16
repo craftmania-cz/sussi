@@ -132,6 +132,7 @@ public class MainListener extends ListenerAdapter {
             if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
                 event.getGuild().createVoiceChannel(name).queue(voiceChannel -> {
                     Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
+                    voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT);
                     event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
                 });
             } else {
