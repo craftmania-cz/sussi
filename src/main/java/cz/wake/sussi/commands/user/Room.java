@@ -100,6 +100,16 @@ public class Room implements ICommand {
                     } else {
                         MessageUtils.sendErrorMessage("Musíš označit uživatele, kterého chceš zabanovat!", channel);
                     }
+                    break;
+                case "unban":
+                    if (args.length == 2 || message.getMentions(Message.MentionType.USER).size() > 0) {
+                        Member toUnban = member.getGuild().getMemberById(message.getMentions(Message.MentionType.USER).get(0).getId());
+                        MessageUtils.sendAutoDeletedMessage("Uživatel byl odbanován.", 3000, channel);
+                        voiceChannel.getManager().getChannel().putPermissionOverride(toUnban).setAllow(Permission.VIEW_CHANNEL).queue();
+                    } else {
+                        MessageUtils.sendErrorMessage("Musíš označit uživatele, kterého chceš zabanovat!", channel);
+                    }
+                    break;
                 case "bitrate":
                     try {
                         if (args.length == 2) {
