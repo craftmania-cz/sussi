@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 public class Room implements ICommand {
@@ -133,8 +134,7 @@ public class Room implements ICommand {
 
     @Override
     public String getDescription() {
-        return "room";
-        //TODO: Description
+        return "Správa voice mistností.";
     }
 
     @Override
