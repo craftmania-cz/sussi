@@ -37,6 +37,29 @@ public class Room implements ICommand {
                                     "Zamknuto: " + (locked ? "Ano" : "Ne") + "\n" +
                                     "Limit: " + (voiceChannel.getUserLimit() == 0 ? "Bez limitu" : voiceChannel.getUserLimit()) + "\n" +
                                     "Bitrate: " + voiceChannel.getBitrate(), false);
+
+            List<PermissionOverride> bannedList = voiceChannel.getMemberPermissionOverrides();
+            StringBuilder banned = new StringBuilder();
+            if(bannedList.size() > 0) {
+                for (PermissionOverride perm : bannedList) {
+                    if(perm.getDenied().contains(Permission.VIEW_CHANNEL)) {
+                        banned.append("<@").append(perm.getMember().getIdLong()).append(">\n");
+                    }
+                }
+                embedBuilder.addField("Zabanovaní lidé", banned.toString(), false);
+            }
+
+            List<PermissionOverride> addedList = voiceChannel.getMemberPermissionOverrides();
+            StringBuilder added = new StringBuilder();
+            if(addedList.size() > 0) {
+                for(PermissionOverride perm : addedList) {
+                    if(perm.getAllowed().contains(Permission.VOICE_CONNECT)) {
+                        added.append("<@").append(perm.getMember().getIdLong()).append(">\n");
+                    }
+                }
+                embedBuilder.addField("Přidaní lidé", added.toString(), false);
+            }
+
             channel.sendMessage(embedBuilder.build()).queue();
         } else {
             switch (args[0]) {
@@ -143,7 +166,7 @@ public class Room implements ICommand {
                         List<String> list = Arrays.asList(args);
                         list = list.subList(1, list.size());
                         String name = String.join(" ", list);
-                        voiceChannel.getManager().setName(name).queue();
+                        voiceChannel.getManager().setName(name).complete();
                         MessageUtils.sendAutoDeletedMessage("Název byl změněn.", 3000, channel);
                     } else {
                         MessageUtils.sendErrorMessage("Musíš napsat uvést název místnosti!", channel);
