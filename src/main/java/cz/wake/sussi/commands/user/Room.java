@@ -139,8 +139,16 @@ public class Room implements ICommand {
 
     @Override
     public String getHelp() {
-        return null;
-        //TODO: Help
+        return ",room - Zobrazí informace o místnosti.\n" +
+                ",room lock - Uzamkne místnost.\n" +
+                ",room unlock - Odemkne místnost.\n" +
+                ",room add @uživatel - Přidá uživatele do místnosti.\n" +
+                ",room remove @uživatel - Odebere uživatele z místnosti.\n" +
+                ",room ban @uživatel - Zabanuje uživatele v místnosti.\n" +
+                ",room unban @uživatel - Odbanuje uživatele v místnosti.\n" +
+                ",room name [text] - Nastaví název místnosti.\n" +
+                ",room limit [číslo] - Nastaví limit místnosti.\n" +
+                ",room bitrate [číslo v kbps] - Nastaví bitrate v místnosti.";
     }
 
     @Override
