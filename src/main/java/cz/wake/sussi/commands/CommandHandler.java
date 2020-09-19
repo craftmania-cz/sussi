@@ -75,6 +75,8 @@ public class CommandHandler {
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         registerCommand(new Android());
+        registerCommand(new AmongUs());
+        registerCommand(new Mafia());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
