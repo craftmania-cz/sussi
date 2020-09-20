@@ -203,7 +203,8 @@ public class Room implements ICommand {
                     }
                     break;
                 case "name":
-                    if (args.length >= 1) {
+                    MessageUtils.sendErrorMessage("Přejmenovávání místností je dočasně deaktivováno.", channel);
+                    /*if (args.length >= 1) {
                         List<String> list = Arrays.asList(args);
                         list = list.subList(1, list.size());
                         String name = String.join(" ", list);
@@ -211,7 +212,7 @@ public class Room implements ICommand {
                         channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":bookmark: | Název kanálu byl změněn na ** " + name + "**").build()).queue();
                     } else {
                         MessageUtils.sendErrorMessage("Musíš napsat uvést název místnosti!", channel);
-                    }
+                    }*/
                     break;
             }
         }
