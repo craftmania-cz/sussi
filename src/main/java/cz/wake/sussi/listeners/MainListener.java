@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -130,10 +131,11 @@ public class MainListener extends ListenerAdapter {
         if(event.getChannelJoined().getIdLong()  == Sussi.getConfig().getVytvoritVoiceID()) {
             String name = event.getMember().getUser().getName();
             if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
-                event.getGuild().createVoiceChannel(name).queue(voiceChannel -> {
+                event.getGuild().getCategoryById("519251195051769856").createVoiceChannel(name).queue(voiceChannel -> {
                     Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
-                    voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT);
+                    voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL).queue();
                     event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
+                    event.getGuild().getTextChannelById("207805056123273216").sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `,room` nebo `,room help`").queue();
                 });
             } else {
                 event.getGuild().kickVoiceMember(event.getMember()).queue();
@@ -144,6 +146,15 @@ public class MainListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
         super.onGuildVoiceLeave(event);
+        if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getChannelLeft().getIdLong()) != 0 && event.getChannelLeft().getMembers().size() == 0) {
+            Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
+            event.getChannelLeft().delete().queue();
+        }
+    }
+
+    @Override
+    public void onGuildVoiceMove(@Nonnull GuildVoiceMoveEvent event) {
+        super.onGuildVoiceMove(event);
         if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getChannelLeft().getIdLong()) != 0 && event.getChannelLeft().getMembers().size() == 0) {
             Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
             event.getChannelLeft().delete().queue();

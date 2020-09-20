@@ -1154,13 +1154,13 @@ public class SQLManager {
         }
      }
 
-    public final long getPlayerVoiceRoomIdByOwnerId(Long ownerId) {
+    public final long getPlayerVoiceRoomIdByOwnerId(long ownerId) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
             ps = conn.prepareStatement("SELECT discord_room_id FROM player_voice_rooms WHERE discord_owner_id = ?");
-            ps.setString(1, ownerId.toString());
+            ps.setLong(1, ownerId);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
                 return ps.getResultSet().getLong("discord_room_id");
@@ -1173,13 +1173,13 @@ public class SQLManager {
         return 0;
     }
 
-    public final long getPlayerVoiceOwnerIdByRoomId(Long roomId) {
+    public final long getPlayerVoiceOwnerIdByRoomId(long roomId) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
             ps = conn.prepareStatement("SELECT discord_owner_id FROM player_voice_rooms WHERE discord_room_id = ?");
-            ps.setString(1, roomId.toString());
+            ps.setLong(1, roomId);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
                 return ps.getResultSet().getLong("discord_owner_id");
@@ -1192,13 +1192,13 @@ public class SQLManager {
         return 0;
     }
 
-    public final void deletePlayerVoice(Long roomId) {
+    public final void deletePlayerVoice(long roomId) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
             ps = conn.prepareStatement("DELETE FROM player_voice_rooms WHERE discord_room_id = ?");
-            ps.setString(1, roomId.toString());
+            ps.setLong(1, roomId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
