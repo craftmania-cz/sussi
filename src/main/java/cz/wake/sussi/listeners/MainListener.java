@@ -159,5 +159,18 @@ public class MainListener extends ListenerAdapter {
             Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
             event.getChannelLeft().delete().queue();
         }
+        if(event.getChannelJoined().getIdLong()  == Sussi.getConfig().getVytvoritVoiceID()) {
+            String name = event.getMember().getUser().getName();
+            if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
+                event.getGuild().getCategoryById("519251195051769856").createVoiceChannel(name).queue(voiceChannel -> {
+                    Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
+                    voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL).queue();
+                    event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
+                    event.getGuild().getTextChannelById("207805056123273216").sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `,room` nebo `,room help`").queue();
+                });
+            } else {
+                event.getGuild().kickVoiceMember(event.getMember()).queue();
+            }
+        }
     }
 }
