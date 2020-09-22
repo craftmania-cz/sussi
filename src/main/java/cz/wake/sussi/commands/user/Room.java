@@ -40,7 +40,7 @@ public class Room implements ICommand {
                     .setTitle("Informace o voice room: " + voiceChannel.getName()).setColor(Constants.LIGHT_BLUE)
                     .addField("Základní informace",
                                     "Majitel: " + voiceOwner.getAsMention() + "\n" +
-                                    "Zamknuto: " + (locked ? "Ne" : "Ano") + "\n" +
+                                    "Zamknuto: " + (locked ? "Ano" : "Ne") + "\n" +
                                     "Limit: " + (voiceChannel.getUserLimit() == 0 ? "Bez limitu" : voiceChannel.getUserLimit()) + "\n" +
                                     "Bitrate: " + (voiceChannel.getBitrate()/1000) + "kbps", false)
                     .setFooter("K změně nastavení místnosti použij ,room nebo ,room help příkaz.");
