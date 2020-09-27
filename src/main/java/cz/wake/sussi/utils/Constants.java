@@ -54,6 +54,7 @@ public class Constants {
     final public static String BOOSTER_COLOR_3 = "665575430677463060";
     final public static String BOOSTER_COLOR_4 = "665575722542301214";
     final public static String BOOSTER_COLOR_5 = "665576138277388288";
+    final public static String BOOSTER_COLOR_6 = "759740234232889364";
 
     private static int getColorCode() {
         int choice = ThreadLocalRandom.current().nextInt(0, 1 + 1);
