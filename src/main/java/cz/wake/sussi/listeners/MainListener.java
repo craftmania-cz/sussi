@@ -91,7 +91,7 @@ public class MainListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
-        if (!event.getMember().getUser().isBot()){
+        if (event.getMember().getUser().isBot()){
             return;
         }
         Member member = event.getMember();
