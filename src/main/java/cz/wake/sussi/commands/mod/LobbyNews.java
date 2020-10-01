@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 
-public class News implements ICommand {
+public class LobbyNews implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
@@ -71,7 +71,7 @@ public class News implements ICommand {
 
     @Override
     public String getCommand() {
-        return "news";
+        return "lobbynews";
     }
 
     @Override
@@ -81,10 +81,10 @@ public class News implements ICommand {
 
     @Override
     public String getHelp() {
-        return ",news show - Zobrazí aktuální oznámení na lobby" +
-                ",news seen [nick] - Vypíše, zda si hráč zobrazil oznámení na lobby.\n" +
-                ",news update [text] - Nastaví nové oznámení na lobby.\n" +
-                ",news reset - Resetuje všem zobrazení oznámení na lobby (Jen wake a krosta)";
+        return ",lobbynews show - Zobrazí aktuální oznámení na lobby" +
+                ",lobbynews seen [nick] - Vypíše, zda si hráč zobrazil oznámení na lobby.\n" +
+                ",lobbynews update [text] - Nastaví nové oznámení na lobby.\n" +
+                ",lobbynews reset - Resetuje všem zobrazení oznámení na lobby (Jen wake a krosta)";
     }
 
     @Override

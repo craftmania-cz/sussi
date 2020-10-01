@@ -62,6 +62,7 @@ public class CommandHandler {
         registerCommand(new BlockCountry());
         registerCommand(new Poll());
         registerCommand(new Korean());
+        registerCommand(new LobbyNews());
         registerCommand(new News());
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
