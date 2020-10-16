@@ -6,7 +6,7 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.objects.ats.ATS;
-import cz.wake.sussi.objects.ats.ATSManager;
+import cz.wake.sussi.runnable.ATSResetTask;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.TimeUtils;
@@ -57,7 +57,7 @@ public class NewAts implements ICommand {
                                     Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(true);
                                     msg.editMessage(pair.getLeft().build()).queue();
                                     if (!pair.getRight().isEmpty()) channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
-                                    MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSManager.PRIVATE_CHANNEL_ID);
+                                    MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSResetTask.PRIVATE_CHANNEL_ID);
                                     if (secretChannel == null) return;
                                     secretChannel.sendMessage(pair.getMiddle().build()).queue();
                                 });
@@ -69,7 +69,7 @@ public class NewAts implements ICommand {
                                 Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = Sussi.getATSManager().evaluate(false);
                                 msg.editMessage(pair.getLeft().build()).queue();
                                 if (!pair.getRight().isEmpty()) channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
-                                MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSManager.PRIVATE_CHANNEL_ID);
+                                MessageChannel secretChannel = Sussi.getJda().getTextChannelById(ATSResetTask.PRIVATE_CHANNEL_ID);
                                 if (secretChannel == null) return;
                                 secretChannel.sendMessage(pair.getMiddle().build()).queue();
                             });
