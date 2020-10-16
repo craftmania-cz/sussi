@@ -8,6 +8,7 @@ import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.runnable.ATSResetTask;
 import cz.wake.sussi.objects.notes.NoteManager;
+import cz.wake.sussi.runnable.EmptyVoiceCheckTask;
 import cz.wake.sussi.runnable.VoteResetTask;
 import cz.wake.sussi.objects.votes.WeekVotesJob;
 import cz.wake.sussi.runnable.StatusChangerTask;
@@ -172,6 +173,19 @@ public class Sussi {
                     .build();
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("statusChangeTask").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever()).build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(EmptyVoiceCheckTask.class)
+                    .withIdentity("emptyVoiceCheck")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("emptyVoiceCheck").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(3)).build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {

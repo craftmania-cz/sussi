@@ -56,6 +56,11 @@ public class Constants {
     final public static String BOOSTER_COLOR_5 = "665576138277388288";
     final public static String BOOSTER_COLOR_6 = "759740234232889364";
 
+    // Others
+    final public static String CM_GUILD_ID = "207412074224025600";
+    final public static String CATEGORY_KECARNA_ID = "519251195051769856";
+    final public static String VOICE_CREATE_ID = "757019915935809596";
+
     private static int getColorCode() {
         int choice = ThreadLocalRandom.current().nextInt(0, 1 + 1);
         switch (choice) {
