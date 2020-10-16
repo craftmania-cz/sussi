@@ -51,6 +51,7 @@ jobs:
         id: docker_build
         with:
           push: true
+          context: ./
           file: ./Dockerfile
           tags: |
             ghcr.io/craftmania-cz/sussi:${{ github.run_id }}
