@@ -77,8 +77,7 @@ public class Sussi {
 
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
-        jda = new JDABuilder(AccountType.BOT)
-                .setToken(config.getBotToken())
+        jda = JDABuilder.createDefault(config.getBotToken())
                 .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))
