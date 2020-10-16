@@ -45,10 +45,8 @@ public class CommandHandler {
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
         registerCommand(new Fortnite());
-        registerCommand(new LeagueOfLegends());
         registerCommand(new GTA());
         registerCommand(new Crypto());
-        registerCommand(new Overwatch());
         registerCommand(new Standa());
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
@@ -70,15 +68,17 @@ public class CommandHandler {
         registerCommand(new NoteCommand());
         registerCommand(new StaffList());
         registerCommand(new NewAts());
-        registerCommand(new Valorant());
         registerCommand(new Apple());
         registerCommand(new English());
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         registerCommand(new Android());
         registerCommand(new AmongUs());
-        registerCommand(new Mafia());
         registerCommand(new Room());
+        registerCommand(new Osu());
+        registerCommand(new RocketLeague());
+        registerCommand(new Wow());
+        registerCommand(new EpicRPG());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
