@@ -10,7 +10,7 @@ import cz.wake.sussi.runnable.ATSResetTask;
 import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.runnable.VoteResetTask;
 import cz.wake.sussi.objects.votes.WeekVotesJob;
-import cz.wake.sussi.runnable.StatusChanger;
+import cz.wake.sussi.runnable.StatusChangerTask;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.SussiLogger;
@@ -160,6 +160,19 @@ public class Sussi {
                     .forJob("weekVotesReset")
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * MON"))
                     .build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(StatusChangerTask.class)
+                    .withIdentity("statusChangeTask")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("statusChangeTask").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever()).build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
