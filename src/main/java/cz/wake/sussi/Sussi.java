@@ -19,6 +19,8 @@ import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -79,6 +81,8 @@ public class Sussi {
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
         jda = JDABuilder.createDefault(config.getBotToken())
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))

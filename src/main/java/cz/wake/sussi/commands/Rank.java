@@ -1,7 +1,9 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.utils.Constants;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.internal.utils.PermissionUtil;
@@ -37,16 +39,15 @@ public enum Rank {
     }
 
     public static Rank getPermLevelForUser(User user, TextChannel ch) {
+        Member guildMember = Sussi.getJda().getGuildById(Constants.CM_GUILD_ID).getMember(user);
+        assert guildMember != null;
         if (user.getIdLong() == Sussi.getConfig().getOwnerID()) {
             return BOT_OWNER;
         }
-        if (!ch.getGuild().isMember(user)) {
-            return USER;
-        }
-        if (PermissionUtil.checkPermission(ch, ch.getGuild().getMember(user), Permission.ADMINISTRATOR)) {
+        if (PermissionUtil.checkPermission(ch, guildMember, Permission.ADMINISTRATOR)) {
             return ADMINISTRATOR;
         }
-        if (PermissionUtil.checkPermission(ch, ch.getGuild().getMember(user), Permission.BAN_MEMBERS)) {
+        if (PermissionUtil.checkPermission(ch, guildMember, Permission.BAN_MEMBERS)) {
             return MODERATOR;
         }
         return USER;
