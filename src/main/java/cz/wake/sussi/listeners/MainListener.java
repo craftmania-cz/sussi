@@ -89,14 +89,14 @@ public class MainListener extends ListenerAdapter {
         }
     }
 
-    @Override
+ /*   @Override
     public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
         if (event.getMember().getUser().isBot()){
             return;
         }
         Member member = event.getMember();
         member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("761020839683817472")).queue(); // Přidání News role všem novým
-    }
+    }*/
 
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
