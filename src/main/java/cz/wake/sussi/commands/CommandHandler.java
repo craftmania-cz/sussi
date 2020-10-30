@@ -79,6 +79,7 @@ public class CommandHandler {
         registerCommand(new RocketLeague());
         registerCommand(new Wow());
         registerCommand(new EpicRPG());
+        registerCommand(new HalloweenStats());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
