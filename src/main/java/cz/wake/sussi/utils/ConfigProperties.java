@@ -12,7 +12,8 @@ public class ConfigProperties {
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
                     dialogFlowApiKey, craftBoxAdminKey;
     private boolean dialogFlowEnabled, metricsEnabled;
-    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID, oznameniID, vytvoritVoiceID;
+    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID, oznameniID, vytvoritVoiceID,
+                    overeniChannelID;
     private List<String> dialogFlowChannels;
 
     public ConfigProperties() {
@@ -50,6 +51,7 @@ public class ConfigProperties {
             secretChannelAtsID = Long.parseLong(properties.getProperty("secret_channel_ats"));
             oznameniID = Long.parseLong(properties.getProperty("oznameni"));
             vytvoritVoiceID = Long.parseLong(properties.getProperty("vytvorit_voice"));
+            overeniChannelID = Long.parseLong(properties.getProperty("overeni"));
 
             craftBoxAdminKey = properties.getProperty("adminKey");
 
@@ -154,5 +156,9 @@ public class ConfigProperties {
 
     public String getCraftBoxAdminKey() {
         return craftBoxAdminKey;
+    }
+
+    public Long getOvereniChannelID() {
+        return overeniChannelID;
     }
 }

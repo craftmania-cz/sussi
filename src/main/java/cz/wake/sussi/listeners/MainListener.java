@@ -100,7 +100,7 @@ public class MainListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        if(event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getReactionEmote().getName().equals("\u2705") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
+        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getReactionEmote().getName().equals("\u2705") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
             Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
                 MessageEmbed napadEmbed = message.getEmbeds().get(0);
 
@@ -114,7 +114,7 @@ public class MainListener extends ListenerAdapter {
             }));
         }
 
-        if(event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getReactionEmote().getName().equals("\u2611\uFE0F") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
+        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getReactionEmote().getName().equals("\u2611\uFE0F") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
             Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
                 MessageEmbed napadEmbed = message.getEmbeds().get(0);
 
@@ -126,6 +126,16 @@ public class MainListener extends ListenerAdapter {
 
                 Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(MessageUtils.getEmbed(Constants.BLUE).setDescription(Constants.THUMB_UP + " | Proběhlo schválení nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
             }));
+        }
+
+        // Reakce na ověření
+        if (event.getChannel().getIdLong() == Sussi.getConfig().getOvereniChannelID() && event.getReaction().getReactionEmote().getName().equals("\u2705")) {
+            if (event.getMember().getUser().isBot()){
+                return;
+            }
+            Member member = event.getMember();
+            member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("772583689032302625")).queue(); // Přidání Member role všem novým
+            member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("761020839683817472")).queue(); // News role
         }
     }
 
