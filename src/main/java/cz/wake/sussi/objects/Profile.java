@@ -168,13 +168,15 @@ public class Profile {
         // Groups
         if (groups != null) {
             if (groups.length() == 0) return;
-            if (groups.getJSONObject("servers").length() == 0) return;
             //System.out.println(nick + " " + groups);
             this.globalVIP = groups.isNull("primary") ? null : groups.getString("primary");
             if (VIPType.isValid(globalVIP)) {
                 this.globalVIPexpiry = groups.isNull("time") ? null : groups.getLong("time");
                 this.globalVIPobj = new ServerVIP(globalVIPexpiry, globalVIP);
             } else globalVIP = null;
+
+            //System.out.println(globalVIP);
+            //System.out.println(globalVIPobj);
 
             for (ServerType vip : ServerType.values()) {
                 mappedServerVIPs.put(vip, new ArrayList<>());
@@ -463,6 +465,20 @@ public class Profile {
                 out.put(vipType, null);
             }
         }
+        // Check for global VIP
+        if (this.getGlobalVIP() != null) {
+            final ServerVIP globalVIP = this.getGlobalVIP();
+            //System.out.println(globalVIP);
+            final VIPType vipType = globalVIP.getVIPType();
+            //System.out.println(out.get(vipType));
+            if (out.get(vipType) == null) {
+                out.put(vipType, globalVIP);
+            } else if (!out.get(vipType).isPermanent()
+                    && (globalVIP.isPermanent()
+                    || globalVIP.time > out.get(vipType).time)) {
+                out.put(vipType, globalVIP);
+            }
+        }
         return out;
     }
 
@@ -594,7 +610,6 @@ public class Profile {
         SURVIVAL,
         SKYBLOCK,
         CREATIVE,
-        SKYBCLOUD, //TODO: Delete
         SKYCLOUD,
         PRISON,
         VANILLA;

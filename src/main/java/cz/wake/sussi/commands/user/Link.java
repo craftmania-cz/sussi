@@ -24,7 +24,7 @@ public class Link implements ICommand {
         }
 
         if (args.length < 1) {
-            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,link SUPERTAJNYKOD123`", channel);
+            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `,link SUPERTAJNYKOD123`\nPro získaní kódu jdi na Lobby a použij `/link`", channel);
             return;
         }
 
@@ -34,8 +34,9 @@ public class Link implements ICommand {
             return;
         }
 
-        channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl prepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(code)).build()).queue();
+        channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(code)).build()).queue();
         Sussi.getInstance().getSql().connectToMC(sender.getId(), code);
+        Sussi.getVIPManager().checkMember(member.getGuild(), member);
     }
 
 

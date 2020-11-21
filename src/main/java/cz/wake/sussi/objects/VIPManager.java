@@ -66,63 +66,69 @@ public class VIPManager {
         final Guild guild = Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID());
         if (guild == null) return;
         for (Member member : guild.getMembers().stream().filter(member -> !member.getUser().isBot()).collect(Collectors.toSet())) {
-            // Debug
-            //SussiLogger.infoMessage("Checking user: " + member.getUser().getAsTag() + ".");
-            // Member's vip roles
-            final Set<Role> vipRoles = member.getRoles().stream().filter(role -> isVIPRole(role.getName())).collect(Collectors.toSet());
-            final Optional<Profile> optionalProfile = getProfileByID(member.getId());
-
-            for (Role vipRole : vipRoles) {
-                //SussiLogger.debugMessage("1");
-                // Check if user should have this role
-                if (!optionalProfile.isPresent()) {
-                    // Does not have any VIP in his profile - all expired
-                    this.removeVIPRole(guild, member, vipRole, "Expired VIP");
-                    continue;
-                }
-
-                final Profile profile = optionalProfile.get();
-
-                final Profile.VIPType vipType = Profile.VIPType.getFromRoleName(vipRole.getName());
-                final HashMap<Profile.VIPType, Profile.ServerVIP> bestVIPsFromEachLevel = profile.getBestVIPsFromEachLevel();
-
-                //SussiLogger.debugMessage("2");
-
-                if (vipType == null) {
-                    // Probably incorrect VIP role?
-                    this.removeVIPRole(guild, member, vipRole, "Invalid role");
-                    continue;
-                }
-
-                //SussiLogger.debugMessage("3");
-
-                if (!bestVIPsFromEachLevel.containsKey(vipType)) {
-                    // Does have this VIP type in
-                    this.removeVIPRole(guild, member, vipRole, "Expired VIP");
-                    continue;
-                }
-            }
-
-            if (!optionalProfile.isPresent()) continue;
-
-            final Profile profile = optionalProfile.get();
-            final HashMap<Profile.VIPType, Profile.ServerVIP> bestVIPsFromEachLevel = profile.getBestVIPsFromEachLevel();
-
-            //SussiLogger.debugMessage("4");
-
-            for (Map.Entry<Profile.VIPType, Profile.ServerVIP> vipTypeServerVIPEntry : bestVIPsFromEachLevel.entrySet()) {
-                if (member.getRoles().stream().noneMatch(role -> role.getName().equals(vipTypeServerVIPEntry.getKey().getDiscordRoleName()))) {
-                    if (vipTypeServerVIPEntry.getValue() == null) continue;
-                    // Has this VIP in profile but not as a role
-                    //SussiLogger.debugMessage("5");
-                    this.addVIPRole(guild, member, guild.getRolesByName(vipTypeServerVIPEntry.getKey().getDiscordRoleName(), false).get(0), vipTypeServerVIPEntry.getValue());
-                    continue;
-                }
-            }
+            this.checkMember(guild, member);
         }
         long then = System.currentTimeMillis();
         long diff = then - now;
         SussiLogger.greatMessage("VIP checking finished (" + diff + "ms).");
+    }
+
+    public void checkMember(Guild guild, Member member) {
+        // Debug
+        //SussiLogger.infoMessage("Checking user: " + member.getUser().getAsTag() + ".");
+        // Member's vip roles
+        final Set<Role> vipRoles = member.getRoles().stream().filter(role -> isVIPRole(role.getName())).collect(Collectors.toSet());
+        final Optional<Profile> optionalProfile = getProfileByID(member.getId());
+
+        //SussiLogger.debugMessage("0");
+
+        for (Role vipRole : vipRoles) {
+            //SussiLogger.debugMessage("1");
+            // Check if user should have this role
+            if (!optionalProfile.isPresent()) {
+                // Does not have any VIP in his profile - all expired
+                this.removeVIPRole(guild, member, vipRole, "Expired VIP");
+                continue;
+            }
+
+            final Profile profile = optionalProfile.get();
+
+            final Profile.VIPType vipType = Profile.VIPType.getFromRoleName(vipRole.getName());
+            final HashMap<Profile.VIPType, Profile.ServerVIP> bestVIPsFromEachLevel = profile.getBestVIPsFromEachLevel();
+
+            //SussiLogger.debugMessage("2");
+
+            if (vipType == null) {
+                // Probably incorrect VIP role?
+                this.removeVIPRole(guild, member, vipRole, "Invalid role");
+                continue;
+            }
+
+            //SussiLogger.debugMessage("3");
+
+            if (!bestVIPsFromEachLevel.containsKey(vipType)) {
+                // Does have this VIP type in
+                this.removeVIPRole(guild, member, vipRole, "Expired VIP");
+                continue;
+            }
+        }
+
+        if (!optionalProfile.isPresent()) return;
+
+        final Profile profile = optionalProfile.get();
+        final HashMap<Profile.VIPType, Profile.ServerVIP> bestVIPsFromEachLevel = profile.getBestVIPsFromEachLevel();
+
+        //SussiLogger.debugMessage("4");
+
+        for (Map.Entry<Profile.VIPType, Profile.ServerVIP> vipTypeServerVIPEntry : bestVIPsFromEachLevel.entrySet()) {
+            if (member.getRoles().stream().noneMatch(role -> role.getName().equals(vipTypeServerVIPEntry.getKey().getDiscordRoleName()))) {
+                if (vipTypeServerVIPEntry.getValue() == null) continue;
+                // Has this VIP in profile but not as a role
+                //SussiLogger.debugMessage("5");
+                this.addVIPRole(guild, member, guild.getRolesByName(vipTypeServerVIPEntry.getKey().getDiscordRoleName(), false).get(0), vipTypeServerVIPEntry.getValue());
+                continue;
+            }
+        }
     }
 
     /**
@@ -177,7 +183,7 @@ public class VIPManager {
                         .setTitle("Byla ti odebrána VIP role: " + role.getName() + "")
                         .setDescription("Důvody proč se tohle mohlo stát:\n" +
                                 "1. Tvé VIP expirovalo.\n" +
-                                "2. Nemáš linknutý Discord účet s MC účtem - napiš `,link` v <#207805056123273216>.\n" +
+                                "2. Nemáš linknutý Discord účet s MC účtem - více se dozvíš v <#731820662271901716>.\n" +
                                 "3. Tenhle typ VIP již neexistuje.\n" +
                                 "4. Nastala chyba v žabičkovém systému, napiš Wakovi.")
                         .build()
@@ -191,7 +197,7 @@ public class VIPManager {
         member.getUser().openPrivateChannel().queue(channel -> channel.sendMessage(
                 MessageUtils.getEmbed(Constants.BLUE)
                         .setTitle("Byla ti nastavena VIP role: " + role.getName())
-                        .setDescription((serverVIP.isPermanent() ? "" : "\nExpirace: " + serverVIP.getFormattedDate()))
+                        .setDescription((serverVIP.isPermanent() ? "Tato role neexpiruje." : "\nExpirace: " + serverVIP.getFormattedDate()))
                         .build()
         ).queue());
 
