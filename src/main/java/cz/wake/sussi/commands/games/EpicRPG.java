@@ -10,19 +10,19 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
-public class DeadbyDaylight implements ICommand {
+public class EpicRPG implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("602257373851287572"))) {
-                member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("602257373851287572")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("762088037387468820"))) {
+                member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("762088037387468820")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `Dead by Daylight`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `Epic RPG`!", 5000L, channel);
             } else {
-                member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("602257373851287572")).queue();
+                member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("762088037387468820")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `Dead by Daylight`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `Epic RPG`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class DeadbyDaylight implements ICommand {
 
     @Override
     public String getCommand() {
-        return "dbd";
+        return "epicrpg";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #dead_by_daylight";
+        return "Získání role a přístupu do channelu #epic_rpg";
     }
 
     @Override

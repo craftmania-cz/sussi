@@ -7,19 +7,21 @@ import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.objects.VIPManager;
-import cz.wake.sussi.objects.ats.ATSManager;
 import cz.wake.sussi.objects.jobs.VIPCheckJob;
-import cz.wake.sussi.objects.notes.NoteManager;
-import cz.wake.sussi.objects.votes.VoteManager;
 import cz.wake.sussi.objects.jobs.WeekVotesJob;
-import cz.wake.sussi.runnable.StatusChanger;
+import cz.wake.sussi.runnable.ATSResetTask;
+import cz.wake.sussi.objects.notes.NoteManager;
+import cz.wake.sussi.runnable.EmptyVoiceCheckTask;
+import cz.wake.sussi.runnable.VoteResetTask;
+import cz.wake.sussi.runnable.StatusChangerTask;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -49,8 +51,8 @@ public class Sussi {
     private static final Map<String, Logger> LOGGERS;
     public static final Logger LOGGER;
     public static NoteManager noteManager;
-    public static ATSManager atsManager;
-    public static VoteManager voteManager;
+    public static ATSResetTask atsManager;
+    public static VoteResetTask voteManager;
     public static VIPManager vipManager;
     public static ConfigProperties config;
 
@@ -80,8 +82,9 @@ public class Sussi {
 
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
-        jda = new JDABuilder(AccountType.BOT)
-                .setToken(config.getBotToken())
+        jda = JDABuilder.createDefault(config.getBotToken())
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
                 .addEventListeners(new DialogFlowListener(aiDataService))
@@ -118,20 +121,16 @@ public class Sussi {
             SussiLogger.warnMessage("Sussi is running as BETA bot! Some functions will not work!");
         }
 
-        // StatusChanger
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new StatusChanger(), 10, 60000);
-
         if (!isBeta) noteManager = new NoteManager();
 
-        atsManager = new ATSManager();
-        voteManager = new VoteManager();
+        atsManager = new ATSResetTask();
+        voteManager = new VoteResetTask();
         vipManager = new VIPManager();
 
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();
-            JobDetail job = JobBuilder.newJob(ATSManager.class)
+            JobDetail job = JobBuilder.newJob(ATSResetTask.class)
                     .withIdentity("atsEvaluation")
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
@@ -146,7 +145,7 @@ public class Sussi {
 
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();
-            JobDetail job = JobBuilder.newJob(VoteManager.class)
+            JobDetail job = JobBuilder.newJob(VoteResetTask.class)
                     .withIdentity("monthVotesEvaluation")
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
@@ -176,12 +175,38 @@ public class Sussi {
 
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(StatusChangerTask.class)
+                    .withIdentity("statusChangeTask")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("statusChangeTask").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever()).build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(EmptyVoiceCheckTask.class)
+                    .withIdentity("emptyVoiceCheck")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("emptyVoiceCheck").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(3)).build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
                     .build();
             CronTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("vipCheck")
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 8,20 * * ?"))
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 18 ? * * *")) // every day at 18:00
                     .build();
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
@@ -240,11 +265,11 @@ public class Sussi {
         return noteManager;
     }
 
-    public static ATSManager getATSManager() {
+    public static ATSResetTask getATSManager() {
         return atsManager;
     }
 
-    public static VoteManager getVoteManager() {
+    public static VoteResetTask getVoteManager() {
         return voteManager;
     }
 

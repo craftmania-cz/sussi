@@ -1,18 +1,17 @@
-package cz.wake.sussi.objects.ats;
+package cz.wake.sussi.runnable;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.objects.ats.ATS;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import cz.wake.sussi.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.quartz.Job;
-import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ATSManager implements Job {
+public class ATSResetTask implements Job {
 
     public static final Long PRIVATE_CHANNEL_ID = Sussi.getConfig().getSecretChannelAtsID();
     public static final Long AT_POKEC_ID = Sussi.getConfig().getAtPokecID();
@@ -138,7 +137,7 @@ public class ATSManager implements Job {
     }
 
     /**
-     * Check firstly if user is in ATS by using {@link ATSManager#isInATS(String)}
+     * Check firstly if user is in ATS by using {@link ATSResetTask#isInATS(String)}
      *
      * @param nick Player's nick
      * @return ATS or null if player is not in ATS

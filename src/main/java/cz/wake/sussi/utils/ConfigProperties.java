@@ -10,9 +10,10 @@ public class ConfigProperties {
 
     private String botToken;
     private String host, port, dbname, dbuser, dbpassword, minConnections, maxConnections, timeout, ipHubKey, beta, proxycheckKey,
-                    dialogFlowApiKey;
+                    dialogFlowApiKey, craftBoxAdminKey;
     private boolean dialogFlowEnabled, metricsEnabled;
-    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID, oznameniID;
+    private Long navrhyHlasovaniID, ownerID, secretChannelAtsID, atPokecID, navrhyDiskuzeID, cmGuildID, oznameniID, vytvoritVoiceID,
+                    overeniChannelID;
     private List<String> dialogFlowChannels;
 
     public ConfigProperties() {
@@ -49,6 +50,10 @@ public class ConfigProperties {
             atPokecID = Long.parseLong(properties.getProperty("at_pokec"));
             secretChannelAtsID = Long.parseLong(properties.getProperty("secret_channel_ats"));
             oznameniID = Long.parseLong(properties.getProperty("oznameni"));
+            vytvoritVoiceID = Long.parseLong(properties.getProperty("vytvorit_voice"));
+            overeniChannelID = Long.parseLong(properties.getProperty("overeni"));
+
+            craftBoxAdminKey = properties.getProperty("adminKey");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -145,5 +150,15 @@ public class ConfigProperties {
 
     public Long getOznameniID() {
         return oznameniID;
+    }
+
+    public Long getVytvoritVoiceID() { return vytvoritVoiceID; }
+
+    public String getCraftBoxAdminKey() {
+        return craftBoxAdminKey;
+    }
+
+    public Long getOvereniChannelID() {
+        return overeniChannelID;
     }
 }

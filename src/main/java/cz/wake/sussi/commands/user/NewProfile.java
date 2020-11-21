@@ -37,16 +37,18 @@ public class NewProfile implements ICommand {
             } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
         }
 
-        if (args[0].startsWith("<@!") && args[0].endsWith(">")) {
-            List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
-            if (mentions.size() > 0) {
-                if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
-                    nick = Sussi.getInstance().getSql().getLinkedNickname(mentions.get(0).getId());
-                else {
-                    MessageUtils.sendErrorMessage("Uživatel " + mentions.get(0).getAsMention() + " nemá propojený MC účet.", channel);
-                    return;
-                }
+        if (args.length > 0 || message.getMentions(Message.MentionType.USER).size() > 0) {
+            if (args[0].startsWith("<@") && args[0].endsWith(">")) {
+                List<IMentionable> mentions = message.getMentions(Message.MentionType.USER);
+                if (mentions.size() > 0) {
+                    if (Sussi.getInstance().getSql().isAlreadyLinkedByID(mentions.get(0).getId()))
+                        nick = Sussi.getInstance().getSql().getLinkedNickname(mentions.get(0).getId());
+                    else {
+                        MessageUtils.sendErrorMessage("Uživatel " + mentions.get(0).getAsMention() + " nemá propojený MC účet.", channel);
+                        return;
+                    }
 
+                }
             }
         }
 
@@ -113,7 +115,8 @@ public class NewProfile implements ICommand {
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
                                 "Creative: " + profile.getCreative_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCreative_experience()) + "XP)" + "\n" +
                                 "Vanilla: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
-                                "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n"
+                                "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n" +
+                                "Hardcore Vanilla: " + profile.getHardcore_vanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getHardcore_vanilla_experience()) + "XP)" + "\n"
                         , true)
                 .setFooter("CraftMania.cz Stats")
                 .setTimestamp(Instant.from(ZonedDateTime.now()));

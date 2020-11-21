@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Profile {
 
@@ -52,7 +54,9 @@ public class Profile {
     private int prison_level = 1;
     private int prison_experience = 0;
     private int skycloud_level = 1;
-    private int skycloud_experience = 1;
+    private int skycloud_experience = 0;
+    private int hardcore_vanilla_level = 1;
+    private int hardcore_vanilla_experience = 0;
 
     // Votes
     private int total = 0;
@@ -141,6 +145,8 @@ public class Profile {
         this.prison_experience = ranked.isNull("prison_experience") ? 0 : ranked.getInt("prison_experience");
         this.skycloud_level = ranked.isNull("skycloud_level") ? 0 : ranked.getInt("skycloud_level");
         this.skycloud_experience = ranked.isNull("skycloud_experience") ? 0 : ranked.getInt("skycloud_experience");
+        this.hardcore_vanilla_level = ranked.isNull("hardcore_vanilla_level") ? 0 : ranked.getInt("hardcore_vanilla_level");
+        this.hardcore_vanilla_experience = ranked.isNull("hardcore_vanilla_experience") ? 0 : ranked.getInt("hardcore_vanilla_experience");
 
         // Votes
         this.total = votes.isNull("total") ? 0 : votes.getInt("total");
@@ -161,6 +167,9 @@ public class Profile {
 
         // Groups
         if (groups != null) {
+            if (groups.length() == 0) return;
+            if (groups.getJSONObject("servers").length() == 0) return;
+            System.out.println(nick + " " + groups);
             this.globalVIP = groups.isNull("primary") ? null : groups.getString("primary");
             if (VIPType.isValid(globalVIP)) {
                 this.globalVIPexpiry = groups.isNull("time") ? null : groups.getLong("time");
@@ -188,9 +197,9 @@ public class Profile {
                     });
                 }
 
-                hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
             }
         }
+        hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
     }
 
     public int getStatusId() {
@@ -313,6 +322,14 @@ public class Profile {
         return vanilla_experience;
     }
 
+    public int getHardcore_vanilla_level() {
+        return hardcore_vanilla_level;
+    }
+
+    public int getHardcore_vanilla_experience() {
+        return hardcore_vanilla_experience;
+    }
+
     public int getTotalVotes() {
         return total;
     }
@@ -427,6 +444,29 @@ public class Profile {
     }
 
     /**
+     * Returns the best ServerVIP for each level - gold, emerald, diamond, obsidian.
+     * @return List of Server VIPs
+     */
+    public HashMap<VIPType, ServerVIP> getBestVIPsFromEachLevel() {
+        // VIPType : ServerVIP?
+        HashMap<VIPType, ServerVIP> out = new HashMap<>();
+        for (VIPType vipType : VIPType.values()) {
+            if (this.serverVIPs.stream().anyMatch(serverVIP -> serverVIP.getVIPType() == vipType)) {
+                for (ServerVIP serverVIP : this.serverVIPs.stream().filter(serverVIP -> serverVIP.getVIPType() == vipType).collect(Collectors.toList())) {
+                    if (!out.containsKey(vipType)) {
+                        out.put(vipType, serverVIP);
+                    } else if (!out.get(vipType).isPermanent() && (serverVIP.isPermanent() || serverVIP.time > out.get(vipType).time)) {
+                        out.put(vipType, serverVIP);
+                    }
+                }
+            } else {
+                out.put(vipType, null);
+            }
+        }
+        return out;
+    }
+
+    /**
      * Server VIP object that stores server name, expire date
      * and type of VIP
      *
@@ -525,6 +565,20 @@ public class Profile {
             return false;
         }
 
+        @Nullable
+        public static VIPType getFromRoleName(@Nullable String roleName) {
+            if (roleName == null) return null;
+            try {
+                 return valueOf(roleName.substring(0, roleName.indexOf(' ')).toUpperCase());
+            } catch (NullPointerException e) {
+                return null;
+            }
+        }
+
+        public String getDiscordRoleName() {
+            return StringUtils.capitalize(groupName) + " VIP";
+        }
+
         public int getPriority() {
             return priority;
         }
@@ -540,6 +594,9 @@ public class Profile {
         SURVIVAL,
         SKYBLOCK,
         CREATIVE,
+        SKYBCLOUD, //TODO: Delete
+        SKYCLOUD,
+        PRISON,
         VANILLA;
 
         ServerType() {}

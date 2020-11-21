@@ -54,6 +54,10 @@ public class MessageUtils {
                 .complete();
     }
 
+    public static Message sendMessage(Color color, String message, MessageChannel channel) {
+        return channel.sendMessage(MessageUtils.getEmbed().setColor(color).setDescription(message).build()).complete();
+    }
+
     public static void editMessage(EmbedBuilder embed, Message message) {
         editMessage(message.getContentRaw(), embed, message);
     }

@@ -10,19 +10,19 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
-public class Overwatch implements ICommand {
+public class Wow implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         try {
-            if (!member.getRoles().contains(member.getGuild().getRoleById("433590207581913088"))) {
-                member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("433590207581913088")).queue();
+            if (!member.getRoles().contains(member.getGuild().getRoleById("766608113025024020"))) {
+                member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("766608113025024020")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `Overwatch`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " nastavil/a sis roli `World of Warcraft`!", 5000L, channel);
             } else {
-                member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("433590207581913088")).queue();
+                member.getGuild().removeRoleFromMember(member, member.getGuild().getRoleById("766608113025024020")).queue();
                 message.delete().queue();
-                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `Overwatch`!", 5000L, channel);
+                MessageUtils.sendAutoDeletedMessage(member.getAsMention() + " odebral/a sis roli `World of Warcraft`!", 5000L, channel);
             }
         } catch (Exception ex){
             ex.printStackTrace();
@@ -31,12 +31,12 @@ public class Overwatch implements ICommand {
 
     @Override
     public String getCommand() {
-        return "overwatch";
+        return "wow";
     }
 
     @Override
     public String getDescription() {
-        return "Získání role a přístupu do channelu #overwatch";
+        return "Získání role a přístupu do channelu #world_of_warcraft";
     }
 
     @Override

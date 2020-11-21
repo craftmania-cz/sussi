@@ -1,7 +1,8 @@
-package cz.wake.sussi.objects.votes;
+package cz.wake.sussi.runnable;
 
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.ats.ATS;
+import cz.wake.sussi.objects.votes.VotePlayer;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.MonthUtils;
 import cz.wake.sussi.utils.SussiLogger;
@@ -20,7 +21,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VoteManager implements Job {
+public class VoteResetTask implements Job {
 
     private static Long OZNAMENI_ID = Sussi.getConfig().getOznameniID();
 

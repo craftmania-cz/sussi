@@ -3,7 +3,6 @@ package cz.wake.sussi.sql;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
@@ -1133,6 +1132,75 @@ public class SQLManager {
                 ps.setInt(1, count);
                 ps.setString(2, p);
             }
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void createNewPlayerVoice(Long ownerId, Long roomId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO player_voice_rooms(discord_room_id, discord_owner_id) VALUES(?, ?)");
+            ps.setString(1, roomId.toString());
+            ps.setString(2, ownerId.toString());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+     }
+
+    public final long getPlayerVoiceRoomIdByOwnerId(long ownerId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_room_id FROM player_voice_rooms WHERE discord_owner_id = ?");
+            ps.setLong(1, ownerId);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getLong("discord_room_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return 0;
+    }
+
+    public final long getPlayerVoiceOwnerIdByRoomId(long roomId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_owner_id FROM player_voice_rooms WHERE discord_room_id = ?");
+            ps.setLong(1, roomId);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getLong("discord_owner_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return 0;
+    }
+
+    public final void deletePlayerVoice(long roomId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("DELETE FROM player_voice_rooms WHERE discord_room_id = ?");
+            ps.setLong(1, roomId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

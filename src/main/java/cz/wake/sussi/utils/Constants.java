@@ -1,11 +1,14 @@
 package cz.wake.sussi.utils;
 
+import cz.wake.sussi.Sussi;
+
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Constants {
 
     // Colors
+    final public static Color LIGHT_BLUE = new Color(93, 133, 252);
     final public static Color BLUE = new Color(58, 95, 205);
     final public static Color RED = new Color(220, 20, 60);
     final public static Color GREEN = new Color(60, 179, 90);
@@ -53,6 +56,13 @@ public class Constants {
     final public static String BOOSTER_COLOR_3 = "665575430677463060";
     final public static String BOOSTER_COLOR_4 = "665575722542301214";
     final public static String BOOSTER_COLOR_5 = "665576138277388288";
+    final public static String BOOSTER_COLOR_6 = "759740234232889364";
+
+    // Others
+    final public static String CM_GUILD_ID = Sussi.config.getCmGuildID().toString();
+    final public static String CATEGORY_KECARNA_ID = "519251195051769856";
+    final public static String VOICE_CREATE_ID = Sussi.config.getVytvoritVoiceID().toString();
+    final public static Color HALLOWEEN = new Color(252, 161, 3);
 
     private static int getColorCode() {
         int choice = ThreadLocalRandom.current().nextInt(0, 1 + 1);
