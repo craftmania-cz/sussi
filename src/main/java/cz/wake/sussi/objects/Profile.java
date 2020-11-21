@@ -169,7 +169,7 @@ public class Profile {
         if (groups != null) {
             if (groups.length() == 0) return;
             if (groups.getJSONObject("servers").length() == 0) return;
-            System.out.println(nick + " " + groups);
+            //System.out.println(nick + " " + groups);
             this.globalVIP = groups.isNull("primary") ? null : groups.getString("primary");
             if (VIPType.isValid(globalVIP)) {
                 this.globalVIPexpiry = groups.isNull("time") ? null : groups.getLong("time");
