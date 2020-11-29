@@ -204,10 +204,8 @@ public class Sussi {
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
                     .build();
-            CronTrigger ITrigger = TriggerBuilder.newTrigger()
-                    .forJob("vipCheck")
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 18 ? * * *")) // every day at 18:00
-                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("vipCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(3)).build(); // Every 3 hours
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
