@@ -80,6 +80,8 @@ public class CommandHandler {
         registerCommand(new Wow());
         registerCommand(new EpicRPG());
         registerCommand(new HalloweenStats());
+        registerCommand(new GenshinImpact());
+        registerCommand(new Cyberpunk2077());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
