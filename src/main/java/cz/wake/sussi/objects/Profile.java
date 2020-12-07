@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Profile {
 
@@ -165,34 +167,41 @@ public class Profile {
 
         // Groups
         if (groups != null) {
+            if (groups.length() == 0) return;
+            //System.out.println(nick + " " + groups);
             this.globalVIP = groups.isNull("primary") ? null : groups.getString("primary");
             if (VIPType.isValid(globalVIP)) {
                 this.globalVIPexpiry = groups.isNull("time") ? null : groups.getLong("time");
                 this.globalVIPobj = new ServerVIP(globalVIPexpiry, globalVIP);
             } else globalVIP = null;
 
+            //System.out.println(globalVIP);
+            //System.out.println(globalVIPobj);
+
             for (ServerType vip : ServerType.values()) {
                 mappedServerVIPs.put(vip, new ArrayList<>());
             }
 
             // Nemá global VIP
-            for (String serverName : groups.getJSONObject("servers").keySet()) {
-                JSONArray serverArray = groups.getJSONObject("servers").getJSONArray(serverName);
-                serverArray.forEach(serverObj -> {
-                    JSONObject jsonObject = new JSONObject(serverObj.toString());
+            if (!groups.isNull("servers")) {
+                for (String serverName : groups.getJSONObject("servers").keySet()) {
+                    JSONArray serverArray = groups.getJSONObject("servers").getJSONArray(serverName);
+                    serverArray.forEach(serverObj -> {
+                        JSONObject jsonObject = new JSONObject(serverObj.toString());
 
-                    ServerVIP obj = new ServerVIP(jsonObject.getLong("time"), jsonObject.getString("group"));
-                    obj.setServerName(serverName);
+                        ServerVIP obj = new ServerVIP(jsonObject.getLong("time"), jsonObject.getString("group"));
+                        obj.setServerName(serverName);
 
-                    //System.out.println(obj.toString());
+                        //System.out.println(obj.toString());
 
-                    serverVIPs.add(obj);
-                    mappedServerVIPs.get(obj.getServerType()).add(obj);
-                });
+                        serverVIPs.add(obj);
+                        mappedServerVIPs.get(obj.getServerType()).add(obj);
+                    });
+                }
+
             }
-
-            hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
         }
+        hasAnyVIP = this.globalVIP != null || !serverVIPs.isEmpty();
     }
 
     public int getStatusId() {
@@ -382,6 +391,7 @@ public class Profile {
      */
     @Nullable
     public ServerVIP getGlobalVIP() {
+        if (!hasGlobalVIP()) return null;
         return globalVIPobj;
     }
 
@@ -431,6 +441,43 @@ public class Profile {
                     .filter(serverVIP -> serverVIP.getServerType() == type)
                     .max(Comparator.comparingInt(serverVIP -> serverVIP.getVIPType().priority));
             opt.ifPresent(out::add);
+        }
+        return out;
+    }
+
+    /**
+     * Returns the best ServerVIP for each level - gold, emerald, diamond, obsidian.
+     * @return List of Server VIPs
+     */
+    public HashMap<VIPType, ServerVIP> getBestVIPsFromEachLevel() {
+        // VIPType : ServerVIP?
+        HashMap<VIPType, ServerVIP> out = new HashMap<>();
+        for (VIPType vipType : VIPType.values()) {
+            if (this.serverVIPs.stream().anyMatch(serverVIP -> serverVIP.getVIPType() == vipType)) {
+                for (ServerVIP serverVIP : this.serverVIPs.stream().filter(serverVIP -> serverVIP.getVIPType() == vipType).collect(Collectors.toList())) {
+                    if (!out.containsKey(vipType)) {
+                        out.put(vipType, serverVIP);
+                    } else if (!out.get(vipType).isPermanent() && (serverVIP.isPermanent() || serverVIP.time > out.get(vipType).time)) {
+                        out.put(vipType, serverVIP);
+                    }
+                }
+            } else {
+                out.put(vipType, null);
+            }
+        }
+        // Check for global VIP
+        if (this.getGlobalVIP() != null) {
+            final ServerVIP globalVIP = this.getGlobalVIP();
+            //System.out.println(globalVIP);
+            final VIPType vipType = globalVIP.getVIPType();
+            //System.out.println(out.get(vipType));
+            if (out.get(vipType) == null) {
+                out.put(vipType, globalVIP);
+            } else if (!out.get(vipType).isPermanent()
+                    && (globalVIP.isPermanent()
+                    || globalVIP.time > out.get(vipType).time)) {
+                out.put(vipType, globalVIP);
+            }
         }
         return out;
     }
@@ -489,6 +536,10 @@ public class Profile {
             return dateTimeFormatter.format(this.time);
         }
 
+        public String getDiscordRoleName() {
+            return getGroup() + " VIP";
+        }
+
         @Override
         public String toString() {
             return "ServerVIP{" +
@@ -530,6 +581,20 @@ public class Profile {
             return false;
         }
 
+        @Nullable
+        public static VIPType getFromRoleName(@Nullable String roleName) {
+            if (roleName == null) return null;
+            try {
+                 return valueOf(roleName.substring(0, roleName.indexOf(' ')).toUpperCase());
+            } catch (NullPointerException e) {
+                return null;
+            }
+        }
+
+        public String getDiscordRoleName() {
+            return StringUtils.capitalize(groupName) + " VIP";
+        }
+
         public int getPriority() {
             return priority;
         }
@@ -545,6 +610,8 @@ public class Profile {
         SURVIVAL,
         SKYBLOCK,
         CREATIVE,
+        SKYCLOUD,
+        PRISON,
         VANILLA;
 
         ServerType() {}

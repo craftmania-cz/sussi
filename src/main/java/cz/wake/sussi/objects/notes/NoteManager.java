@@ -1,6 +1,7 @@
 package cz.wake.sussi.objects.notes;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.utils.SussiLogger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +19,7 @@ public class NoteManager {
         this.notes = new ArrayList<>();
         this.notePlayers = new HashSet<>();
 
-        Sussi.LOGGER.info("Caching notes...");
+        SussiLogger.infoMessage("Caching notes...");
         this.cacheNodes();
     }
 
@@ -34,7 +35,7 @@ public class NoteManager {
                 Note note = new Note(resultSet.getString("player"), resultSet.getString("admin"), resultSet.getString("note"), resultSet.getInt("id"), resultSet.getTimestamp("date"));
                 this.notes.add(note);
             }
-            Sussi.LOGGER.info("Cached " + this.notes.size() + " notes.");
+            SussiLogger.greatMessage("Cached " + this.notes.size() + " notes.");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
