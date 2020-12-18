@@ -102,7 +102,7 @@ public class NewProfile implements ICommand {
                                 "CraftTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftTokens()) + "\n" +
                                 "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
                                 "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(Sussi.getInstance().getSql().getEventPoints(profile.getName())) + "\n" +
-                                "Ach. pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints())
+                                "Quest pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints())
                         , true)
                 .addField("Hlasování",
                         "Celkem hlasů: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getTotalVotes()) + "\n" +
@@ -114,6 +114,7 @@ public class NewProfile implements ICommand {
                         "Survival: " + profile.getSurvival_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSurvival_experience()) + "XP)" + "\n" +
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
                                 "Creative: " + profile.getCreative_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCreative_experience()) + "XP)" + "\n" +
+                                "Prison: " + profile.getPrison_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getPrison_experience()) + "XP)" + "\n" +
                                 "Vanilla: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
                                 "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n" +
                                 "Hardcore Vanilla: " + profile.getHardcore_vanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getHardcore_vanilla_experience()) + "XP)" + "\n"
