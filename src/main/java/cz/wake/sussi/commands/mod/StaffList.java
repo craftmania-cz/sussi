@@ -21,6 +21,7 @@ public class StaffList implements ICommand {
                 .addField("Eventer", generateStaffList(member, "272457315767287808"), false)
                 .addField("Builder", generateStaffList(member, "294897053207756800"), false)
                 .addField("Moderator", generateStaffList(member, "649927113964650496"), false)
+                .addField("Artist", generateStaffList(member, "796382683734605836"), false)
                 .build();
         channel.sendMessage(embed).queue();
     }
