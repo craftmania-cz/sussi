@@ -1228,4 +1228,36 @@ public class SQLManager {
         }
         return profiles;
     }
+
+    public final void addDiscordVoiceActivity(String userId, Long amount) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_voice_activity = discord_voice_activity + ? WHERE discord_user_id = ?;");
+            ps.setLong(1, amount);
+            ps.setString(2, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void addDiscordTextActivity(String userId, Long amount) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_text_activity = discord_text_activity + ? WHERE discord_user_id = ?;");
+            ps.setLong(1, amount);
+            ps.setString(2, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
 }

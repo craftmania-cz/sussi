@@ -9,11 +9,8 @@ import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.objects.VIPManager;
 import cz.wake.sussi.objects.jobs.VIPCheckJob;
 import cz.wake.sussi.objects.jobs.WeekVotesJob;
-import cz.wake.sussi.runnable.ATSResetTask;
+import cz.wake.sussi.runnable.*;
 import cz.wake.sussi.objects.notes.NoteManager;
-import cz.wake.sussi.runnable.EmptyVoiceCheckTask;
-import cz.wake.sussi.runnable.VoteResetTask;
-import cz.wake.sussi.runnable.StatusChangerTask;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.SussiLogger;
@@ -90,6 +87,7 @@ public class Sussi {
                 .addEventListeners(new DialogFlowListener(aiDataService))
                 .addEventListeners(new BoosterListener())
                 .addEventListeners(new ChangelogReactionsListener())
+                .addEventListeners(new GuildStatisticsListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
@@ -207,6 +205,18 @@ public class Sussi {
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("vipCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(3)).build(); // Every 3 hours
             scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(TextActivityTask.class)
+                    .withIdentity("textActivityCheck")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("textActivityCheck").withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1)).build(); // Every 1 minute
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
