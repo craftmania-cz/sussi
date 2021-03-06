@@ -5,6 +5,7 @@ import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
+import cz.wake.sussi.objects.Profile;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -34,8 +35,13 @@ public class Link implements ICommand {
             return;
         }
 
-        channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(code)).build()).queue();
+        String nick = Sussi.getInstance().getSql().getConnectionNick(code);
+        channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + nick).build()).queue();
         Sussi.getInstance().getSql().connectToMC(sender.getId(), code);
+
+        Profile profile = new Profile(nick);
+        if (profile.hasAnyVIP()) Sussi.getVIPManager().getVIPProfiles().add(profile);
+
         Sussi.getVIPManager().checkMember(member.getGuild(), member);
     }
 
