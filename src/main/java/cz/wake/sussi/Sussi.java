@@ -4,6 +4,7 @@ import ai.api.AIConfiguration;
 import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
+import cz.wake.sussi.commands.SlashCommandHandler;
 import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.objects.VIPManager;
@@ -40,6 +41,7 @@ public class Sussi {
     private static JDA jda;
     private SQLManager sql;
     private CommandHandler ch = new CommandHandler();
+    private static SlashCommandHandler slashCommandHandler;
     public static final String PREFIX = ",";
     public static long startUp;
     public static String API_URL = "";
@@ -88,11 +90,15 @@ public class Sussi {
                 .addEventListeners(new BoosterListener())
                 .addEventListeners(new ChangelogReactionsListener())
                 .addEventListeners(new GuildStatisticsListener())
+                .addEventListeners(new SlashCommandListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
         // Register commands
         (instance = new Sussi()).init();
+
+        slashCommandHandler = new SlashCommandHandler();
+        slashCommandHandler.createAndUpdateCommands();
 
         // Metrics
         if (config.isMetricsEnabled()) {

@@ -63,7 +63,7 @@ public class Help implements ICommand {
         return Rank.USER;
     }
 
-    private StringBuilder getContext(){
+    public static StringBuilder getContext(){
         StringBuilder builder = new StringBuilder();
         CommandHandler ch = new CommandHandler();
         builder.append("Prefix pro příkazy na tvém serveru je `,`\nDodatečné informace o příkazu ,help <příkaz>");
