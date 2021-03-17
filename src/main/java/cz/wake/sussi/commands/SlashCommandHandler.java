@@ -25,7 +25,7 @@ public class SlashCommandHandler {
 
         commands.addCommands(
                 new CommandUpdateAction.CommandData("link", "Propojení CraftMania účtu s tvým Discord účtem.")
-                    .addOption(new CommandUpdateAction.OptionData(STRING,"linkId", "Klíč, který se ti zobrazit skrz /link příkaz na serveru").setRequired(true))
+                    .addOption(new CommandUpdateAction.OptionData(STRING,"key", "Klíč, který se ti zobrazit skrz /link příkaz na serveru").setRequired(true))
         );
 
         // Finální update všech slash příkazů

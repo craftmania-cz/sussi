@@ -20,7 +20,8 @@ public class LinkSlashCommand {
         User user = hook.getEvent().getUser();
         Member member = hook.getEvent().getMember();
         MessageChannel textChannel =  hook.getEvent().getChannel();
-        String keyId = event.getOption("linkId").getAsString();
+        SlashCommandEvent.OptionData optionKeyId = event.getOption("key");
+        String keyId = optionKeyId.getAsString();
 
         if (keyId != null) {
             if (!Sussi.getInstance().getSql().doesConnectionExist(keyId)) {
