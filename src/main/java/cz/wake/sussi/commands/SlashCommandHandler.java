@@ -1,7 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.Sussi;
-import cz.wake.sussi.commands.slash.HelpSlashCommand;
+import cz.wake.sussi.commands.slash.*;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction;
 
@@ -58,6 +58,8 @@ public class SlashCommandHandler {
 
     private void registerSlashCommands() {
         registerSlashCommand(new HelpSlashCommand());
+        registerSlashCommand(new LinkSlashCommand());
+        registerSlashCommand(new UnlinkSlashCommand());
     }
 
 
