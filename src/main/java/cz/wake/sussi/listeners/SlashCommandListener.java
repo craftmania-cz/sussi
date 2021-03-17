@@ -1,8 +1,10 @@
 package cz.wake.sussi.listeners;
 
-import cz.wake.sussi.commands.slash.HelpSlashCommand;
-import cz.wake.sussi.commands.slash.LinkSlashCommand;
-import cz.wake.sussi.commands.slash.UnlinkSlashCommand;
+import cz.wake.sussi.Sussi;
+import cz.wake.sussi.commands.ISlashCommand;
+import cz.wake.sussi.commands.Rank;
+import cz.wake.sussi.utils.SussiLogger;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -11,19 +13,20 @@ public class SlashCommandListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
-        if (event.getGuild() == null) {
+        if (event.getGuild() == null || event.getUser().isBot()) {
             return;
         }
-        switch (event.getName()) {
-            case "help":
-                new HelpSlashCommand().call(event);
-                break;
-            case "unlink":
-                new UnlinkSlashCommand().call(event);
-                break;
-            case "link":
-                new LinkSlashCommand().call(event);
-                break;
+        for (ISlashCommand slashCommand : Sussi.getSlashCommandHandler().getSlashCommands()) {
+            if (slashCommand.getName().equals(event.getName())) {
+                if (Rank.getPermLevelForUser(event.getUser(), (TextChannel) event.getChannel()).isAtLeast(slashCommand.getRank())) {
+                    try {
+                        slashCommand.onSlashCommand(event.getUser(), event.getChannel(), event.getMember(), event);
+                    } catch (Exception e) {
+                        SussiLogger.fatalMessage("Internal error when executing the command!");
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 

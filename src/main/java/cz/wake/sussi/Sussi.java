@@ -245,6 +245,10 @@ public class Sussi {
         return ch;
     }
 
+    public static SlashCommandHandler getSlashCommandHandler() {
+        return slashCommandHandler;
+    }
+
     private void init() {
         ch.register();
     }

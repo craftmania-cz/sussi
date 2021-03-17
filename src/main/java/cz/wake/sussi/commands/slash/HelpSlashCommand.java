@@ -1,18 +1,20 @@
 package cz.wake.sussi.commands.slash;
 
+import cz.wake.sussi.commands.CommandType;
+import cz.wake.sussi.commands.ISlashCommand;
+import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.commands.CommandHook;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import static cz.wake.sussi.commands.user.Help.getContext;
 
-public class HelpSlashCommand {
+public class HelpSlashCommand implements ISlashCommand {
 
-    public void call(SlashCommandEvent event) {
+    @Override
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, SlashCommandEvent event) {
         event.acknowledge(true).queue();
         CommandHook hook = event.getHook();
         hook.setEphemeral(true);
@@ -31,5 +33,30 @@ public class HelpSlashCommand {
                     .setDescription(getContext())
                     .build()).queue();
         });
+    }
+
+    @Override
+    public String getName() {
+        return "help";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Základní nápověda pro Sussi.";
+    }
+
+    @Override
+    public String getHelp() {
+        return "/help";
+    }
+
+    @Override
+    public CommandType getType() {
+        return CommandType.GENERAL;
+    }
+
+    @Override
+    public Rank getRank() {
+        return Rank.USER;
     }
 }
