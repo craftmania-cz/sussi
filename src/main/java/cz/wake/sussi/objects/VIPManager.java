@@ -93,6 +93,11 @@ public class VIPManager {
 
             final Profile profile = optionalProfile.get();
 
+            if (profile.getStatusId() == 429 || profile.getStatusId() == 500) {
+                // Too many requests
+                continue;
+            }
+
             final Profile.VIPType vipType = Profile.VIPType.getFromRoleName(vipRole.getName());
             final HashMap<Profile.VIPType, Profile.ServerVIP> bestVIPsFromEachLevel = profile.getBestVIPsFromEachLevel();
 
