@@ -1,4 +1,4 @@
-package cz.wake.sussi.commands.slash;
+package cz.wake.sussi.commands.user;
 
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;

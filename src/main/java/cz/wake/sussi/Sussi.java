@@ -203,7 +203,7 @@ public class Sussi {
             e.printStackTrace();
         }
 
-        try {
+      /* try {
             Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
@@ -214,7 +214,7 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
-        }
+        }*/
 
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();

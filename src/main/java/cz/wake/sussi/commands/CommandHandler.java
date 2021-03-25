@@ -47,7 +47,6 @@ public class CommandHandler {
         registerCommand(new Fortnite());
         registerCommand(new GTA());
         registerCommand(new Crypto());
-        registerCommand(new Standa());
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());

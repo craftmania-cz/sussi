@@ -18,7 +18,7 @@ public class VIPManager {
 
     public VIPManager() {
         this.vipProfiles = new HashSet<>();
-        this.cache().thenAcceptAsync(x -> this.check());
+        //this.cache().thenAcceptAsync(x -> this.check());
     }
 
     /**
