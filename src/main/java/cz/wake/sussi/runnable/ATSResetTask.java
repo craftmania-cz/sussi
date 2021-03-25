@@ -66,7 +66,7 @@ public class ATSResetTask implements Job {
                 ps.executeUpdate();
                 ps = conn.prepareStatement("INSERT INTO archive.`ats_archive_" + date + "` SELECT * FROM minigames.at_table;");
                 ps.executeUpdate();
-                ps = conn.prepareStatement("UPDATE minigames.at_table SET surv_chat_body = 0, surv_played_time = 0, sky_chat_body = 0, sky_played_time = 0, crea_chat_body = 0, crea_played_time = 0, prison_chat_body = 0, prison_played_time = 0, vanilla_chat_body = 0, vanilla_played_time = 0, minigames_chat_body = 0, minigames_played_time = 0, skycloud_chat_body = 0, skycloud_played_time = 0, build_played_time = 0, events_played_time = 0, hardcore_vanilla_chat_body = 0, hardcore_vanilla_played_time = 0;");
+                ps = conn.prepareStatement("UPDATE minigames.at_table SET surv_chat_body = 0, surv_played_time = 0, sky_chat_body = 0, sky_played_time = 0, crea_chat_body = 0, crea_played_time = 0, prison_chat_body = 0, prison_played_time = 0, vanilla_chat_body = 0, vanilla_played_time = 0, minigames_chat_body = 0, minigames_played_time = 0, build_played_time = 0, events_played_time = 0, anarchy_chat_body = 0, anarchy_played_time = 0;");
                 ps.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
