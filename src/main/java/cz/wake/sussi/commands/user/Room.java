@@ -9,6 +9,7 @@ import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.*;
 
 import java.util.Arrays;
@@ -17,10 +18,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class Room implements ICommand {
+
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-
-
 
         if (Sussi.getInstance().getSql().getPlayerVoiceRoomIdByOwnerId(sender.getIdLong()) == 0) {
             MessageUtils.sendErrorMessage("Nemáš žádnou místnost! Vytvoříš si ji připojením do kanálu **Vytvořit voice kanál**", channel);

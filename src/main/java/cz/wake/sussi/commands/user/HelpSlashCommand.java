@@ -14,17 +14,14 @@ import static cz.wake.sussi.commands.user.Help.getContext;
 public class HelpSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, SlashCommandEvent event) {
-        event.acknowledge(true).queue();
-        CommandHook hook = event.getHook();
-        hook.setEphemeral(true);
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
 
         // Variables
         MessageChannel textChannel =  hook.getEvent().getChannel();
 
         // Command
         if(textChannel.getType() == ChannelType.TEXT){
-            textChannel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setTitle("Zkontroluj si zprávy")
+            hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setTitle("Zkontroluj si zprávy")
                     .setDescription(":mailbox_with_mail: | Odeslala jsem ti do zpráv nápovědu s příkazy!").build()).queue();
         }
         event.getUser().openPrivateChannel().queue(msg -> {

@@ -13,12 +13,8 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 public class StandaSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, SlashCommandEvent event) {
-        event.acknowledge(true).queue();
-        CommandHook hook = event.getHook();
-        hook.setEphemeral(true);
-
-        channel.sendMessage(EmoteList.OLIZNU_TE + EmoteList.CHOCOLATE_BAR).queue();
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+        hook.sendMessage(EmoteList.OLIZNU_TE + EmoteList.CHOCOLATE_BAR).queue();
     }
 
     @Override

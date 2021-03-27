@@ -16,10 +16,7 @@ import java.awt.*;
 public class LinkSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, SlashCommandEvent event) {
-        event.acknowledge(true).queue();
-        CommandHook hook = event.getHook();
-        hook.setEphemeral(true);
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
 
         MessageChannel textChannel =  hook.getEvent().getChannel();
         SlashCommandEvent.OptionData optionKeyId = event.getOption("key");
@@ -31,7 +28,7 @@ public class LinkSlashCommand implements ISlashCommand {
                 return;
             }
 
-            textChannel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(keyId)).build()).queue();
+            hook.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(keyId)).build()).queue();
             Sussi.getInstance().getSql().connectToMC(sender.getId(), keyId);
             Sussi.getVIPManager().checkMember(member.getGuild(), member);
         } else {

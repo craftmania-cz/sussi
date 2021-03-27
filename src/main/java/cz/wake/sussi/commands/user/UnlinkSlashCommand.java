@@ -16,10 +16,7 @@ import java.awt.*;
 public class UnlinkSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, SlashCommandEvent event) {
-        event.acknowledge(true).queue();
-        CommandHook hook = event.getHook();
-        hook.setEphemeral(true);
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
 
         User user = hook.getEvent().getUser();
         MessageChannel textChannel =  hook.getEvent().getChannel();
@@ -27,10 +24,11 @@ public class UnlinkSlashCommand implements ISlashCommand {
         // Command
         if (!Sussi.getInstance().getSql().isConnectedToMC(user.getId())) {
             MessageUtils.sendErrorMessage("Tento účet není propojen se žádnym MC účtem!", textChannel);
+            //TODO: Předělat tyhle error zprávy na hook
             return;
         }
 
-        textChannel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(user.getId()) + "!").build()).queue();
+        hook.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(user.getId()) + "!").build()).queue();
         Sussi.getInstance().getSql().disconnectFromMC(user.getId());
     }
 

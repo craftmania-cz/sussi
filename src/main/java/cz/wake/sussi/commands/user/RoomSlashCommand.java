@@ -5,6 +5,7 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
+import cz.wake.sussi.utils.EmoteList;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.commands.CommandHook;
@@ -17,23 +18,24 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 public class RoomSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, SlashCommandEvent event) {
-        event.acknowledge(true).queue();
-        CommandHook hook = event.getHook();
-        hook.setEphemeral(true);
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
 
         String subcommandName = event.getSubcommandName();
 
         if (subcommandName == null) {
-            System.out.println("NULL SUBCOMMAND");
             return;
         }
 
         VoiceChannel voiceChannel = member.getGuild().getVoiceChannelById(Sussi.getInstance().getSql().getPlayerVoiceRoomIdByOwnerId(sender.getIdLong()));
 
+        if (voiceChannel == null) {
+            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Nenacházíš se v žádném z voice kanálů. Připoj se prvně do **Vytvořit voice kanál**.").build()).queue();
+            return;
+        }
+
         switch (subcommandName) {
             case "help":
-                channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Nápověda k příkazu ,room")
+                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Nápověda k příkazu ,room")
                         .setDescription("`,room` - Zobrazí informace o místnosti.\n" +
                                 "`,room lock` - Uzamkne místnost.\n" +
                                 "`,room unlock` - Odemkne místnost.\n" +
@@ -48,14 +50,24 @@ public class RoomSlashCommand implements ISlashCommand {
                 break;
             case "lock":
                 voiceChannel.putPermissionOverride(member.getGuild().getPublicRole()).setDeny(Permission.VOICE_CONNECT).queue();
-                channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":lock: | Místnost **" + voiceChannel.getName() + "** byla uzamknuta.").build()).queue();
+                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":lock: | Místnost **" + voiceChannel.getName() + "** byla uzamknuta.").build()).queue();
                 break;
             case "unlock":
                 voiceChannel.putPermissionOverride(member.getGuild().getPublicRole()).setAllow(Permission.VOICE_CONNECT).queue();
-                channel.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(":unlock: | Místnost ** " + voiceChannel.getName() + "** byla odemknuta.").build()).queue();
+                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(":unlock: | Místnost ** " + voiceChannel.getName() + "** byla odemknuta.").build()).queue();
                 break;
             case "add":
-                System.out.println(event.getOption("user"));
+                Member toAdd = event.getOption("user").getAsMember();
+                if (toAdd == null) {
+                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
+                    return;
+                }
+                if (toAdd.getId().equals(hook.getEvent().getMember().getId())) {
+                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Sám sebe pozvat nemůžeš, už tam jsi.").build()).queue();
+                    return;
+                }
+                voiceChannel.getManager().getChannel().putPermissionOverride(toAdd).setAllow(Permission.VOICE_CONNECT).queue();
+                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Uživatel " + toAdd.getAsMention() + " byl přidán do voice").build()).queue();
                 break;
         }
 

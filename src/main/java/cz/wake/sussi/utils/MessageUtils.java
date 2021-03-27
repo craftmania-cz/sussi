@@ -68,7 +68,7 @@ public class MessageUtils {
     }
 
     public static EmbedBuilder getEmbedError() {
-        return new EmbedBuilder().setFooter("Chyba při provádění akce CorgiBot", Sussi.getJda().getSelfUser().getAvatarUrl());
+        return new EmbedBuilder().setColor(Constants.RED);
     }
 
     private static void autoDeleteMessage(Message message, long delay) {
