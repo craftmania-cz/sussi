@@ -50,6 +50,17 @@ public class SlashCommandHandler {
                         .addOption(new CommandUpdateAction.OptionData(USER, "user", "Uživatel, kterému budou odebrány práva do voice").setRequired(true)))
                 .addSubcommand(new CommandUpdateAction.SubcommandData("name", "Změnit název voice místnosti")
                         .addOption(new CommandUpdateAction.OptionData(STRING, "text", "Nový název místnosti").setRequired(true)))
+                .addSubcommand(new CommandUpdateAction.SubcommandData("bitrate", "Nastavení kvality hovoru v místnosti.")
+                        .addOption(new CommandUpdateAction.OptionData(INTEGER, "value", "Hodnota kbps, která se nastaví pro místnost.").setRequired(true)))
+                .addSubcommand(new CommandUpdateAction.SubcommandData("unlimited", "Nastaví neomezený počet připojení do místnosti (limit 99)."))
+                .addSubcommand(new CommandUpdateAction.SubcommandData("limit", "Nastaví limit uživatelů v místnosti.")
+                        .addOption(new CommandUpdateAction.OptionData(INTEGER, "value", "Limit uživatelů, který se nastaví pro místnost.").setRequired(true)))
+                .addSubcommand(new CommandUpdateAction.SubcommandData("ban", "Zablokování a skryté voice místnosti pro uživatele")
+                        .addOption(new CommandUpdateAction.OptionData(USER, "user", "Uživatel, který bude zabanován z místnosti.").setRequired(true)))
+                .addSubcommand(new CommandUpdateAction.SubcommandData("unban", "Zrušení blokace přístupu uživateli do voice místnosti.")
+                        .addOption(new CommandUpdateAction.OptionData(USER, "user", "Uživatel, který bude mít opět přístup do místnosti.").setRequired(true)))
+                .addSubcommand(new CommandUpdateAction.SubcommandData("kick", "Vyhození uživatele z místnosti")
+                        .addOption(new CommandUpdateAction.OptionData(USER, "user","Uživatel, který bude vyhozen z místnosti").setRequired(true)))
         );
 
 

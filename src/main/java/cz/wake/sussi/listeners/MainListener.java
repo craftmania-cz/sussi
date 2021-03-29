@@ -155,7 +155,7 @@ public class MainListener extends ListenerAdapter {
                     Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
                     voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL).queue();
                     event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
-                    event.getGuild().getTextChannelById("207805056123273216").sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `,room` nebo `,room help`").queue();
+                    event.getGuild().getTextChannelById("207805056123273216").sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room` nebo `/room help`").queue();
                 });
             } else {
                 event.getGuild().kickVoiceMember(event.getMember()).queue();
