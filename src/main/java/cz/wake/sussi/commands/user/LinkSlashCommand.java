@@ -18,13 +18,12 @@ public class LinkSlashCommand implements ISlashCommand {
     @Override
     public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
 
-        MessageChannel textChannel =  hook.getEvent().getChannel();
         SlashCommandEvent.OptionData optionKeyId = event.getOption("key");
         String keyId = optionKeyId.getAsString();
 
         if (keyId != null) {
             if (!Sussi.getInstance().getSql().doesConnectionExist(keyId)) {
-                MessageUtils.sendErrorMessage("Tento kód nebyl nalezen v naší databázi!", textChannel);
+                hook.sendMessage(MessageUtils.getEmbedError().setDescription("Tento kód nebyl nalezen v naší databázi!").build()).queue();
                 return;
             }
 
@@ -32,7 +31,7 @@ public class LinkSlashCommand implements ISlashCommand {
             Sussi.getInstance().getSql().connectToMC(sender.getId(), keyId);
             Sussi.getVIPManager().checkMember(member.getGuild(), member);
         } else {
-            MessageUtils.sendErrorMessage("Špatně zadaný příkaz! Př. `/link SUPERTAJNYKOD123`\nPro získaní kódu jdi na Lobby a použij `/link`", textChannel);
+            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/link SUPERTAJNYKOD123`\nPro získaní kódu jdi na Lobby a použij `/link`").build()).queue();
         }
     }
 

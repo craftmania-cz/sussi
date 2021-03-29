@@ -19,12 +19,10 @@ public class UnlinkSlashCommand implements ISlashCommand {
     public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
 
         User user = hook.getEvent().getUser();
-        MessageChannel textChannel =  hook.getEvent().getChannel();
 
         // Command
         if (!Sussi.getInstance().getSql().isConnectedToMC(user.getId())) {
-            MessageUtils.sendErrorMessage("Tento účet není propojen se žádnym MC účtem!", textChannel);
-            //TODO: Předělat tyhle error zprávy na hook
+            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Tento účet není propojen se žádnym MC účtem!").build()).queue();
             return;
         }
 
