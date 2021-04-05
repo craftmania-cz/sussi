@@ -41,7 +41,6 @@ public class CommandHandler {
         registerCommand(new Stop());
         registerCommand(new Pravidla());
         registerCommand(new CheckIP());
-        registerCommand(new Unban());
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
         registerCommand(new Fortnite());

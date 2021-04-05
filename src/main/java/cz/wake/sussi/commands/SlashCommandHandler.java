@@ -3,6 +3,7 @@ package cz.wake.sussi.commands;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
+import net.dv8tion.jda.api.entities.Command;
 import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class SlashCommandHandler {
                 .addSubcommand(new CommandUpdateAction.SubcommandData("help", "Zobrazení nápovědy pro spravování voice kanálu"))
                 .addSubcommand(new CommandUpdateAction.SubcommandData("lock", "Uzamknutí voice místnosti"))
                 .addSubcommand(new CommandUpdateAction.SubcommandData("unlock", "Odemknutí voice místnosti"))
-                .addSubcommand(new CommandUpdateAction.SubcommandData("add", "Přidání prív pro uživatele do uzamknuté místnosti")
+                .addSubcommand(new CommandUpdateAction.SubcommandData("add", "Přidání práv pro uživatele do uzamknuté místnosti")
                         .addOption(new CommandUpdateAction.OptionData(USER, "user", "Uživatel, kterému budou dány práva do voice").setRequired(true)))
                 .addSubcommand(new CommandUpdateAction.SubcommandData("remove", "Odebrání práv pro uživatele z místnosti")
                         .addOption(new CommandUpdateAction.OptionData(USER, "user", "Uživatel, kterému budou odebrány práva do voice").setRequired(true)))
@@ -61,6 +62,19 @@ public class SlashCommandHandler {
                         .addOption(new CommandUpdateAction.OptionData(USER, "user", "Uživatel, který bude mít opět přístup do místnosti.").setRequired(true)))
                 .addSubcommand(new CommandUpdateAction.SubcommandData("kick", "Vyhození uživatele z místnosti")
                         .addOption(new CommandUpdateAction.OptionData(USER, "user","Uživatel, který bude vyhozen z místnosti").setRequired(true)))
+        );
+
+        commands.addCommands(
+                new CommandUpdateAction.CommandData("wiki", "Rychlé odkazy na témata a návody na naší Wiki")
+                .addOption(new CommandUpdateAction.OptionData(STRING, "id", "Výběr tématu nebo návodu z Wiki").setRequired(true)
+                    .addChoice("Pravidla serveru", "pravidla")
+                    .addChoice("Povolené a zakázané módy", "povolene-mody")
+                    .addChoice("Jak se připojit na server", "jak-se-pripojit")
+                    .addChoice("Problémy s resource packem", "problemy-s-resource-packem")
+                    .addChoice("Návod: Trade", "navod-trade")
+                    .addChoice("Návod: Aukce", "navod-aukce")
+                    .addChoice("Návod: Jak na Craftmania Discord", "navod-discord")
+                    .addChoice("Návod: Warpy", "navod-warpy"))
         );
 
 
