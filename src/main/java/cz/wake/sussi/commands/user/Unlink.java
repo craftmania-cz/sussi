@@ -5,6 +5,7 @@ import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
+import cz.wake.sussi.objects.Profile;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -22,8 +23,12 @@ public class Unlink implements ICommand {
             return;
         }
 
-        channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(sender.getId()) + "!").build()).queue();
+        final String minecraftNick = Sussi.getInstance().getSql().getMinecraftNick(sender.getId());
+        channel.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + minecraftNick + "!").build()).queue();
         Sussi.getInstance().getSql().disconnectFromMC(sender.getId());
+
+        Sussi.getVIPManager().getVIPProfiles().removeIf(profile -> profile.getName().equals(minecraftNick));
+        Sussi.getVIPManager().checkMember(member.getGuild(), member);
     }
 
     @Override
