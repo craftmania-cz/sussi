@@ -71,10 +71,8 @@ public class SlashCommandHandler {
                     .addChoice("Povolené a zakázané módy", "povolene-mody")
                     .addChoice("Jak se připojit na server", "jak-se-pripojit")
                     .addChoice("Problémy s resource packem", "problemy-s-resource-packem")
-                    .addChoice("Návod: Trade", "navod-trade")
-                    .addChoice("Návod: Aukce", "navod-aukce")
                     .addChoice("Návod: Jak na Craftmania Discord", "navod-discord")
-                    .addChoice("Návod: Warpy", "navod-warpy"))
+                    .addChoice("Návod: Jak najít screeny, logy atd.", "navod-screeny-a-logy"))
         );
 
 
@@ -107,6 +105,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new LinkSlashCommand());
         registerSlashCommand(new UnlinkSlashCommand());
         registerSlashCommand(new RoomSlashCommand());
+        registerSlashCommand(new WikiSlashCommand());
 
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());
