@@ -1,6 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.commands.mod.CheckIpSlashCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.entities.Command;
@@ -85,6 +86,12 @@ public class SlashCommandHandler {
                     .addOption(new CommandUpdateAction.OptionData(STRING, "opt6", "Šestí hodnota na zvolení"))
         );
 
+        commands.addCommands(
+                new CommandUpdateAction.CommandData("checkip", "Kontrola IP adresy, zda je VPN, z jakého je kraje a jiné informace.")
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "ip", "IP adresa ve formát IPv4 nebo IPv6"))
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "name", "Jméno hráče, který bude zkontrolován"))
+        );
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -118,6 +125,9 @@ public class SlashCommandHandler {
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());
         registerSlashCommand(new ChooseSlashCommand());
+
+        // Moderation
+        registerSlashCommand(new CheckIpSlashCommand());
     }
 
 
