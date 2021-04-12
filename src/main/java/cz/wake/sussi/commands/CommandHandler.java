@@ -39,7 +39,6 @@ public class CommandHandler {
         SussiLogger.infoMessage("Loading all commands.");
         registerCommand(new Help());
         registerCommand(new Stop());
-        registerCommand(new Pravidla());
         registerCommand(new CheckIP());
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
@@ -52,7 +51,6 @@ public class CommandHandler {
         registerCommand(new Link());
         registerCommand(new Unlink());
         registerCommand(new Hytale());
-        registerCommand(new Fallguys());
         registerCommand(new Events());
         registerCommand(new NewProfile());
         registerCommand(new BlockCountry());
@@ -71,12 +69,7 @@ public class CommandHandler {
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         registerCommand(new Android());
-        registerCommand(new AmongUs());
-        registerCommand(new Room());
         registerCommand(new Osu());
-        registerCommand(new RocketLeague());
-        registerCommand(new Wow());
-        registerCommand(new EpicRPG());
         registerCommand(new HalloweenStats());
         registerCommand(new GenshinImpact());
         registerCommand(new Cyberpunk2077());
