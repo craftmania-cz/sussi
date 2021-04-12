@@ -75,7 +75,15 @@ public class SlashCommandHandler {
                     .addChoice("Návod: Jak najít screeny, logy atd.", "navod-screeny-a-logy"))
         );
 
-
+        commands.addCommands(
+                new CommandUpdateAction.CommandData("choose", "Vyber nějaké možnosti a nech na Sussi ať vybere tu správnou.")
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "opt1", "První hodnota na zvolení").setRequired(true))
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "opt2", "Druhá hodnota na zvolení").setRequired(true))
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "opt3", "Třetí hodnota na zvolení"))
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "opt4", "Čtvrtá hodnota na zvolení"))
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "opt5", "Pátá hodnota na zvolení"))
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "opt6", "Šestí hodnota na zvolení"))
+        );
 
         // Finální update všech slash příkazů
         commands.queue();
@@ -109,6 +117,7 @@ public class SlashCommandHandler {
 
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());
+        registerSlashCommand(new ChooseSlashCommand());
     }
 
 
