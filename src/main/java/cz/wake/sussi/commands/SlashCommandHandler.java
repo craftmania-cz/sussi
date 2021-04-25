@@ -92,6 +92,27 @@ public class SlashCommandHandler {
                     .addOption(new CommandUpdateAction.OptionData(STRING, "name", "Jméno hráče, který bude zkontrolován"))
         );
 
+        commands.addCommands(
+                new CommandUpdateAction.CommandData("uuid", "Získání online a offline UUID podle nicku hráče.")
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "name", "Minecraft nick hráče").setRequired(true))
+        );
+
+        commands.addCommands(
+                new CommandUpdateAction.CommandData("profile", "Zobrazení CraftMania statistik a hráčského profilu.")
+                    .addOption(new CommandUpdateAction.OptionData(STRING, "name", "Minecraft nick hráče z serveru"))
+        );
+
+        commands.addCommands(
+                new CommandUpdateAction.CommandData("profile-settings", "Nastavení svého profilu pro statistiky na serveru.")
+                    .addSubcommand(new CommandUpdateAction.SubcommandData("status", "Nastavení statusu pro svůj profil na serveru")
+                        .addOption(new CommandUpdateAction.OptionData(STRING, "text", "Status, který se nastaví na tvůj profil.").setRequired(true)))
+                    .addSubcommand(new CommandUpdateAction.SubcommandData("gender", "Nastavení pohlaví pro svůj profil")
+                        .addOption(new CommandUpdateAction.OptionData(STRING, "type", "Zvolení pohlaví, co se nastaví na profil").setRequired(true)
+                               .addChoice("Muž", "man")
+                               .addChoice("Žena", "woman")
+                               .addChoice("Nezvoleno", "no-gender"))
+        ));
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -121,6 +142,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new UnlinkSlashCommand());
         registerSlashCommand(new RoomSlashCommand());
         registerSlashCommand(new WikiSlashCommand());
+        registerSlashCommand(new UUIDSlashCommand());
 
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());
