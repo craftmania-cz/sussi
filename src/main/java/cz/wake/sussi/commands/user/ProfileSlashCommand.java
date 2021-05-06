@@ -105,9 +105,8 @@ public class ProfileSlashCommand implements ISlashCommand {
         }
 
         EmbedBuilder embedBuilder = MessageUtils.getEmbed(color)
-                .setTitle("Informace o hráči: " + profile.getName() + "#" + profile.getDiscriminator() + " (lvl: " + profile.getGlobal_level() + ")")
+                .setTitle("Informace o hráči: " + profile.getName() + "#" + profile.getDiscriminator() + " (lvl: " + profile.getGlobal_level() + ")", "https://stats.craftmania.cz/player/" + profile.getName())
                 .setThumbnail("https://mc-heads.net/head/" + profile.getName() + "/128.png")
-
                 .addField("Globální statistiky",
                         "Registrován: " + getDate(profile.getRegistred()) + "\n" +
                                 "Role: " + role + "\n" +
@@ -120,23 +119,27 @@ public class ProfileSlashCommand implements ISlashCommand {
                         "CraftCoins: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftCoins()) + "\n" +
                                 "CraftTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftTokens()) + "\n" +
                                 "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
-                                "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(Sussi.getInstance().getSql().getEventPoints(profile.getName())) + "\n" +
-                                "Quest pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints())
+                                "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getEventPoints()) + "\n" +
+                                "Quest pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints()) + "\n" +
+                                "Bug pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getBugPoints())
                         , true)
                 .addField("Hlasování",
                         "Celkem hlasů: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getTotalVotes()) + "\n" +
                                 "Měsíční hlasy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getMonthVotes()) + "\n" +
                                 "Týdenní hlasy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getWeekVotes()) + "\n" +
-                                "Poslední hlas: " + getDate(profile.getLastVote())
+                                "Poslední hlas: " + getDate(profile.getLastVote()) + "\n" +
+                                "VotePass: " + profile.getVotePass()
                         , true)
+                .addField("Discord",
+                        "Počet zpráv: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getDiscord_messages()) + "\n" + "Voice: " + TimeUtils.formatTime("%d dni, %hh %mm", profile.getDiscord_voice()/1000, false), true)
                 .addField("Levely",
                         "Survival: " + profile.getSurvival_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSurvival_experience()) + "XP)" + "\n" +
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
                                 "Creative: " + profile.getCreative_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCreative_experience()) + "XP)" + "\n" +
                                 "Prison: " + profile.getPrison_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getPrison_experience()) + "XP)" + "\n" +
-                                "Vanilla: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
-                                "SkyCloud: " + profile.getSkycloud_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkycloud_experience()) + "XP)" + "\n" +
-                                "Hardcore Vanilla: " + profile.getHardcore_vanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getHardcore_vanilla_experience()) + "XP)" + "\n"
+                                "Vanilla [Lands]: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
+                                "Vanilla [Anarchy]: " + profile.getVanilla_anarchy_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_anarchy_experience()) + "XP)" + "\n" +
+                                "Staré servery: " + profile.getStare_servery_level() + "\n"
                         , true)
                 .setFooter("CraftMania.cz Stats")
                 .setTimestamp(Instant.from(ZonedDateTime.now()));
@@ -145,7 +148,7 @@ public class ProfileSlashCommand implements ISlashCommand {
             embedBuilder.addField("VIP",
                     (profile.hasGlobalVIP() ? "Global: " + StringUtils.capitalize(profile.getGlobalVIP().getGroup()) + " VIP " + (profile.getGlobalVIP().isPermanent() ? "\n" : "(expirace: " + profile.getGlobalVIP().getFormattedDate() + ")\n") : "") +
                             (profile.getHighestVIPs().stream().map(vip -> vip.getServerName() + ": " + StringUtils.capitalize(vip.getGroup()) + " VIP " + (vip.isPermanent() ? "\n" : "(expirace: " + vip.getFormattedDate() + ")\n")).collect(Collectors.joining())),
-                    false);
+                    true);
         }
 
         hook.sendMessage(embedBuilder.build()).queue();

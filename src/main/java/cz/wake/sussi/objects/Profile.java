@@ -23,10 +23,9 @@ public class Profile {
 
     // Data
     private int id = 0;
-    private int discriminator = 0000;
+    private String discriminator = "????";
     private String nick = "";
     private String uuid = "";
-    private int web_group = 0;
     private long registred = 0;
     private long last_online = 0;
     private String last_server = "";
@@ -40,6 +39,8 @@ public class Profile {
     private int votetokens = 0;
     private long karma = 0;
     private int achievement_points = 0;
+    private int eventPoints = 0;
+    private int bugPoints = 0;
 
     // Ranked
     private int global_level = 1;
@@ -53,24 +54,24 @@ public class Profile {
     private int vanilla_experience = 0;
     private int prison_level = 1;
     private int prison_experience = 0;
-    private int skycloud_level = 1;
-    private int skycloud_experience = 0;
-    private int hardcore_vanilla_level = 1;
-    private int hardcore_vanilla_experience = 0;
+    private int vanilla_anarchy_level = 1;
+    private int vanilla_anarchy_experience = 0;
+    private int stare_servery_level = 1;
+    private int stare_servery_experience = 0;
+
+    // Discord
+    private int discord_messages = 0;
+    private int discord_voice = 0;
 
     // Votes
     private int total = 0;
     private int month = 0;
     private int week = 0;
     private long last_vote = 0;
+    private int votePass = 0;
 
     // Social
     private String status = "";
-    private String facebook = "";
-    private String twitter = "";
-    private String twitch = "";
-    private String steam = "";
-    private String web = "";
 
     private String discordID = "";
 
@@ -113,10 +114,9 @@ public class Profile {
 
         // Data
         this.id = data.isNull("id") ? 0 : data.getInt("id");
-        this.discriminator = data.isNull("discriminator") ? 0 : data.getInt("discriminator");
+        this.discriminator = data.isNull("discriminator") ? "????" : data.getString("discriminator");
         this.nick = data.isNull("nick") ? "" : data.getString("nick");
         this.uuid = data.isNull("uuid") ? "" : data.getString("uuid");
-        this.web_group = data.isNull("web_group") ? 0 : data.getInt("web_group");
         this.registred = data.isNull("registred") ? 0 : data.getLong("registred");
         this.last_online = data.isNull("last_online") ? 0 : data.getLong("last_online");
         this.last_server = data.isNull("last_server") ? "" : data.getString("last_server");
@@ -129,7 +129,9 @@ public class Profile {
         this.crafttokens = economy.isNull("crafttokens") ? 0 : economy.getInt("crafttokens");
         this.votetokens = economy.isNull("votetokens") ? 0 : economy.getInt("votetokens");
         this.karma = economy.isNull("karma") ? 0 : economy.getLong("karma");
-        this.achievement_points = economy.isNull("achievement_points") ? 0 : economy.getInt("achievement_points");
+        this.achievement_points = economy.isNull("quest_points") ? 0 : economy.getInt("quest_points");
+        this.eventPoints = economy.isNull("event_points") ? 0 : economy.getInt("event_points");
+        this.bugPoints = economy.isNull("bug_points") ? 0 : economy.getInt("bug_points");
 
         // Ranked
         this.global_level = ranked.isNull("global_level") ? 0 : ranked.getInt("global_level");
@@ -143,27 +145,25 @@ public class Profile {
         this.vanilla_experience = ranked.isNull("vanilla_experience") ? 0 : ranked.getInt("vanilla_experience");
         this.prison_level = ranked.isNull("prison_level") ? 0 : ranked.getInt("prison_level");
         this.prison_experience = ranked.isNull("prison_experience") ? 0 : ranked.getInt("prison_experience");
-        this.skycloud_level = ranked.isNull("skycloud_level") ? 0 : ranked.getInt("skycloud_level");
-        this.skycloud_experience = ranked.isNull("skycloud_experience") ? 0 : ranked.getInt("skycloud_experience");
-        this.hardcore_vanilla_level = ranked.isNull("hardcore_vanilla_level") ? 0 : ranked.getInt("hardcore_vanilla_level");
-        this.hardcore_vanilla_experience = ranked.isNull("hardcore_vanilla_experience") ? 0 : ranked.getInt("hardcore_vanilla_experience");
+        this.vanilla_anarchy_level = ranked.isNull("anarchy_level") ? 0 : ranked.getInt("anarchy_level");
+        this.vanilla_anarchy_experience = ranked.isNull("anarchy_experience") ? 0 : ranked.getInt("anarchy_experience");
+        this.stare_servery_level = ranked.isNull("old_servers_level") ? 0 : ranked.getInt("old_servers_level");
+        this.stare_servery_experience = ranked.isNull("old_servers_experience") ? 0 : ranked.getInt("old_servers_experience");
 
         // Votes
         this.total = votes.isNull("total") ? 0 : votes.getInt("total");
         this.month = votes.isNull("month") ? 0 : votes.getInt("month");
         this.week = votes.isNull("week") ? 0 : votes.getInt("week");
         this.last_vote = votes.isNull("last_vote") ? 0 : votes.getLong("last_vote");
+        this.votePass = votes.isNull("vote_pass") ? 0 : votes.getInt("vote_pass");
 
         // Social
+        this.status = social.isNull("status") ? "" : social.getString("status");
 
-        //this.status = social.isNull("status") ? "" : social.getString("status");
-        this.facebook = social.isNull("facebook") ? "" : social.getString("facebook");
-        this.twitter = social.isNull("twitter") ? "" : social.getString("twitter");
-        this.twitch = social.isNull("twitch") ? "" : social.getString("twitch");
-        this.steam = social.isNull("steam") ? "" : social.getString("steam");
-        this.web = social.isNull("web") ? "" : social.getString("web");
-
+        // Discord
         this.discordID = data.getJSONObject("discord").isNull("id") ? "" : data.getJSONObject("discord").getString("id");
+        this.discord_messages = data.getJSONObject("discord").isNull("text_activity") ? 0 : data.getJSONObject("discord").getInt("text_activity");
+        this.discord_voice = data.getJSONObject("discord").isNull("voice_activity") ? 0 : data.getJSONObject("discord").getInt("voice_activity");
 
         // Groups
         if (groups != null) {
@@ -212,7 +212,7 @@ public class Profile {
         return id;
     }
 
-    public int getDiscriminator() {
+    public String getDiscriminator() {
         return discriminator;
     }
 
@@ -222,10 +222,6 @@ public class Profile {
 
     public String getUuid() {
         return uuid;
-    }
-
-    public int getWebGroup() {
-        return web_group;
     }
 
     public long getRegistred() {
@@ -288,10 +284,6 @@ public class Profile {
         return skyblock_level;
     }
 
-    public int getSkycloud_level() {
-        return skycloud_level;
-    }
-
     public int getSurvival_level() {
         return survival_level;
     }
@@ -312,10 +304,6 @@ public class Profile {
         return skyblock_experience;
     }
 
-    public int getSkycloud_experience() {
-        return skycloud_experience;
-    }
-
     public int getSurvival_experience() {
         return survival_experience;
     }
@@ -324,12 +312,20 @@ public class Profile {
         return vanilla_experience;
     }
 
-    public int getHardcore_vanilla_level() {
-        return hardcore_vanilla_level;
+    public int getVanilla_anarchy_level() {
+        return vanilla_anarchy_level;
     }
 
-    public int getHardcore_vanilla_experience() {
-        return hardcore_vanilla_experience;
+    public int getVanilla_anarchy_experience() {
+        return vanilla_anarchy_experience;
+    }
+
+    public int getStare_servery_level() {
+        return stare_servery_level;
+    }
+
+    public int getStare_servery_experience() {
+        return stare_servery_experience;
     }
 
     public int getTotalVotes() {
@@ -352,24 +348,24 @@ public class Profile {
         return status;
     }
 
-    public String getFacebook() {
-        return facebook;
+    public int getDiscord_messages() {
+        return discord_messages;
     }
 
-    public String getTwitter() {
-        return twitter;
+    public int getDiscord_voice() {
+        return discord_voice;
     }
 
-    public String getTwitch() {
-        return twitch;
+    public int getVotePass() {
+        return votePass;
     }
 
-    public String getSteam() {
-        return steam;
+    public int getEventPoints() {
+        return eventPoints;
     }
 
-    public String getWeb() {
-        return web;
+    public int getBugPoints() {
+        return bugPoints;
     }
 
     /**
