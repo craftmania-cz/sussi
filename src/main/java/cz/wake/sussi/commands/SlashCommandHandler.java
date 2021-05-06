@@ -100,6 +100,7 @@ public class SlashCommandHandler {
         commands.addCommands(
                 new CommandUpdateAction.CommandData("profile", "Zobrazení CraftMania statistik a hráčského profilu.")
                     .addOption(new CommandUpdateAction.OptionData(STRING, "name", "Minecraft nick hráče z serveru"))
+                    .addOption(new CommandUpdateAction.OptionData(USER, "user", "Discord uživatel, který má propojený účet."))
         );
 
         commands.addCommands(
@@ -143,6 +144,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new RoomSlashCommand());
         registerSlashCommand(new WikiSlashCommand());
         registerSlashCommand(new UUIDSlashCommand());
+        registerSlashCommand(new ProfileSlashCommand());
 
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());
