@@ -127,16 +127,6 @@ public class MainListener extends ListenerAdapter {
                 Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(MessageUtils.getEmbed(Constants.BLUE).setDescription(Constants.THUMB_UP + " | Proběhlo schválení nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
             }));
         }
-
-        // Reakce na ověření
-        if (event.getChannel().getIdLong() == Sussi.getConfig().getOvereniChannelID() && event.getReaction().getReactionEmote().getName().equals("\u2705")) {
-            if (event.getMember().getUser().isBot()){
-                return;
-            }
-            Member member = event.getMember();
-            member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("772583689032302625")).queue(); // Přidání Member role všem novým
-            member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("761020839683817472")).queue(); // News role
-        }
     }
 
     private String getStringDate() {
@@ -186,7 +176,7 @@ public class MainListener extends ListenerAdapter {
                     Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
                     voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL).queue();
                     event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
-                    event.getGuild().getTextChannelById("207805056123273216").sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `,room` nebo `,room help`").queue();
+                    event.getGuild().getTextChannelById("207805056123273216").sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room` nebo `/room help`").queue();
                 });
             } else {
                 event.getGuild().kickVoiceMember(event.getMember()).queue();
