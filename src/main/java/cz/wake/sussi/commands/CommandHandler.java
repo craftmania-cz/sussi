@@ -48,8 +48,6 @@ public class CommandHandler {
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());
-        registerCommand(new Link());
-        registerCommand(new Unlink());
         registerCommand(new Hytale());
         registerCommand(new Events());
         registerCommand(new NewProfile());
@@ -72,7 +70,6 @@ public class CommandHandler {
         registerCommand(new Osu());
         registerCommand(new HalloweenStats());
         registerCommand(new GenshinImpact());
-        registerCommand(new Cyberpunk2077());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }
