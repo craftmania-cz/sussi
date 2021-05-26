@@ -5,20 +5,19 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
-import cz.wake.sussi.utils.EmoteList;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class RoomSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
         String subcommandName = event.getSubcommandName();
 
@@ -29,13 +28,13 @@ public class RoomSlashCommand implements ISlashCommand {
         VoiceChannel voiceChannel = member.getGuild().getVoiceChannelById(Sussi.getInstance().getSql().getPlayerVoiceRoomIdByOwnerId(sender.getIdLong()));
 
         if (voiceChannel == null) {
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Nenacházíš se v žádném z voice kanálů. Připoj se prvně do **Vytvořit voice kanál**.").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Nenacházíš se v žádném z voice kanálů. Připoj se prvně do **Vytvořit voice kanál**.").build()).queue();
             return;
         }
 
         switch (subcommandName) {
             case "help":
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setTitle("Nápověda k příkazu ,room")
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setTitle("Nápověda k příkazu ,room")
                         .setDescription("`,room` - Zobrazí informace o místnosti.\n" +
                                 "`/room lock` - Uzamkne místnost.\n" +
                                 "`/room unlock` - Odemkne místnost.\n" +
@@ -50,118 +49,118 @@ public class RoomSlashCommand implements ISlashCommand {
                 break;
             case "lock":
                 voiceChannel.putPermissionOverride(member.getGuild().getPublicRole()).setDeny(Permission.VOICE_CONNECT).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":lock: | Místnost **" + voiceChannel.getName() + "** byla uzamknuta.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setDescription(":lock: | Místnost **" + voiceChannel.getName() + "** byla uzamknuta.").build()).queue();
                 break;
             case "unlock":
                 voiceChannel.putPermissionOverride(member.getGuild().getPublicRole()).setAllow(Permission.VOICE_CONNECT).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(":unlock: | Místnost ** " + voiceChannel.getName() + "** byla odemknuta.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(":unlock: | Místnost ** " + voiceChannel.getName() + "** byla odemknuta.").build()).queue();
                 break;
             case "add":
                 Member toAdd = event.getOption("user").getAsMember();
                 if (toAdd == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
                     return;
                 }
-                if (toAdd.getId().equals(hook.getEvent().getMember().getId())) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Sám sebe pozvat nemůžeš, už tam jsi.").build()).queue();
+                if (toAdd.getId().equals(event.getMember().getId())) {
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe pozvat nemůžeš, už tam jsi.").build()).queue();
                     return;
                 }
                 voiceChannel.getManager().getChannel().putPermissionOverride(toAdd).setAllow(Permission.VOICE_CONNECT).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Uživatel " + toAdd.getAsMention() + " byl přidán do voice").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Uživatel " + toAdd.getAsMention() + " byl přidán do voice").build()).queue();
                 break;
             case "remove":
                 Member toRemove = event.getOption("user").getAsMember();
                 if (toRemove == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
                     return;
                 }
-                if (toRemove.getId().equals(hook.getEvent().getMember().getId())) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Sám sebe odebrat nemůžeš, pokud chceš místnost smazat -> odpoj se.").build()).queue();
+                if (toRemove.getId().equals(event.getMember().getId())) {
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe odebrat nemůžeš, pokud chceš místnost smazat -> odpoj se.").build()).queue();
                     return;
                 }
                 voiceChannel.getManager().getChannel().putPermissionOverride(toRemove).setDeny(Permission.VOICE_CONNECT).queue();
-                hook.sendMessage(MessageUtils
+                hook.sendMessageEmbeds(MessageUtils
                         .getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Uživatel " + toRemove.getAsMention() + " byl odebrán z kanálu").build()).queue();
             case "name":
                 String channelNewName = event.getOption("text").getAsString();
                 if (channelNewName == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadan text nelze použít pro název kanálu!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Zadan text nelze použít pro název kanálu!").build()).queue();
                     return;
                 }
                 voiceChannel.getManager().setName(channelNewName).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":bookmark: | Název kanálu byl změněn na ** " + channelNewName + "**").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setDescription(":bookmark: | Název kanálu byl změněn na ** " + channelNewName + "**").build()).queue();
                 break;
             case "bitrate":
                 Long selectedBitrate = event.getOption("value").getAsLong();
                 if (selectedBitrate == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Byl zadán chybně bitrate, zkus to znova!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Byl zadán chybně bitrate, zkus to znova!").build()).queue();
                     return;
                 }
                 if (selectedBitrate < 8 || selectedBitrate > 384) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Bitrate kanálu může být nastaven pouze od 8kbps do 384kbps.").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Bitrate kanálu může být nastaven pouze od 8kbps do 384kbps.").build()).queue();
                     break;
                 }
                 voiceChannel.getManager().setBitrate((int) (selectedBitrate * 1000)).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":headphones: | Bitrate byl změněn na **" + selectedBitrate + "kbps**").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setDescription(":headphones: | Bitrate byl změněn na **" + selectedBitrate + "kbps**").build()).queue();
                 break;
             case "unlimited":
                 voiceChannel.getManager().setUserLimit(0).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(":memo: | Limit byl změněn na **neomezeně**").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(":memo: | Limit byl změněn na **neomezeně**").build()).queue();
                 break;
             case "limit":
                 Long selectedLimit = event.getOption("value").getAsLong();
                 if (selectedLimit == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Byl zadán chybně limit, zkus to znova!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Byl zadán chybně limit, zkus to znova!").build()).queue();
                     return;
                 }
                 voiceChannel.getManager().setUserLimit(Math.toIntExact(selectedLimit)).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(":memo: | Limit byl změněn na **" + selectedLimit + "**").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(":memo: | Limit byl změněn na **" + selectedLimit + "**").build()).queue();
                 break;
             case "ban":
                 Member toBan = event.getOption("user").getAsMember();
                 if (toBan == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
                     return;
                 }
-                if (toBan.getId().equals(hook.getEvent().getMember().getId())) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Sám sebe zabanovat nemůžeš!").build()).queue();
+                if (toBan.getId().equals(event.getMember().getId())) {
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe zabanovat nemůžeš!").build()).queue();
                     return;
                 }
                 if (toBan.getVoiceState().inVoiceChannel() && toBan.getVoiceState().getChannel().getId().equals(voiceChannel.getId())) {
                     voiceChannel.getGuild().kickVoiceMember(toBan).queue();
                 }
                 voiceChannel.getManager().getChannel().putPermissionOverride(toBan).setDeny(Permission.VIEW_CHANNEL).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.ADMIN).setDescription(":hammer: | Uživatel " + toBan.getAsMention()  + " byl zabanován v kanálu.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.ADMIN).setDescription(":hammer: | Uživatel " + toBan.getAsMention()  + " byl zabanován v kanálu.").build()).queue();
                 break;
             case "unban":
                 Member toUnban = event.getOption("user").getAsMember();
                 if (toUnban == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
                     return;
                 }
-                if (toUnban.getId().equals(hook.getEvent().getMember().getId())) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Sám sebe odbanovat nemůžeš!").build()).queue();
+                if (toUnban.getId().equals(event.getMember().getId())) {
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe odbanovat nemůžeš!").build()).queue();
                     return;
                 }
                 voiceChannel.getManager().getChannel().putPermissionOverride(toUnban).setAllow(Permission.VIEW_CHANNEL).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription(":hammer_pick: | Uživatel " + toUnban.getAsMention()  + " byl odbanován z kanálu, nyní se může připojit.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setDescription(":hammer_pick: | Uživatel " + toUnban.getAsMention()  + " byl odbanován z kanálu, nyní se může připojit.").build()).queue();
                 break;
             case "kick":
                 Member toKick = event.getOption("user").getAsMember();
                 if (toKick == null) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Zadaný uživatel neexistuje, chyba Discordu?!").build()).queue();
                     return;
                 }
-                if (toKick.getId().equals(hook.getEvent().getMember().getId())) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Sám sebe vyhodit nemůžeš, jednoduše se odpoj.").build()).queue();
+                if (toKick.getId().equals(event.getMember().getId())) {
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe vyhodit nemůžeš, jednoduše se odpoj.").build()).queue();
                     return;
                 }
                 if (!voiceChannel.getMembers().contains(toKick)) {
-                    hook.sendMessage(MessageUtils.getEmbedError().setDescription("Uživatel není v místnosti připojený, nelze ho vyhodit.").build()).queue();
+                    hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Uživatel není v místnosti připojený, nelze ho vyhodit.").build()).queue();
                     return;
                 }
                 voiceChannel.getGuild().kickVoiceMember(toKick).queue();
-                hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.DELETE + " Uživatel " + toKick.getAsMention() + " byl vykopnut.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.DELETE + " Uživatel " + toKick.getAsMention() + " byl vykopnut.").build()).queue();
                 break;
         }
     }

@@ -25,7 +25,7 @@ shadowJar {
 clean { delete "./build" }
 
 repositories {
-    //flatDir { dirs 'lib' }
+   //flatDir { dirs 'lib' }
     mavenCentral()
     maven { url "https://jcenter.bintray.com" }
     maven { url "https://repo.maven.apache.org/maven2" }
@@ -38,7 +38,8 @@ repositories {
 
 dependencies {
     //compile group: 'net.dv8tion', name: 'JDA', version:'4.2.0_209'
-    compile group: 'com.github.dv8fromtheworld', name: 'jda', version: 'd997e0d'
+    //compile name: 'JDA-4.2.1_DEV'
+    compile group: 'com.github.DV8FromTheWorld', name: 'JDA', version:'f9578019ce'
     compile group: 'com.jagrosh', name: 'jda-utilities', version:'3.0.4'
     compile group: 'com.zaxxer', name: 'HikariCP', version:'3.2.0'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.25'

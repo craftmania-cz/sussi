@@ -5,23 +5,23 @@ import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import static cz.wake.sussi.commands.user.Help.getContext;
 
 public class HelpSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
         // Variables
-        MessageChannel textChannel =  hook.getEvent().getChannel();
+        MessageChannel textChannel = event.getChannel();
 
         // Command
         if(textChannel.getType() == ChannelType.TEXT){
-            hook.sendMessage(MessageUtils.getEmbed(Constants.GREEN).setTitle("Zkontroluj si zprávy")
+            hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setTitle("Zkontroluj si zprávy")
                     .setDescription(":mailbox_with_mail: | Odeslala jsem ti do zpráv nápovědu s příkazy!").build()).queue();
         }
         event.getUser().openPrivateChannel().queue(msg -> {

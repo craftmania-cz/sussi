@@ -8,11 +8,11 @@ import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class CheckIpSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
         if (event.getOption("ip") != null) {
             String requestedIP = event.getOption("ip").getAsString();
             checkIP(requestedIP,hook);
@@ -35,10 +35,10 @@ public class CheckIpSlashCommand implements ISlashCommand {
                 checkIP(playerIP, hook);
                 return;
             }
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Pro zadaný nick nebyla nelezena žádná IP!").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Pro zadaný nick nebyla nelezena žádná IP!").build()).queue();
             return;
         }
-        hook.sendMessage(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Musíš takhle `/checkip [nick/IP]`. Př. `/checkip 8.8.8.8`").build()).queue();
+        hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Musíš takhle `/checkip [nick/IP]`. Př. `/checkip 8.8.8.8`").build()).queue();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CheckIpSlashCommand implements ISlashCommand {
         return Rank.MODERATOR;
     }
 
-    public void checkIP(String ip, CommandHook channel){
+    public void checkIP(String ip, InteractionHook hook){
 
         boolean vpn = false;
         String provider = "Unknown";
@@ -99,7 +99,7 @@ public class CheckIpSlashCommand implements ISlashCommand {
 
             // Nezjistitelna IP?
             if (adressInfo.get("isocode") == JSONObject.NULL) {
-                channel.sendMessage(MessageUtils.getEmbed().setTitle("Kontrola IP adresy")
+                hook.sendMessageEmbeds(MessageUtils.getEmbed().setTitle("Kontrola IP adresy")
                         .setDescription("Tato IP adresa je nezjistitelná.").build()).queue();
                 return;
             }
@@ -145,10 +145,10 @@ public class CheckIpSlashCommand implements ISlashCommand {
 
             }
 
-            channel.sendMessage(eb.setAuthor("Kontrola IP adresy").setDescription(text).build()).queue();
+            hook.sendMessageEmbeds(eb.setAuthor("Kontrola IP adresy").setDescription(text).build()).queue();
 
         } catch (Exception e){
-            channel.sendMessage(MessageUtils.getEmbedError().setDescription("Chyba v API! Zkus to zachvilku...").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Chyba v API! Zkus to zachvilku...").build()).queue();
             e.printStackTrace();
         }
     }

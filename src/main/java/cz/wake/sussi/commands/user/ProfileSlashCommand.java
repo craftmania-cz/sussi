@@ -9,11 +9,12 @@ import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -28,16 +29,16 @@ import java.util.stream.Collectors;
 public class ProfileSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
         String nick = "";
 
-        SlashCommandEvent.OptionData optionName = event.getOption("name");
-        SlashCommandEvent.OptionData optionUser = event.getOption("user");
+        OptionMapping optionName = event.getOption("name");
+        OptionMapping optionUser = event.getOption("user");
 
         if (optionName == null && optionUser == null) { // -> /profile
             if (!Sussi.getInstance().getSql().isAlreadyLinkedByID(sender.getId())) {
-                hook.sendMessage(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/profile MrWakeCZ` nebo nemáš propojený profil.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/profile MrWakeCZ` nebo nemáš propojený profil.").build()).queue();
                 return;
             } else nick = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
         } else if (optionName != null) { // -> /profile [@nick]
@@ -47,7 +48,7 @@ public class ProfileSlashCommand implements ISlashCommand {
             if (Sussi.getInstance().getSql().isAlreadyLinkedByID(selectedUser.getId()))
                 nick = Sussi.getInstance().getSql().getLinkedNickname(selectedUser.getId());
             else {
-                hook.sendMessage(MessageUtils.getEmbedError().setDescription("Uživatel " + selectedUser.getAsMention() + " nemá propojený MC účet.").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Uživatel " + selectedUser.getAsMention() + " nemá propojený MC účet.").build()).queue();
                 return;
             }
         }
@@ -55,12 +56,12 @@ public class ProfileSlashCommand implements ISlashCommand {
         Profile profile = new Profile(nick);
 
         if (profile.getStatusId() == 404) {
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Hráč `" + nick + "` nebyl nalezen.").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Hráč `" + nick + "` nebyl nalezen.").build()).queue();
             return;
         }
 
         if (profile.getStatusId() == 500) {
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Nepodařilo se provést akci, zkus to zachvilku...").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Nepodařilo se provést akci, zkus to zachvilku...").build()).queue();
             return;
         }
 
@@ -92,7 +93,7 @@ public class ProfileSlashCommand implements ISlashCommand {
         return Rank.USER;
     }
 
-    private void firstPage(User s, CommandHook hook, Profile profile) {
+    private void firstPage(User s, InteractionHook hook, Profile profile) {
         Color color = Color.WHITE;
         String role = "Hráč";
 
@@ -151,7 +152,7 @@ public class ProfileSlashCommand implements ISlashCommand {
                     true);
         }
 
-        hook.sendMessage(embedBuilder.build()).queue();
+        hook.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
     private Color getColorByRank(int rank){

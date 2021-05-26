@@ -6,11 +6,12 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,15 +21,15 @@ import org.json.JSONObject;
 public class UUIDSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
-        SlashCommandEvent.OptionData optionName = event.getOption("name");
+        OptionMapping optionName = event.getOption("name");
         String nameValue = optionName.getAsString();
 
         JSONObject apiResponse = getApiObject(nameValue);
 
         if (apiResponse == null) {
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Chyba v CraftMania API! Zkus to zachvilku....").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Chyba v CraftMania API! Zkus to zachvilku....").build()).queue();
             return;
         }
 
@@ -43,7 +44,7 @@ public class UUIDSlashCommand implements ISlashCommand {
         }
         offlineUUID = offlineUUID.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5");
 
-        hook.sendMessage(MessageUtils.getEmbed().setColor(Constants.RED).setTitle("Přehled UUID: " + nameValue)
+        hook.sendMessageEmbeds(MessageUtils.getEmbed().setColor(Constants.RED).setTitle("Přehled UUID: " + nameValue)
             .addField("Online (Mojang)", onlineUUUID != null ? "`" + onlineUUUID + "`" : "Warez hráč - nelze vygenerovat." , false)
             .addField("Offline", "`" + offlineUUID + "`", false).build()).queue();
 

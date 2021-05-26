@@ -5,28 +5,28 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.awt.*;
 
 public class UnlinkSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
-        User user = hook.getEvent().getUser();
+        User user = event.getUser();
 
         // Command
         if (!Sussi.getInstance().getSql().isConnectedToMC(user.getId())) {
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Tento účet není propojen se žádnym MC účtem!").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Tento účet není propojen se žádnym MC účtem!").build()).queue();
             return;
         }
 
-        hook.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(user.getId()) + "!").build()).queue();
+        hook.sendMessageEmbeds(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(user.getId()) + "!").build()).queue();
         Sussi.getInstance().getSql().disconnectFromMC(user.getId());
     }
 

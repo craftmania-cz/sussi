@@ -3,11 +3,11 @@ package cz.wake.sussi.commands.user;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ChooseSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
         String option1 = event.getOption("opt1").getAsString();
         String option2 = event.getOption("opt2").getAsString();

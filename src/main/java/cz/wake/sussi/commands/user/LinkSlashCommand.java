@@ -5,33 +5,35 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.awt.*;
 
 public class LinkSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, CommandHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
 
-        SlashCommandEvent.OptionData optionKeyId = event.getOption("key");
+        OptionMapping optionKeyId = event.getOption("key");
         String keyId = optionKeyId.getAsString();
 
         if (keyId != null) {
             if (!Sussi.getInstance().getSql().doesConnectionExist(keyId)) {
-                hook.sendMessage(MessageUtils.getEmbedError().setDescription("Tento kód nebyl nalezen v naší databázi!").build()).queue();
+                hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Tento kód nebyl nalezen v naší databázi!").build()).queue();
                 return;
             }
 
-            hook.sendMessage(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(keyId)).build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(keyId)).build()).queue();
             Sussi.getInstance().getSql().connectToMC(sender.getId(), keyId);
             Sussi.getVIPManager().checkMember(member.getGuild(), member);
         } else {
-            hook.sendMessage(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/link SUPERTAJNYKOD123`\nPro získaní kódu jdi na Lobby a použij `/link`").build()).queue();
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/link SUPERTAJNYKOD123`\nPro získaní kódu jdi na Lobby a použij `/link`").build()).queue();
         }
     }
 

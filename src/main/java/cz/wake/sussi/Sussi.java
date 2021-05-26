@@ -106,30 +106,103 @@ public class Sussi {
             Metrics.setup();
         }
 
-        // isBeta and MySQL
-        if (!isBeta) {
-            SussiLogger.infoMessage("Connection to MySQL...");
+        // MySQL
+        SussiLogger.infoMessage("Connection to MySQL...");
 
-            try {
-                (instance = new Sussi()).initDatabase();
-                SussiLogger.greatMessage("Sussi is successful connected to MySQL.");
-                SussiLogger.infoMessage("Sussi will run as PRODUCTION bot.");
-                isBeta = false;
-            } catch (Exception e) {
-                SussiLogger.dangerMessage("During connection to MySQL, error has occurred:");
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        } else {
-            SussiLogger.warnMessage("Database is off, Sussi will not load and save anything!");
-            SussiLogger.warnMessage("Sussi is running as BETA bot! Some functions will not work!");
+        try {
+            (instance = new Sussi()).initDatabase();
+            SussiLogger.greatMessage("Sussi is successful connected to MySQL.");
+            SussiLogger.infoMessage("Sussi will run as PRODUCTION bot.");
+        } catch (Exception e) {
+            SussiLogger.dangerMessage("During connection to MySQL, error has occurred:");
+            e.printStackTrace();
+            System.exit(-1);
         }
 
-        if (!isBeta) noteManager = new NoteManager();
+        if (!isBeta) {
 
-        atsManager = new ATSResetTask();
-        voteManager = new VoteResetTask();
-        vipManager = new VIPManager();
+            // Inicializace základních managerů
+            noteManager = new NoteManager();
+            atsManager = new ATSResetTask();
+            voteManager = new VoteResetTask();
+            vipManager = new VIPManager();
+
+            // Tasks
+            scheduleTasks();
+        }
+    }
+
+    public static Sussi getInstance() {
+        return instance;
+    }
+
+    public MainListener getEvents() {
+        return events;
+    }
+
+    public static JDA getJda() {
+        return jda;
+    }
+
+    public CommandHandler getCommandHandler() {
+        return ch;
+    }
+
+    public static SlashCommandHandler getSlashCommandHandler() {
+        return slashCommandHandler;
+    }
+
+    private void init() {
+        ch.register();
+    }
+
+    public static long getStartUp() {
+        return startUp;
+    }
+
+    private void initDatabase() {
+        sql = new SQLManager(this);
+    }
+
+    public SQLManager getSql() {
+        return sql;
+    }
+
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        Date now = new Date();
+        return sdfDate.format(now);
+    }
+
+    public static String getApiUrl(){
+        return API_URL;
+    }
+
+    public static String getIpHubKey() {
+        return ipHubKey;
+    }
+
+    public static NoteManager getNoteManager() {
+        return noteManager;
+    }
+
+    public static ATSResetTask getATSManager() {
+        return atsManager;
+    }
+
+    public static VoteResetTask getVoteManager() {
+        return voteManager;
+    }
+
+    public static VIPManager getVIPManager() {
+        return vipManager;
+    }
+
+    public static ConfigProperties getConfig() {
+        return config;
+    }
+
+    private static void scheduleTasks() {
 
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         try {
@@ -227,75 +300,6 @@ public class Sussi {
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
-    }
 
-    public static Sussi getInstance() {
-        return instance;
-    }
-
-    public MainListener getEvents() {
-        return events;
-    }
-
-    public static JDA getJda() {
-        return jda;
-    }
-
-    public CommandHandler getCommandHandler() {
-        return ch;
-    }
-
-    public static SlashCommandHandler getSlashCommandHandler() {
-        return slashCommandHandler;
-    }
-
-    private void init() {
-        ch.register();
-    }
-
-    public static long getStartUp() {
-        return startUp;
-    }
-
-    private void initDatabase() {
-        sql = new SQLManager(this);
-    }
-
-    public SQLManager getSql() {
-        return sql;
-    }
-
-    public static String getCurrentTimeStamp() {
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        Date now = new Date();
-        return sdfDate.format(now);
-    }
-
-    public static String getApiUrl(){
-        return API_URL;
-    }
-
-    public static String getIpHubKey() {
-        return ipHubKey;
-    }
-
-    public static NoteManager getNoteManager() {
-        return noteManager;
-    }
-
-    public static ATSResetTask getATSManager() {
-        return atsManager;
-    }
-
-    public static VoteResetTask getVoteManager() {
-        return voteManager;
-    }
-
-    public static VIPManager getVIPManager() {
-        return vipManager;
-    }
-
-    public static ConfigProperties getConfig() {
-        return config;
     }
 }
