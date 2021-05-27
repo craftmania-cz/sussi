@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
@@ -182,5 +183,19 @@ public class MainListener extends ListenerAdapter {
                 event.getGuild().kickVoiceMember(event.getMember()).queue();
             }
         }
+    }
+
+    @Override
+    public void onGuildMemberUpdatePending(@Nonnull GuildMemberUpdatePendingEvent event){
+        if(!event.getGuild().getId().equals("207412074224025600")){ // CM
+            return;
+        }
+        Guild guild = event.getGuild();
+        if (!event.getNewPending()) {
+            return;
+        }
+        Role role = guild.getRoleById(847281784403001375L); // News role
+        assert role != null;
+        event.getGuild().addRoleToMember(event.getMember(), role).queue();
     }
 }
