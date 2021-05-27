@@ -94,6 +94,11 @@ public class ProfileSlashCommand implements ISlashCommand {
         return Rank.USER;
     }
 
+    @Override
+    public boolean isEphemeral() {
+        return false;
+    }
+
     private void firstPage(User s, InteractionHook hook, Profile profile) {
         Color color = Color.WHITE;
         String role = "Hráč";

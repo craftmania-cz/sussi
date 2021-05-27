@@ -66,6 +66,11 @@ public class CheckIpSlashCommand implements ISlashCommand {
         return Rank.MODERATOR;
     }
 
+    @Override
+    public boolean isEphemeral() {
+        return false;
+    }
+
     public void checkIP(String ip, InteractionHook hook){
 
         boolean vpn = false;

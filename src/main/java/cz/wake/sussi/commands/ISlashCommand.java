@@ -19,4 +19,6 @@ public interface ISlashCommand {
     CommandType getType();
 
     Rank getRank();
+
+    boolean isEphemeral();
 }

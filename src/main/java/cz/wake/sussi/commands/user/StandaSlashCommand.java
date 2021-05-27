@@ -41,4 +41,9 @@ public class StandaSlashCommand implements ISlashCommand {
     public Rank getRank() {
         return Rank.USER;
     }
+
+    @Override
+    public boolean isEphemeral() {
+        return false;
+    }
 }

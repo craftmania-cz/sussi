@@ -92,6 +92,20 @@ public class SlashCommandHandler {
                         .addChoice("Žena", "woman")
                         .addChoice("Nezvoleno", "no-gender"))));
 
+        commands.addCommands(new CommandData("role", "Nastavení role pro přístup do kanálů nebo dostávání upozornění")
+                .addOption(new OptionData(OptionType.STRING, "name", "Zvol si roli, kterou si chceš přidat nebo odebrat.").setRequired(true)
+                    .addChoice("News (oznámení o novinkách)", "news")
+                    .addChoice("Events (oznámení o eventech)", "events")
+                    .addChoice("Apple", "apple")
+                    .addChoice("Android", "android")
+                    .addChoice("Crypto", "crypto")
+                    .addChoice("Fortnite", "fortnite")
+                    .addChoice("Hytale", "hytale")
+                    .addChoice("Genshin Impact", "genshin")
+                    .addChoice("Osu", "osu")
+                    .addChoice("GTA", "gta")
+                    .addChoice("Korean (Kanál v jiném jazyce)", "korean")));
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -123,6 +137,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new WikiSlashCommand());
         registerSlashCommand(new UUIDSlashCommand());
         registerSlashCommand(new ProfileSlashCommand());
+        registerSlashCommand(new RoleSlashCommand());
 
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());

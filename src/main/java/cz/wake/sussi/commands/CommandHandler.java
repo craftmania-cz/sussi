@@ -1,6 +1,5 @@
 package cz.wake.sussi.commands;
 
-import cz.wake.sussi.commands.games.*;
 import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.owner.Udrzba;
@@ -42,34 +41,21 @@ public class CommandHandler {
         registerCommand(new CheckIP());
         registerCommand(new CheckBan());
         registerCommand(new Blacklist());
-        registerCommand(new Fortnite());
-        registerCommand(new GTA());
-        registerCommand(new Crypto());
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());
-        registerCommand(new Hytale());
-        registerCommand(new Events());
-        registerCommand(new NewProfile());
         registerCommand(new BlockCountry());
         registerCommand(new Poll());
-        registerCommand(new Korean());
         registerCommand(new LobbyNews());
-        registerCommand(new News());
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
         registerCommand(new Booster());
         registerCommand(new NoteCommand());
         registerCommand(new StaffList());
         registerCommand(new NewAts());
-        registerCommand(new Apple());
-        registerCommand(new English());
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
-        registerCommand(new Android());
-        registerCommand(new Osu());
         registerCommand(new HalloweenStats());
-        registerCommand(new GenshinImpact());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

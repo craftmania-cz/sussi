@@ -19,7 +19,7 @@ public class SlashCommandListener extends ListenerAdapter {
         for (ISlashCommand slashCommand : Sussi.getSlashCommandHandler().getSlashCommands()) {
             if (slashCommand.getName().equals(event.getName())) {
                 if (Rank.getPermLevelForUser(event.getUser(), (TextChannel) event.getChannel()).isAtLeast(slashCommand.getRank())) {
-                    event.deferReply().queue();
+                    event.deferReply(slashCommand.isEphemeral()).queue();
                     try {
                         slashCommand.onSlashCommand(event.getUser(), event.getChannel(), event.getMember(), event.getHook(), event);
                     } catch (Exception e) {

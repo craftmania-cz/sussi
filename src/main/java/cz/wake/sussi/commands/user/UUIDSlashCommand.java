@@ -75,6 +75,11 @@ public class UUIDSlashCommand implements ISlashCommand {
         return Rank.USER;
     }
 
+    @Override
+    public boolean isEphemeral() {
+        return false;
+    }
+
     private static JSONObject getApiObject(String name) {
         try {
             OkHttpClient caller = new OkHttpClient();

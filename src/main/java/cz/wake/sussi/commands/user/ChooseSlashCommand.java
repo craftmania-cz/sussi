@@ -67,4 +67,9 @@ public class ChooseSlashCommand implements ISlashCommand {
     public Rank getRank() {
         return Rank.USER;
     }
+
+    @Override
+    public boolean isEphemeral() {
+        return false;
+    }
 }
