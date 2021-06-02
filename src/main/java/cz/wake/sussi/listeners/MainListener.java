@@ -187,13 +187,16 @@ public class MainListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdatePending(@Nonnull GuildMemberUpdatePendingEvent event){
+        System.out.println("Call GuildMemberUpdatePendingEvent");
         if(!event.getGuild().getId().equals("207412074224025600")){ // CM
             return;
         }
+        System.out.println("State: new pending?: " + event.getNewPending() + ", oldpending: " + event.getOldPending());
         Guild guild = event.getGuild();
-        if (!event.getNewPending()) {
+        if (!event.getOldPending()) {
             return;
         }
+        System.out.println("Adding to user: " + event.getUser().getName() + " news role.");
         Role role = guild.getRoleById(847281784403001375L); // News role
         assert role != null;
         event.getGuild().addRoleToMember(event.getMember(), role).queue();

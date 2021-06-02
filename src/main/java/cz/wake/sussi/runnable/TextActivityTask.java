@@ -15,7 +15,7 @@ public class TextActivityTask implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         HashMap<String, Long> messageLogCopy = (HashMap<String, Long>) GuildStatisticsListener.messageLog.clone();
 
-        SussiLogger.infoMessage("Updating text activity for " + messageLogCopy.size() + " users...");
+        //SussiLogger.infoMessage("Updating text activity for " + messageLogCopy.size() + " users...");
 
         GuildStatisticsListener.messageLog.clear();
         messageLogCopy.forEach((userId, messagesCount) -> {
