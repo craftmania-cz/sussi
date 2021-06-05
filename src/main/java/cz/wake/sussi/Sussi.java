@@ -1,12 +1,9 @@
 package cz.wake.sussi;
 
-import ai.api.AIConfiguration;
-import ai.api.AIDataService;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.commands.SlashCommandHandler;
 import cz.wake.sussi.listeners.*;
-import cz.wake.sussi.metrics.Metrics;
 import cz.wake.sussi.objects.VIPManager;
 import cz.wake.sussi.objects.jobs.VIPCheckJob;
 import cz.wake.sussi.objects.jobs.WeekVotesJob;
@@ -29,7 +26,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.dv8tion.jda.internal.utils.JDALogger.getLog;
@@ -75,10 +71,6 @@ public class Sussi {
 
         startUp = System.currentTimeMillis();
 
-        // Dialogflow
-        AIConfiguration aiConfig = new AIConfiguration(config.getDialogFlowApiKey());
-        AIDataService aiDataService = new AIDataService(aiConfig);
-
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
         jda = JDABuilder.createDefault(config.getBotToken())
@@ -86,7 +78,6 @@ public class Sussi {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
-                .addEventListeners(new DialogFlowListener(aiDataService))
                 .addEventListeners(new BoosterListener())
                 .addEventListeners(new ChangelogReactionsListener())
                 .addEventListeners(new GuildStatisticsListener())
@@ -99,12 +90,6 @@ public class Sussi {
 
         slashCommandHandler = new SlashCommandHandler();
         slashCommandHandler.createAndUpdateCommands();
-
-        // Metrics
-        if (config.isMetricsEnabled()) {
-            SussiLogger.infoMessage("Metrics enabled, now starts...");
-            Metrics.setup();
-        }
 
         // MySQL
         SussiLogger.infoMessage("Connection to MySQL...");
