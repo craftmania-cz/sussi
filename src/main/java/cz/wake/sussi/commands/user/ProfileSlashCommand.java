@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.button.Button;
+import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.apache.commons.lang3.StringUtils;
 

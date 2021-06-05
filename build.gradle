@@ -37,9 +37,7 @@ repositories {
 }
 
 dependencies {
-    //compile group: 'net.dv8tion', name: 'JDA', version:'4.2.0_209'
-    //compile name: 'JDA-4.2.1_DEV'
-    compile group: 'com.github.DV8FromTheWorld', name: 'JDA', version:'f9578019ce'
+    compile group: 'net.dv8tion', name: 'JDA', version:'4.2.1_269'
     compile group: 'com.jagrosh', name: 'jda-utilities', version:'3.0.4'
     compile group: 'com.zaxxer', name: 'HikariCP', version:'3.2.0'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.25'
