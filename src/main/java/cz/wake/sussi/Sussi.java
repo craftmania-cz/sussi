@@ -14,6 +14,7 @@ import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -82,6 +83,7 @@ public class Sussi {
                 .addEventListeners(new ChangelogReactionsListener())
                 .addEventListeners(new GuildStatisticsListener())
                 .addEventListeners(new SlashCommandListener())
+                .addEventListeners(new ButtonClickListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
@@ -114,6 +116,9 @@ public class Sussi {
 
             // Tasks
             scheduleTasks();
+        } else {
+            jda.getPresence().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "Testovací režim."));
+            jda.getPresence().setStatus(OnlineStatus.IDLE);
         }
     }
 

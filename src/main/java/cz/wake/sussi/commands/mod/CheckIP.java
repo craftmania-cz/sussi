@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -25,26 +26,10 @@ public class CheckIP implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(args.length < 1){
-            channel.sendMessage(MessageUtils.getEmbed(Constants.GRAY).setDescription("IP zkontroluješ v následovně: `,checkip [IPv4]` - Například: `,checkip 8.8.8.8`").build()).queue();
-        } else {
-            String ip = args[0];
-            if (isIP(ip) || isIPv6(ip)) {
-                checkIP(ip, channel);
-            } else if (isText(ip)) {
-                String playerIP = Sussi.getInstance().getSql().getIPFromServerByPlayer(ip);
-                if (playerIP != null) {
-                    checkIP(playerIP, channel);
-                    return;
-                }
-                MessageUtils.sendErrorMessage("Pro zadaný nick nebyla nelezena žádná IP!", channel);
-            } else {
-                MessageUtils.sendErrorMessage("Zadaná IP nesplňuje formát IP!", channel);
-            }
-        }
+
     }
 
-    public void checkIP(String ip, MessageChannel channel){
+    public void checkIP(String ip, InteractionHook hook){
 
         boolean vpn = false;
         String provider = "Unknown";
@@ -77,7 +62,7 @@ public class CheckIP implements ICommand {
 
             // Nezjistitelna IP?
             if (adressInfo.get("isocode") == JSONObject.NULL) {
-                channel.sendMessage(MessageUtils.getEmbed().setTitle("Kontrola IP adresy")
+                hook.sendMessageEmbeds(MessageUtils.getEmbed().setTitle("Kontrola IP adresy")
                     .setDescription("Tato IP adresa je nezjistitelná.").build()).queue();
                 return;
             }
@@ -122,11 +107,10 @@ public class CheckIP implements ICommand {
                 text.append("**Proxy/VPN:** Ne");
 
             }
-
-            channel.sendMessage(eb.setAuthor("Kontrola IP adresy").setDescription(text).build()).queue();
+            hook.sendMessageEmbeds(eb.setAuthor("Kontrola IP adresy").setDescription(text).build()).queue();
 
         } catch (Exception e){
-            MessageUtils.sendErrorMessage("Chyba v API! Zkus to zachvilku...", channel);
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Chyba v API! Zkus to zachvilku...").build()).queue();
             e.printStackTrace();
         }
 

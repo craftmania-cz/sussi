@@ -1,17 +1,18 @@
 package cz.wake.sussi.commands.mod;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandType;
-import cz.wake.sussi.commands.ICommand;
+import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
-public class StaffList implements ICommand {
+public class StaffListSlashCommand implements ISlashCommand {
 
     @Override
-    public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
         MessageEmbed embed = MessageUtils.getEmbed(Constants.BLUE).setTitle("Seznam všech členů AT + jejich ID")
                 .addField("Owner", generateStaffList(member, "207423116861767681"), false)
                 .addField("Staff", generateStaffList(member, "208227643714306050"), false)
@@ -23,22 +24,22 @@ public class StaffList implements ICommand {
                 .addField("Moderator", generateStaffList(member, "649927113964650496"), false)
                 .addField("Artist", generateStaffList(member, "796382683734605836"), false)
                 .build();
-        channel.sendMessage(embed).queue();
+        hook.sendMessageEmbeds(embed).queue();
     }
 
     @Override
-    public String getCommand() {
+    public String getName() {
         return "stafflist";
     }
 
     @Override
     public String getDescription() {
-        return ".";
+        return "";
     }
 
     @Override
     public String getHelp() {
-        return ".";
+        return "/stafflist";
     }
 
     @Override
@@ -52,12 +53,7 @@ public class StaffList implements ICommand {
     }
 
     @Override
-    public String[] getAliases() {
-        return new String[]{"staffid", "sid"};
-    }
-
-    @Override
-    public boolean deleteMessage() {
+    public boolean isEphemeral() {
         return false;
     }
 

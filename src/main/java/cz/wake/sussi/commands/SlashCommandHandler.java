@@ -1,7 +1,9 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.commands.mod.CheckBanSlashCommand;
 import cz.wake.sussi.commands.mod.CheckIpSlashCommand;
+import cz.wake.sussi.commands.mod.StaffListSlashCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.JDA;
@@ -107,6 +109,15 @@ public class SlashCommandHandler {
                     .addChoice("GTA", "gta")
                     .addChoice("Korean (Kanál v jiném jazyce)", "korean")));
 
+        commands.addCommands(new CommandData("checkban", "Zkontrolování zda má hráč aktivní ban a odkoho.")
+                //.addOptions(new OptionData(OptionType.STRING, "ip", "IP adresa ve formát IPv4 nebo IPv6"))
+                .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče, který bude zkontrolován").setRequired(true)));
+
+        commands.addCommands(new CommandData("stafflist", "Seznam členů AT a jejich ID pro přidání do ticketů."));
+
+        //commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
+        //        .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.")));
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -146,6 +157,8 @@ public class SlashCommandHandler {
 
         // Moderation
         registerSlashCommand(new CheckIpSlashCommand());
+        registerSlashCommand(new StaffListSlashCommand());
+        registerSlashCommand(new CheckBanSlashCommand());
     }
 
 

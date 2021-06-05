@@ -38,8 +38,6 @@ public class CommandHandler {
         SussiLogger.infoMessage("Loading all commands.");
         registerCommand(new Help());
         registerCommand(new Stop());
-        registerCommand(new CheckIP());
-        registerCommand(new CheckBan());
         registerCommand(new Blacklist());
         registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
@@ -51,7 +49,6 @@ public class CommandHandler {
         registerCommand(new NickWordBlacklist());
         registerCommand(new Booster());
         registerCommand(new NoteCommand());
-        registerCommand(new StaffList());
         registerCommand(new NewAts());
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
