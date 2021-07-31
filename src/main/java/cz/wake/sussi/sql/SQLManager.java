@@ -1260,4 +1260,36 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public final void updatePlayerStatus(final String nick, final String status) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET status = ? WHERE `nick` = ?;");
+            ps.setString(1, status);
+            ps.setString(2, nick);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void updatePlayerGenderId(final String nick, final int genderId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET gender = ? WHERE `nick` = ?;");
+            ps.setInt(1, genderId);
+            ps.setString(2, nick);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
 }

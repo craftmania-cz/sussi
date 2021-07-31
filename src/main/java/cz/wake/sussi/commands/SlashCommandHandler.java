@@ -91,9 +91,9 @@ public class SlashCommandHandler {
                     .addOptions(new OptionData(OptionType.STRING, "text", "Status, který se nastaví na tvůj profil.").setRequired(true)))
                 .addSubcommands(new SubcommandData("gender", "Nastavení pohlaví pro svůj profil")
                     .addOptions(new OptionData(OptionType.STRING, "type", "Zvolení pohlaví, co se nastaví na profil").setRequired(true)
-                        .addChoice("Muž", "man")
-                        .addChoice("Žena", "woman")
-                        .addChoice("Nezvoleno", "no-gender"))));
+                        .addChoice("Muž", "1")
+                        .addChoice("Žena", "2")
+                        .addChoice("Nezvoleno", "0"))));
 
         commands.addCommands(new CommandData("role", "Nastavení role pro přístup do kanálů nebo dostávání upozornění")
                 .addOptions(new OptionData(OptionType.STRING, "name", "Zvol si roli, kterou si chceš přidat nebo odebrat.").setRequired(true)
@@ -150,6 +150,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new UUIDSlashCommand());
         registerSlashCommand(new ProfileSlashCommand());
         registerSlashCommand(new RoleSlashCommand());
+        registerSlashCommand(new ProfileSettingsSlashCommand());
 
         // Fun příkazy
         registerSlashCommand(new StandaSlashCommand());
