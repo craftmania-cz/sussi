@@ -7,6 +7,7 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -32,6 +33,9 @@ public class LinkSlashCommand implements ISlashCommand {
             hook.sendMessageEmbeds(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(keyId)).build()).queue();
             Sussi.getInstance().getSql().connectToMC(sender.getId(), keyId);
             Sussi.getVIPManager().checkMember(member.getGuild(), member);
+
+            Role role = event.getGuild().getRoleById("876294038985265212"); // Verified role
+            event.getGuild().addRoleToMember(member, role).queue();
         } else {
             hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/link SUPERTAJNYKOD123`\nPro získaní kódu jdi na Lobby a použij `/link`").build()).queue();
         }

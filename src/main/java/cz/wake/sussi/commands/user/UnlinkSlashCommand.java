@@ -7,6 +7,7 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -28,6 +29,9 @@ public class UnlinkSlashCommand implements ISlashCommand {
 
         hook.sendMessageEmbeds(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(user.getId()) + "!").build()).queue();
         Sussi.getInstance().getSql().disconnectFromMC(user.getId());
+
+        Role role = event.getGuild().getRoleById("876294038985265212"); // Verified role
+        event.getGuild().removeRoleFromMember(member, role).queue();
     }
 
     @Override

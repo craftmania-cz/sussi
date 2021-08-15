@@ -1292,4 +1292,23 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public final Set<String> getAllLinkedProfiles() {
+        Set<String> profiles = new HashSet<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_user_id FROM player_profile WHERE discord_user_id IS NOT null;");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                profiles.add(resultSet.getString("discord_user_id"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return profiles;
+    }
 }
