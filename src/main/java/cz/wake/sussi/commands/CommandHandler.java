@@ -47,7 +47,7 @@ public class CommandHandler {
         registerCommand(new LobbyNews());
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
-        registerCommand(new Booster());
+        //registerCommand(new Booster());
         registerCommand(new NoteCommand());
         registerCommand(new NewAts()); // Nahrazuje ATSSlashCommand
         registerCommand(new BugPoints());
