@@ -50,7 +50,7 @@ public class Constants {
     final public static String TEN = "\uD83D\uDD1F";
 
     // Roles
-    final public static String BOOSTER_ROLE = "889846801245560833";
+    final public static String BOOSTER_ROLE = "580680123091648523";
     final public static String BOOSTER_COLOR_1 = "665574449541677057";
     final public static String BOOSTER_COLOR_2 = "665574758011633686";
     final public static String BOOSTER_COLOR_3 = "665575430677463060";
