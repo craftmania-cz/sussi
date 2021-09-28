@@ -44,3 +44,6 @@ overeni: 772578075530756106
 
 # CraftBox
 adminKey: ''
+
+# CraftingStore
+craftingStoreToken: "jaaaj"
