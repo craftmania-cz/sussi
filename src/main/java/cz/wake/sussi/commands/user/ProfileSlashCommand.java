@@ -138,7 +138,7 @@ public class ProfileSlashCommand implements ISlashCommand {
                                 "VotePass: " + profile.getVotePass()
                         , true)
                 .addField("Discord",
-                        "Počet zpráv: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getDiscord_messages()) + "\n" + "Voice: " + TimeUtils.formatTime("%d dni, %hh %mm", profile.getDiscord_voice()/1000, false), true)
+                        "Počet zpráv: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getDiscord_messages()) + "\n" + "Voice: " + TimeUtils.formatTime("%d dni, %hh %mm", profile.getDiscord_voice()/60, false), true)
                 .addField("Levely",
                         "Survival: " + profile.getSurvival_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSurvival_experience()) + "XP)" + "\n" +
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
