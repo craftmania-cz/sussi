@@ -6,38 +6,15 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
+
+import java.util.Set;
 
 public class Udrzba implements ICommand {
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if(sender.getId().equals(Sussi.getConfig().getOwnerID())){
-            if (args.length == 0) {
-                channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - udrzba :question:")
-                        .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
-                return;
-            }
 
-            String name = args[0];
-
-            if (!Sussi.getInstance().getSql().isExistServer(name.toLowerCase())) {
-                MessageUtils.sendErrorMessage("Tento server není zapsaný v databázi!", channel);
-                return;
-            }
-
-            if (Sussi.getInstance().getSql().isMaintenance(name.toLowerCase())) {
-                Sussi.getInstance().getSql().updateMaintenance(name.toLowerCase(), 0);
-                channel.sendMessage("Údržba pro server `" + name + "` byla vypnuta.").queue();
-            }
-            else {
-                Sussi.getInstance().getSql().updateMaintenance(name.toLowerCase(), 1);
-                channel.sendMessage("Údržba pro server `" + name + "` byla zapnuta.").queue();
-            }
-        }
     }
 
     @Override
