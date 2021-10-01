@@ -63,7 +63,7 @@ public class VoteResetTask implements Job {
             ps = conn.prepareStatement("UPDATE minigames.player_profile SET month_votes = 0;");
             ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         } finally {
             Sussi.getInstance().getSql().getPool().close(conn, ps, null);
         }
@@ -128,6 +128,7 @@ public class VoteResetTask implements Job {
 
 
     private void sendRewardAnnounce(String month, String year, List<RewardMonthVotePlayer> rewardVotePlayerList) {
+        SussiLogger.infoMessage("Sending an announce to the bot owner about the sending of monthly rewards for voting.");
         Collections.sort(rewardVotePlayerList, Comparator.comparing(RewardMonthVotePlayer::getPosition));
         Sussi.getJda().getUserById(Sussi.getConfig().getOwnerID())
                 .openPrivateChannel()
