@@ -1293,6 +1293,22 @@ public class SQLManager {
         }
     }
 
+    public final void resetDailyBonus() {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET lobby_bonus_streak = 0 WHERE lobby_bonus_claimed_daily = 0");
+            ps.executeUpdate();
+            ps = conn.prepareStatement("UPDATE player_profile SET lobby_bonus_claimed_daily = 0;");
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
     public final void updateBooster(final String id, final int booster) {
         Connection conn = null;
         PreparedStatement ps = null;
