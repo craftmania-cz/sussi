@@ -1234,9 +1234,10 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE player_profile SET discord_voice_activity = discord_voice_activity + ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_voice_activity = discord_voice_activity + ?, month_discord_voice_activity = month_discord_voice_activity + ? WHERE discord_user_id = ?;");
             ps.setLong(1, amount);
-            ps.setString(2, userId);
+            ps.setLong(2, amount);
+            ps.setString(3, userId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
