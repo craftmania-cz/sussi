@@ -1293,6 +1293,42 @@ public class SQLManager {
         }
     }
 
+    public final void updateBooster(final String id, final int booster) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_booster = ? WHERE `discord_user_id` = ?;");
+            ps.setInt(1, booster);
+            ps.setString(2, id);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final List<String> getDiscordBoosters() {
+        List<String> idlist = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_user_id FROM player_profile WHERE discord_booster = 1;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                idlist.add(ps.getResultSet().getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return idlist;
+    }
+
+
     public final Set<String> getAllLinkedProfiles() {
         Set<String> profiles = new HashSet<>();
         Connection conn = null;

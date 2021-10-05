@@ -291,5 +291,17 @@ public class Sussi {
             e.printStackTrace();
         }
 
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(BoosterCheckerTask.class)
+                    .withIdentity("boosterCheck")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("boosterCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(1)).build(); // Every 1 hour
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
     }
 }
