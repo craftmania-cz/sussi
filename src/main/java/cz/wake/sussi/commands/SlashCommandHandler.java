@@ -3,14 +3,15 @@ package cz.wake.sussi.commands;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.mod.CheckBanSlashCommand;
 import cz.wake.sussi.commands.mod.CheckIpSlashCommand;
+import cz.wake.sussi.commands.mod.ATSSlashCommand;
 import cz.wake.sussi.commands.mod.StaffListSlashCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import java.util.ArrayList;
@@ -115,8 +116,9 @@ public class SlashCommandHandler {
 
         commands.addCommands(new CommandData("stafflist", "Seznam členů AT a jejich ID pro přidání do ticketů."));
 
-        //commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
-        //        .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.")));
+        commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
+                        .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.", false))
+                        .addOptions(new OptionData(OptionType.USER, "user", "Uživatel z AT k zobrazení", false)));
 
         // Finální update všech slash příkazů
         commands.queue();
@@ -160,11 +162,6 @@ public class SlashCommandHandler {
         registerSlashCommand(new CheckIpSlashCommand());
         registerSlashCommand(new StaffListSlashCommand());
         registerSlashCommand(new CheckBanSlashCommand());
+        registerSlashCommand(new ATSSlashCommand());
     }
-
-
-
-
-
-
 }
