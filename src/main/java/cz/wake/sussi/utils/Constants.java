@@ -27,15 +27,15 @@ public class Constants {
     final public static String THUMB_DOWN = "\uD83D\uDC4E";
     
     // AT Rank Colors
-    final public static Color MAJITEL = new Color(30, 144, 255);
-    final public static Color MANAGER = new Color(255, 224, 102);
+    final public static Color MAJITEL = new Color(61, 130, 250);
+    final public static Color MANAGER = new Color(215, 27, 100);
     final public static Color HL_ADMIN = new Color(205, 0, 0);
-    final public static Color ADMIN = new Color(255, 64, 64);
-    final public static Color DEV = new Color(39, 64, 139);
-    final public static Color EVENTER = new Color(238, 122, 233);
-    final public static Color HELPER = new Color(0, 205, 102);
-    final public static Color MOD = new Color(255, 165, 0);
-    final public static Color BUILDER = new Color(145, 44, 238);
+    final public static Color ADMIN = new Color(229, 72, 79);
+    final public static Color DEV = new Color(252, 200, 71);
+    final public static Color EVENTER = new Color(255, 113, 177);
+    final public static Color HELPER = new Color(64, 200, 108);
+    final public static Color MOD = new Color(248, 135, 38);
+    final public static Color BUILDER = new Color(86, 113, 181);
 
     // Numbers
     final public static String ONE = "\u0031\u20E3";
