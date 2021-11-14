@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
@@ -49,9 +50,18 @@ public class MessageUtils {
         return channel.sendMessage(builder.setColor(Constants.RED).build()).complete();
     }
 
+    public static Message sendErrorMessage(EmbedBuilder builder, InteractionHook hook) {
+        return hook.editOriginalEmbeds(builder.setColor(Constants.RED).build()).complete();
+    }
+
     public static Message sendErrorMessage(String message, MessageChannel channel) {
         return channel.sendMessage(MessageUtils.getEmbed().setColor(Constants.RED).setDescription(message).build())
                 .complete();
+    }
+
+    // TODO: Dopsat všechny metody aby se dali posílat hooku
+    public static Message sendErrorMessage(String message, InteractionHook hook) {
+        return hook.editOriginalEmbeds(MessageUtils.getEmbed().setColor(Constants.RED).setDescription(message).build()).complete();
     }
 
     public static Message sendMessage(Color color, String message, MessageChannel channel) {

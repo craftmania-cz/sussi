@@ -21,11 +21,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class NewAts implements ICommand {
-
 
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
+        MessageUtils.sendErrorMessage("Tento příkaz byl nahrazen Slash příkazem `/ats`.", channel);
+
+        /*
         if (args.length < 1) {
             if (Sussi.getInstance().getSql().isAlreadyLinkedByID(sender.getId())) {
                 String name = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
@@ -128,6 +131,7 @@ public class NewAts implements ICommand {
 
             firstPage(sender, message, channel, w, ats, false);
         }
+         */
     }
 
     private void firstPage(User s, Message message, MessageChannel ch, EventWaiter w, ATS ats, boolean generated) {

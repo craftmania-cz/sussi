@@ -26,9 +26,12 @@ public class SlashCommandListener extends ListenerAdapter {
                         SussiLogger.fatalMessage("Internal error when executing the command!");
                         e.printStackTrace();
                     }
+                } else {
+                    event.deferReply(true).queue(success -> {
+                        success.editOriginal("Na tento příkaz nemáš dostatečná práva.").queue();
+                    });
                 }
             }
         }
     }
-
 }

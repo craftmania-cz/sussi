@@ -49,7 +49,7 @@ public class CommandHandler {
         registerCommand(new NickWordBlacklist());
         registerCommand(new Booster());
         registerCommand(new NoteCommand());
-        registerCommand(new NewAts());
+        registerCommand(new NewAts()); // Nahrazuje ATSSlashCommand
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         registerCommand(new HalloweenStats());
