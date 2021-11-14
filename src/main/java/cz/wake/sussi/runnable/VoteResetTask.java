@@ -63,7 +63,7 @@ public class VoteResetTask implements Job {
             ps = conn.prepareStatement("UPDATE minigames.player_profile SET month_votes = 0;");
             ps.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();;
+            e.printStackTrace();
         } finally {
             Sussi.getInstance().getSql().getPool().close(conn, ps, null);
         }
@@ -74,6 +74,7 @@ public class VoteResetTask implements Job {
     private List<RewardMonthVotePlayer> sendRewards(List<VotePlayer> votePlayerList) {
         List<RewardMonthVotePlayer> rewardVotePlayerList = new ArrayList<>();
         for (VotePlayer voteplayer : votePlayerList) {
+            SussiLogger.infoMessage("Sending month vote reward for player " + voteplayer.getNick());
             boolean linkedDiscord;
 
             int statusId;
@@ -110,12 +111,16 @@ public class VoteResetTask implements Job {
                         .whenComplete((v, error) -> {
                             if (error != null) {
                                 rewardVotePlayerList.add(new RewardMonthVotePlayer(voteplayer.getNick(), voteplayer.getUuid(), true, discordID, false, voteplayer.getPosition(), rewardCode));
+                                SussiLogger.dangerMessage("Vote month reward was not sent to player " + voteplayer.getNick());
                             } else {
                                 rewardVotePlayerList.add(new RewardMonthVotePlayer(voteplayer.getNick(), voteplayer.getUuid(), true, discordID, true, voteplayer.getPosition(), rewardCode));
+                                SussiLogger.greatMessage("Vote month reward was successfully sent to player " + voteplayer.getNick());
                             }
                         });
             } else {
                 rewardVotePlayerList.add(new RewardMonthVotePlayer(voteplayer.getNick(), voteplayer.getUuid(), false, null, false, voteplayer.getPosition(), rewardCode));
+                SussiLogger.dangerMessage("Winner of vote month reward " + voteplayer.getNick() + " Minecraft account is not linked with Discord.");
+
             }
         }
         return rewardVotePlayerList;
@@ -123,6 +128,7 @@ public class VoteResetTask implements Job {
 
 
     private void sendRewardAnnounce(String month, String year, List<RewardMonthVotePlayer> rewardVotePlayerList) {
+        SussiLogger.infoMessage("Sending an announce to the bot owner about the sending of monthly rewards for voting.");
         Collections.sort(rewardVotePlayerList, Comparator.comparing(RewardMonthVotePlayer::getPosition));
         Sussi.getJda().getUserById(Sussi.getConfig().getOwnerID())
                 .openPrivateChannel()
@@ -185,6 +191,8 @@ public class VoteResetTask implements Job {
                         }).collect(Collectors.joining("\n")), true)
                 .build()
         ).queue();
+
+        SussiLogger.infoMessage("Starting generating and sending vote month rewards.");
         List<RewardMonthVotePlayer> rewardMonthVotePlayerList = sendRewards(cache.subList(0, 5));
 
         // Nechci kecat, tohle by se mělo vyřešit lépe
