@@ -119,6 +119,12 @@ public class SlashCommandHandler {
         commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
                         .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.", false))
                         .addOptions(new OptionData(OptionType.USER, "user", "Uživatel z AT k zobrazení", false)));
+                        
+        commands.addCommands(new CommandData("booster", "Nastavění vlastní booster barvy.")
+                .addOptions(new OptionData(OptionType.STRING, "hex_color", "Barva ve formátu hex.").setRequired(true)));
+
+        //commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
+        //        .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.")));
 
         // Finální update všech slash příkazů
         commands.queue();
@@ -153,9 +159,9 @@ public class SlashCommandHandler {
         registerSlashCommand(new ProfileSlashCommand());
         registerSlashCommand(new RoleSlashCommand());
         registerSlashCommand(new ProfileSettingsSlashCommand());
+        registerSlashCommand(new BoosterSlashCommand());
 
         // Fun příkazy
-        registerSlashCommand(new StandaSlashCommand());
         registerSlashCommand(new ChooseSlashCommand());
 
         // Moderation

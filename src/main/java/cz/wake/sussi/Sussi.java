@@ -274,7 +274,7 @@ public class Sussi {
                     .withIdentity("vipCheck")
                     .build();
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
-                    .forJob("vipCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(3)).build(); // Every 3 hours
+                    .forJob("vipCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(2)).build(); // Every 2 hours
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
@@ -293,5 +293,17 @@ public class Sussi {
             e.printStackTrace();
         }
 
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(BoosterCheckerTask.class)
+                    .withIdentity("boosterCheck")
+                    .build();
+            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("boosterCheck").withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(30)).build(); // Every 30 minutes
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
     }
 }
