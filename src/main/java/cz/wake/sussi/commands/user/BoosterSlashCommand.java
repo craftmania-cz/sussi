@@ -59,23 +59,16 @@ public class BoosterSlashCommand implements ISlashCommand {
                         .setColor(color)
                         .setMentionable(false)
                         .complete();
-
-                guild.modifyRolePositions().selectPosition(newRole).moveTo(retiredPosition - 1).queue();
-
+                guild.modifyRolePositions().selectPosition(newRole).moveTo(retiredPosition).queue();
                 guild.addRoleToMember(member, newRole).queue();
-
             } else {
                 // Get and assign
                 final Role role = rolesByName.stream().findFirst().get();
-
                 guild.addRoleToMember(member, role).queue();
             }
-
             hook.sendMessageEmbeds(MessageUtils.getEmbed(color).setTitle("Barva úspěšně nastavena").setDescription("Nastavil jsi si barvu `" + colorHexString + "`").build()).queue();
-            return;
         } catch (NumberFormatException e) {
-            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Nesprávný formát barvy!").build()).queue();
-            return;
+            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Nesprávný formát barvy! Musí být ve formátu RGB #8f9eb5").build()).queue();
         }
     }
 

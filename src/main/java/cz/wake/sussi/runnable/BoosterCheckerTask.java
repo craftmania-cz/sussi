@@ -23,6 +23,11 @@ public class BoosterCheckerTask implements Job {
 
         guild.getRoles().stream().filter(role -> role.getName().startsWith("#")).forEach(role -> {
             final List<Member> members = guild.getMembersWithRoles(role);
+            if (members.isEmpty()) {
+                SussiLogger.infoMessage("Role " + role.getName() + " is empty. Deleting..");
+                role.delete().queue();
+                return;
+            }
             for (Member member : members) {
                 if (!member.getRoles().contains(member.getGuild().getRoleById(Constants.BOOSTER_ROLE))) {
                     // Delete all booster roles
@@ -32,7 +37,7 @@ public class BoosterCheckerTask implements Job {
                         }
                     });
                     member.getUser().openPrivateChannel().queue(channel -> {
-                        channel.sendMessage(MessageUtils.getEmbedError().setTitle("Přestal jsi boostovat CraftMania server").setDescription("Z tohoto důvodu ti byla odebrána role `" + role.getName() + "` tvé barvy.").build()).queue();
+                        channel.sendMessageEmbeds(MessageUtils.getEmbedError().setTitle("Přestal jsi boostovat CraftMania server").setDescription("Z tohoto důvodu ti byla odebrána role `" + role.getName() + "` tvé barvy.").build()).queue();
                     });
                 }
             }
