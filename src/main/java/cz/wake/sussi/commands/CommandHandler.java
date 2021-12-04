@@ -52,7 +52,6 @@ public class CommandHandler {
         registerCommand(new NewAts()); // Nahrazuje ATSSlashCommand
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
-        registerCommand(new HalloweenStats());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
     }
 }

@@ -162,7 +162,6 @@ public class SlashCommandHandler {
         registerSlashCommand(new BoosterSlashCommand());
 
         // Fun příkazy
-        registerSlashCommand(new StandaSlashCommand());
         registerSlashCommand(new ChooseSlashCommand());
 
         // Moderation
