@@ -5,6 +5,7 @@ import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.commands.SlashCommandHandler;
 import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.objects.VIPManager;
+import cz.wake.sussi.objects.jobs.DailyBonusResetJob;
 import cz.wake.sussi.objects.jobs.VIPCheckJob;
 import cz.wake.sussi.objects.jobs.WeekVotesJob;
 import cz.wake.sussi.runnable.*;
@@ -166,7 +167,7 @@ public class Sussi {
         return sdfDate.format(now);
     }
 
-    public static String getApiUrl(){
+    public static String getApiUrl() {
         return API_URL;
     }
 
@@ -229,6 +230,21 @@ public class Sussi {
 
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();
+            JobDetail job = JobBuilder.newJob(DailyBonusResetJob.class)
+                    .withIdentity("dailyBonusReset")
+                    .build();
+            CronTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("dailyBonusReset")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 * * ? *")) // everyday on 1 am
+                    .build();
+            scheduler.start();
+            scheduler.scheduleJob(job, ITrigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(WeekVotesJob.class)
                     .withIdentity("weekVotesReset")
                     .build();
@@ -268,7 +284,7 @@ public class Sussi {
             e.printStackTrace();
         }
 
-      try {
+        try {
             Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
@@ -299,7 +315,7 @@ public class Sussi {
                     .withIdentity("boosterCheck")
                     .build();
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
-                    .forJob("boosterCheck").withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(30)).build(); // Every 30 minutes
+                    .forJob("boosterCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(1)).build(); // Every 1 hour
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {

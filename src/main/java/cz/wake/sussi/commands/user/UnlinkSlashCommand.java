@@ -29,6 +29,7 @@ public class UnlinkSlashCommand implements ISlashCommand {
 
         hook.sendMessageEmbeds(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet úspěšně odpojen").setDescription("Tvůj discord profil byl odpojen od MC účtu " + Sussi.getInstance().getSql().getMinecraftNick(user.getId()) + "!").build()).queue();
         Sussi.getInstance().getSql().disconnectFromMC(user.getId());
+        Sussi.getInstance().getSql().updateBooster(user.getId(), 0);
 
         Role role = event.getGuild().getRoleById("876294038985265212"); // Verified role
         event.getGuild().removeRoleFromMember(member, role).queue();

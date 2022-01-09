@@ -1234,9 +1234,10 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE player_profile SET discord_voice_activity = discord_voice_activity + ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_voice_activity = discord_voice_activity + ?, month_discord_voice_activity = month_discord_voice_activity + ? WHERE discord_user_id = ?;");
             ps.setLong(1, amount);
-            ps.setString(2, userId);
+            ps.setLong(2, amount);
+            ps.setString(3, userId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -1292,6 +1293,58 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public final void resetDailyBonus() {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET lobby_bonus_streak = 0 WHERE lobby_bonus_claimed_daily = 0");
+            ps.executeUpdate();
+            ps = conn.prepareStatement("UPDATE player_profile SET lobby_bonus_claimed_daily = 0;");
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void updateBooster(final String id, final int booster) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET discord_booster = ? WHERE `discord_user_id` = ?;");
+            ps.setInt(1, booster);
+            ps.setString(2, id);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final List<String> getDiscordBoosters() {
+        List<String> idlist = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_user_id FROM player_profile WHERE discord_booster = 1;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                idlist.add(ps.getResultSet().getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return idlist;
+    }
+
 
     public final Set<String> getAllLinkedProfiles() {
         Set<String> profiles = new HashSet<>();

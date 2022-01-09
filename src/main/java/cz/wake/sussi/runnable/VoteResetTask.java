@@ -60,7 +60,7 @@ public class VoteResetTask implements Job {
                 cache.add(new VotePlayer(resultSet.getString("nick"), UUID.fromString(resultSet.getString("uuid")), resultSet.getInt("month_votes"), resultSet.getInt("pos")));
             }
 
-            ps = conn.prepareStatement("UPDATE minigames.player_profile SET month_votes = 0, lobby_vip_bonus = 0;");
+            ps = conn.prepareStatement("UPDATE minigames.player_profile SET month_votes = 0, month_discord_voice_activity = 0, lobby_bonus_claimed_monthly_vip = 0, lobby_bonus_claimed_discord_voice_activity_1h = 0, lobby_bonus_claimed_discord_voice_activity_10h = 0, lobby_bonus_claimed_discord_voice_activity_24h = 0;");
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
