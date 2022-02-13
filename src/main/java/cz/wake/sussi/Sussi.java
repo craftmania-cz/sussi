@@ -12,12 +12,14 @@ import cz.wake.sussi.runnable.*;
 import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
+import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.SussiLogger;
 import dev.mayuna.mayusjdautils.data.MayuCoreListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.quartz.*;
@@ -28,6 +30,7 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,6 +106,12 @@ public class Sussi {
             (instance = new Sussi()).initDatabase();
             SussiLogger.greatMessage("Sussi is successful connected to MySQL.");
             SussiLogger.infoMessage("Sussi will run as PRODUCTION bot.");
+            //Add missing members into db
+            List<String> dbMembers = Sussi.getInstance().getSql().getAllDiscordMembers();
+            for (Member member : Sussi.getJda().getGuildById(Constants.CM_GUILD_ID).getMembers()) {
+                if (!dbMembers.contains(member.getId())) getInstance().getSql().addDiscordMembers(member.getId());
+            }
+
         } catch (Exception e) {
             SussiLogger.dangerMessage("During connection to MySQL, error has occurred:");
             e.printStackTrace();

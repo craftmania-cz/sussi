@@ -1469,4 +1469,40 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
     }
+
+    public final List<String> getAllDiscordMembers() {
+        List<String> memberIds = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_user_id FROM discord_members;");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                memberIds.add(resultSet.getString("discord_user_id"));
+            }
+            System.out.println(memberIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return memberIds;
+    }
+
+    public final void addDiscordMembers(final String userId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO discord_members (discord_user_id) VALUES (?);");
+            ps.setString(1, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
 }
