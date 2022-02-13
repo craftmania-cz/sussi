@@ -1,5 +1,6 @@
 package cz.wake.sussi.sql;
 
+import com.google.gson.Gson;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.*;
@@ -9,10 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class SQLManager {
 
@@ -1363,5 +1361,112 @@ public class SQLManager {
             pool.close(conn, ps, null);
         }
         return profiles;
+    }
+
+    public final VoiceRoom getVoiceRoom(String userId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT discord_user_id, voiceroom_name, voiceroom_limit, voiceroom_locked, voiceroom_bitrate, voiceroom_addedMembers, voiceroom_bannedMembers FROM discord_members WHERE discord_user_id = ?");
+            ps.setString(1, userId);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                Gson gson = new Gson();
+                List<String> addedMembers = gson.fromJson(ps.getResultSet().getString("voiceroom_addedMembers"), List.class);
+                List<String> bannedMembers = gson.fromJson(ps.getResultSet().getString("voiceroom_bannedMembers"), List.class);
+                return new VoiceRoom(ps.getResultSet().getLong("discord_user_id"), ps.getResultSet().getString("voiceroom_name"), ps.getResultSet().getInt("voiceroom_limit"), ps.getResultSet().getBoolean("voiceroom_locked"), ps.getResultSet().getInt("voiceroom_bitrate"), addedMembers, bannedMembers);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
+    }
+
+    public final void updateVoiceRoomName(String userId, String name) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_name = ? WHERE discord_user_id = ?;");
+            ps.setString(1, name);
+            ps.setString(2, userId);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void updateVoiceRoomLocked(String userId, Boolean locked) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_locked = ? WHERE discord_user_id = ?;");
+            ps.setBoolean(1, locked);
+            ps.setString(2, userId);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final void updateVoiceRoomInt(String userId, String type, Integer value) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_" + type + " = ? WHERE discord_user_id = ?;");
+            ps.setInt(1, value);
+            ps.setString(2, userId);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final List<String> getVoiceRoomMembers(String userId, String type) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT voiceroom_" + type + "Members FROM discord_members WHERE discord_user_id = ?;");
+            ps.setString(1, userId);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                Gson gson = new Gson();
+                List<String> members = gson.fromJson(ps.getResultSet().getString("voiceroom_" + type + "Members"), List.class);
+                return members;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return null;
+    }
+
+    public final void updateVoiceRoomMembers(String userId, String type, List<String> members) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_" + type + "Members = ? WHERE discord_user_id = ?;");
+            ps.setString(1, members.toString().replaceAll("([\\w.]+)", "\"$1\""));
+            ps.setString(2, userId);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
     }
 }
