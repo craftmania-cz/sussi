@@ -1,6 +1,8 @@
 package cz.wake.sussi.listeners;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.utils.MessageUtils;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -9,7 +11,10 @@ public class BoosterListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdateBoostTime(GuildMemberUpdateBoostTimeEvent e) {
+        final Guild guild = Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID());
+        if (guild == null) return;
         Member member = e.getMember();
+
         System.out.println("[BOOST]: " + member.getNickname() + " - newTime(" + e.getNewTimeBoosted() + "), oldTime(" + e.getOldTimeBoosted() + ")");
         if(e.getNewTimeBoosted() != null && e.getOldTimeBoosted() == null) {
             /*
@@ -25,6 +30,16 @@ public class BoosterListener extends ListenerAdapter {
         }
         if (e.getNewTimeBoosted() == null && e.getOldTimeBoosted() != null) {
             Sussi.getInstance().getSql().updateBooster(member.getId(), 0);
+            guild.getRoles().stream().filter(role -> role.getName().startsWith("#")).forEach(role -> {
+                guild.removeRoleFromMember(member, role).queue(success -> {
+                    if (guild.getMembersWithRoles(role).isEmpty()) {
+                        role.delete().queue();
+                    }
+                });
+                member.getUser().openPrivateChannel().queue(channel -> {
+                    channel.sendMessage(MessageUtils.getEmbedError().setTitle("Přestal jsi boostovat CraftMania server").setDescription("Z tohoto důvodu ti byla odebrána role `" + role.getName() + "` tvé barvy.").build()).queue();
+                });
+            });
         }
     }
 }

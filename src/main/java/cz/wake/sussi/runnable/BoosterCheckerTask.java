@@ -2,6 +2,7 @@ package cz.wake.sussi.runnable;
 
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.utils.Constants;
+import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -31,7 +32,6 @@ public class BoosterCheckerTask implements Job {
 
         final List<Member> updatedRealBoosters = guild.getMembersWithRoles(guild.getRoleById(Constants.BOOSTER_ROLE));
 
-
         for (String id : dbBoosters) {
             if(!containsBooster(updatedRealBoosters, id)){
                 Member member = guild.getMemberById(id);
@@ -39,6 +39,23 @@ public class BoosterCheckerTask implements Job {
                 Sussi.getInstance().getSql().updateBooster(id, 0);
             }
         }
+
+        guild.getRoles().stream().filter(role -> role.getName().startsWith("#")).forEach(role -> {
+            final List<Member> members = guild.getMembersWithRoles(role);
+            for (Member member : members) {
+                if (!member.getRoles().contains(member.getGuild().getRoleById(Constants.BOOSTER_ROLE))) {
+                    // Delete all booster roles
+                    guild.removeRoleFromMember(member, role).queue(success -> {
+                        if (guild.getMembersWithRoles(role).isEmpty()) {
+                            role.delete().queue();
+                        }
+                    });
+                    member.getUser().openPrivateChannel().queue(channel -> {
+                        channel.sendMessage(MessageUtils.getEmbedError().setTitle("Přestal jsi boostovat CraftMania server").setDescription("Z tohoto důvodu ti byla odebrána role `" + role.getName() + "` tvé barvy.").build()).queue();
+                    });
+                }
+            }
+        });
 
         SussiLogger.greatMessage("Booster checking finished.");
     }
