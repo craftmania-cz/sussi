@@ -34,13 +34,14 @@ public class Profile {
     private String mc_version = "";
 
     // Economy
-    private int craftcoins = 0;
-    private int crafttokens = 0;
-    private int votetokens = 0;
-    private long karma = 0;
-    private int achievement_points = 0;
-    private int eventPoints = 0;
-    private int bugPoints = 0;
+    private int craft_coins = 0;
+    private int craft_tokens = 0;
+    private int vote_tokens = 0;
+    private int karma_points = 0;
+    private int quest_points = 0;
+    private int event_points = 0;
+    private int bug_points = 0;
+    private int parkour_points = 0;
 
     // Ranked
     private int global_level = 1;
@@ -125,13 +126,14 @@ public class Profile {
         this.mc_version = data.isNull("mc_version") ? "" : data.getString("mc_version");
 
         // Economy
-        this.craftcoins = economy.isNull("craftcoins") ? 0 : economy.getInt("craftcoins");
-        this.crafttokens = economy.isNull("crafttokens") ? 0 : economy.getInt("crafttokens");
-        this.votetokens = economy.isNull("votetokens") ? 0 : economy.getInt("votetokens");
-        this.karma = economy.isNull("karma") ? 0 : economy.getLong("karma");
-        this.achievement_points = economy.isNull("quest_points") ? 0 : economy.getInt("quest_points");
-        this.eventPoints = economy.isNull("event_points") ? 0 : economy.getInt("event_points");
-        this.bugPoints = economy.isNull("bug_points") ? 0 : economy.getInt("bug_points");
+        this.craft_coins = economy.isNull("craft_coins") ? 0 : economy.getInt("craft_coins");
+        this.craft_tokens = economy.isNull("craft_tokens") ? 0 : economy.getInt("craft_tokens");
+        this.vote_tokens = economy.isNull("vote_tokens") ? 0 : economy.getInt("vote_tokens");
+        this.karma_points = economy.isNull("karma_points") ? 0 : economy.getInt("karma_points");
+        this.quest_points = economy.isNull("quest_points") ? 0 : economy.getInt("quest_points");
+        this.event_points = economy.isNull("event_points") ? 0 : economy.getInt("event_points");
+        this.bug_points = economy.isNull("bug_points") ? 0 : economy.getInt("bug_points");
+        this.parkour_points = economy.isNull("parkour_points") ? 0 : economy.getInt("parkour_points");
 
         // Ranked
         this.global_level = ranked.isNull("global_level") ? 0 : ranked.getInt("global_level");
@@ -249,23 +251,23 @@ public class Profile {
     }
 
     public int getCraftCoins() {
-        return craftcoins;
+        return craft_coins;
     }
 
     public int getCraftTokens() {
-        return crafttokens;
+        return craft_tokens;
     }
 
     public int getVoteTokens() {
-        return votetokens;
+        return vote_tokens;
     }
 
-    public long getKarma() {
-        return karma;
+    public long getKarmaPoints() {
+        return karma_points;
     }
 
-    public int getAchievementPoints() {
-        return achievement_points;
+    public int getQuestPoints() {
+        return quest_points;
     }
 
     public int getGlobal_level() {
@@ -361,11 +363,15 @@ public class Profile {
     }
 
     public int getEventPoints() {
-        return eventPoints;
+        return event_points;
     }
 
     public int getBugPoints() {
-        return bugPoints;
+        return bug_points;
+    }
+
+    public int getParkourPoints() {
+        return parkour_points;
     }
 
     /**
