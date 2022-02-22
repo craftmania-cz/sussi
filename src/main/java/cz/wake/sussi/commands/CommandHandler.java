@@ -2,7 +2,6 @@ package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.Stop;
-import cz.wake.sussi.commands.owner.Udrzba;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 
@@ -39,7 +38,6 @@ public class CommandHandler {
         registerCommand(new Help());
         registerCommand(new Stop());
         registerCommand(new Blacklist());
-        registerCommand(new Udrzba());
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());
         registerCommand(new BlockCountry());
@@ -47,7 +45,6 @@ public class CommandHandler {
         registerCommand(new LobbyNews());
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
-        //registerCommand(new Booster());
         registerCommand(new NoteCommand());
         registerCommand(new NewAts()); // Nahrazuje ATSSlashCommand
         registerCommand(new BugPoints());
