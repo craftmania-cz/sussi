@@ -3,6 +3,7 @@ package cz.wake.sussi.listeners;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
+import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -22,9 +23,12 @@ public class SlashCommandListener extends ListenerAdapter {
                     event.deferReply(slashCommand.isEphemeral()).queue();
                     try {
                         slashCommand.onSlashCommand(event.getUser(), event.getChannel(), event.getMember(), event.getHook(), event);
-                    } catch (Exception e) {
+                    } catch (Exception exception) {
                         SussiLogger.fatalMessage("Internal error when executing the command!");
-                        e.printStackTrace();
+                        MessageUtils.sendErrorMessage(MessageUtils.getEmbedError()
+                                .setDescription("Nastala chyba při provádění ATS příkazu. Zkus to prosím později.")
+                                .addField("Technické informace", "`" + exception + "`", false), event.getHook());
+                        exception.printStackTrace();
                     }
                 } else {
                     event.deferReply(true).queue(success -> {
