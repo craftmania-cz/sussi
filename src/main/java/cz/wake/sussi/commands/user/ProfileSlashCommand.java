@@ -127,8 +127,9 @@ public class ProfileSlashCommand implements ISlashCommand {
                                 "CraftTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCraftTokens()) + "\n" +
                                 "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
                                 "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getEventPoints()) + "\n" +
-                                "Quest pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getAchievementPoints()) + "\n" +
-                                "Bug pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getBugPoints())
+                                "Quest pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getQuestPoints()) + "\n" +
+                                "Bug pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getBugPoints()) /*+ "\n" +
+                                "Parkour pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getParkourPoints())*/
                         , true)
                 .addField("Hlasování",
                         "Celkem hlasů: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getTotalVotes()) + "\n" +
