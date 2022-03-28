@@ -35,9 +35,8 @@ public class SlashCommandHandler {
         commands.addCommands(new CommandData("link", "Propojení CraftMania účtu s tvým Discord účtem.")
                 .addOptions(new OptionData(OptionType.STRING, "key", "Klíč, který se ti zobrazit skrz /link příkaz na serveru").setRequired(true)));
 
-        commands.addCommands(new CommandData("standa", "Standův tajný příkaz, chceš čokošku?"));
-
         commands.addCommands(new CommandData("room", "Spravování vlastní hlasové místnosti")
+                .addSubcommands(new SubcommandData("info", "Zobrazení aktuální nastavení voice kanálu"))
                 .addSubcommands(new SubcommandData("help", "Zobrazení nápovědy pro spravování voice kanálu"))
                 .addSubcommands(new SubcommandData("lock", "Uzamknutí voice místnosti"))
                 .addSubcommands(new SubcommandData("unlock", "Odemknutí voice místnosti"))

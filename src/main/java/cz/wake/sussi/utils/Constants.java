@@ -60,8 +60,9 @@ public class Constants {
 
     // Others
     final public static String CM_GUILD_ID = Sussi.config.getCmGuildID().toString();
-    final public static String CATEGORY_KECARNA_ID = "519251195051769856";
+    final public static String CATEGORY_KECARNA_ID = Sussi.config.getKecarnyCategoryID().toString();
     final public static String VOICE_CREATE_ID = Sussi.config.getVytvoritVoiceID().toString();
+    final public static String CHANNEL_BOT_COMMANDS_ID = Sussi.config.getBotPrikazyChannelID().toString();
     final public static Color HALLOWEEN = new Color(252, 161, 3);
 
     private static int getColorCode() {
