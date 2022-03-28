@@ -3,6 +3,7 @@ package cz.wake.sussi;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.commands.SlashCommandHandler;
+import cz.wake.sussi.commands.console.ConsoleCommandManager;
 import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.objects.VIPManager;
 import cz.wake.sussi.objects.jobs.DailyBonusResetJob;
@@ -63,6 +64,9 @@ public class Sussi {
     public static void main(String[] args) throws LoginException, InterruptedException {
         // Startup info
         SussiLogger.infoMessage("Now will Sussi wake up!");
+
+        SussiLogger.infoMessage("Initializing console commands...");
+        ConsoleCommandManager.init();
 
         // Config
         SussiLogger.infoMessage("Loading config...");
