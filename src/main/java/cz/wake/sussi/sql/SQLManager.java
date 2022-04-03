@@ -1143,7 +1143,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("INSERT INTO player_voice_rooms(discord_room_id, discord_owner_id) VALUES(?, ?)");
+            ps = conn.prepareStatement("INSERT INTO discord_active_voice_rooms(discord_room_id, discord_owner_id) VALUES(?, ?)");
             ps.setString(1, roomId.toString());
             ps.setString(2, ownerId.toString());
             ps.executeUpdate();
@@ -1159,7 +1159,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT discord_room_id FROM player_voice_rooms WHERE discord_owner_id = ?");
+            ps = conn.prepareStatement("SELECT discord_room_id FROM discord_active_voice_rooms WHERE discord_owner_id = ?");
             ps.setLong(1, ownerId);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
@@ -1178,7 +1178,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT discord_owner_id FROM player_voice_rooms WHERE discord_room_id = ?");
+            ps = conn.prepareStatement("SELECT discord_owner_id FROM discord_active_voice_rooms WHERE discord_room_id = ?");
             ps.setLong(1, roomId);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
@@ -1197,7 +1197,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("DELETE FROM player_voice_rooms WHERE discord_room_id = ?");
+            ps = conn.prepareStatement("DELETE FROM discord_active_voice_rooms WHERE discord_room_id = ?");
             ps.setLong(1, roomId);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -1368,7 +1368,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT discord_user_id, voiceroom_name, voiceroom_limit, voiceroom_locked, voiceroom_bitrate, voiceroom_addedMembers, voiceroom_bannedMembers FROM discord_members WHERE discord_user_id = ?");
+            ps = conn.prepareStatement("SELECT discord_user_id, voiceroom_name, voiceroom_limit, voiceroom_locked, voiceroom_bitrate, voiceroom_addedMembers, voiceroom_bannedMembers FROM discord_voice_rooms WHERE discord_user_id = ?");
             ps.setString(1, userId);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
@@ -1390,7 +1390,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_name = ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE discord_voice_rooms SET voiceroom_name = ? WHERE discord_user_id = ?;");
             ps.setString(1, name);
             ps.setString(2, userId);
             ps.execute();
@@ -1406,7 +1406,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_locked = ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE discord_voice_rooms SET voiceroom_locked = ? WHERE discord_user_id = ?;");
             ps.setBoolean(1, locked);
             ps.setString(2, userId);
             ps.execute();
@@ -1422,7 +1422,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_" + type + " = ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE discord_voice_rooms SET voiceroom_" + type + " = ? WHERE discord_user_id = ?;");
             ps.setInt(1, value);
             ps.setString(2, userId);
             ps.execute();
@@ -1438,7 +1438,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT voiceroom_" + type + "Members FROM discord_members WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("SELECT voiceroom_" + type + "Members FROM discord_voice_rooms WHERE discord_user_id = ?;");
             ps.setString(1, userId);
             ps.executeQuery();
             if (ps.getResultSet().next()) {
@@ -1459,7 +1459,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("UPDATE discord_members SET voiceroom_" + type + "Members = ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE discord_voice_rooms SET voiceroom_" + type + "Members = ? WHERE discord_user_id = ?;");
             ps.setString(1, members.toString().replaceAll("([\\w.]+)", "\"$1\""));
             ps.setString(2, userId);
             ps.execute();
@@ -1476,7 +1476,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("SELECT discord_user_id FROM discord_members;");
+            ps = conn.prepareStatement("SELECT discord_user_id FROM discord_voice_rooms;");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 memberIds.add(resultSet.getString("discord_user_id"));
@@ -1495,7 +1495,7 @@ public class SQLManager {
         PreparedStatement ps = null;
         try {
             conn = pool.getConnection();
-            ps = conn.prepareStatement("INSERT INTO discord_members (discord_user_id) VALUES (?);");
+            ps = conn.prepareStatement("INSERT INTO discord_voice_rooms (discord_user_id) VALUES (?);");
             ps.setString(1, userId);
             ps.executeUpdate();
         } catch (Exception e) {
