@@ -131,7 +131,11 @@ public class Sussi {
             vipManager = new VIPManager();
 
             // Tasks
-            scheduleTasks();
+            try {
+                scheduleTasks();
+            } catch (SchedulerException e) {
+                e.printStackTrace();
+            }
         } else {
             jda.getPresence().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "Testovací režim."));
             jda.getPresence().setStatus(OnlineStatus.IDLE);
@@ -208,11 +212,11 @@ public class Sussi {
         return config;
     }
 
-    private static void scheduleTasks() {
-
+    private static void scheduleTasks() throws SchedulerException {
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        scheduler.start();
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(ATSResetTask.class)
                     .withIdentity("atsEvaluation")
                     .build();
@@ -220,14 +224,12 @@ public class Sussi {
                     .forJob("atsEvaluation")
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 8 5 1/1 ? *")) // 5th day of every month on 8am
                     .build();
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(VoteResetTask.class)
                     .withIdentity("monthVotesEvaluation")
                     .build();
@@ -235,14 +237,12 @@ public class Sussi {
                     .forJob("monthVotesEvaluation")
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1/1 ? *")) // every 1st of month on 1am
                     .build();
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(DailyBonusResetJob.class)
                     .withIdentity("dailyBonusReset")
                     .build();
@@ -250,14 +250,12 @@ public class Sussi {
                     .forJob("dailyBonusReset")
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 * * ? *")) // everyday on 1 am
                     .build();
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(WeekVotesJob.class)
                     .withIdentity("weekVotesReset")
                     .build();
@@ -265,53 +263,45 @@ public class Sussi {
                     .forJob("weekVotesReset")
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * MON"))
                     .build();
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(StatusChangerTask.class)
                     .withIdentity("statusChangeTask")
                     .build();
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("statusChangeTask").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever()).build();
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(EmptyVoiceCheckTask.class)
                     .withIdentity("emptyVoiceCheck")
                     .build();
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("emptyVoiceCheck").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(3)).build();
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
                     .build();
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("vipCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(2)).build(); // Every 2 hours
-            scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(TextActivityTask.class)
                     .withIdentity("textActivityCheck")
                     .build();
@@ -323,7 +313,6 @@ public class Sussi {
         }
 
         try {
-            Scheduler scheduler = schedulerFactory.getScheduler();
             JobDetail job = JobBuilder.newJob(BoosterCheckerTask.class)
                     .withIdentity("boosterCheck")
                     .build();
