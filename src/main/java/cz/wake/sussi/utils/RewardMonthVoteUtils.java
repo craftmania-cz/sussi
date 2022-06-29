@@ -6,20 +6,13 @@ import org.json.JSONObject;
 
 public class RewardMonthVoteUtils {
     public static int getAmount(int i) {
-        switch (i) {
-            case 1:
-                return 15;
-            case 2:
-                return 10;
-            case 3:
-                return 7;
-            case 4:
-                return 5;
-            case 5:
-                return 5;
-            default:
-                return 0;
-        }
+        return switch (i) {
+            case 1 -> 370;
+            case 2 -> 250;
+            case 3 -> 170;
+            case 4, 5 -> 120;
+            default -> 0;
+        };
     }
 
     public static String getRewardCode(int amount) {
@@ -33,6 +26,7 @@ public class RewardMonthVoteUtils {
                     .post(body)
                     .build();
             Response response = caller.newCall(request).execute();
+            System.out.println(response);
             craftingStoreJSON = new JSONObject(response.body().string());
         } catch (Exception e) {
             e.printStackTrace();

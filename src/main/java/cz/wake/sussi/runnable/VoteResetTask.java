@@ -93,6 +93,7 @@ public class VoteResetTask implements Job {
             statusId = cmApiJSON.getInt("status");
             if (statusId != 200) {
                 SussiLogger.fatalMessage("Internal error when retrieving data from CraftMania api!");
+                break;
             }
             String discordID = cmApiJSON.getJSONObject("data").getJSONObject("discord").isNull("id") ? null : cmApiJSON.getJSONObject("data").getJSONObject("discord").getString("id");
 
@@ -106,7 +107,7 @@ public class VoteResetTask implements Job {
                         .thenCompose((user) -> user.openPrivateChannel().submit())
                         .thenCompose((channel) -> channel.sendMessage(MessageUtils.getEmbed(Color.decode("#3cab59"))
                                 // Zpráva pro obdržitele odměny za hlasování
-                                .setDescription("Jako odměnu za hlasování získáváš dárkový poukaz v hodnotě **" + RewardMonthVoteUtils.getAmount(voteplayer.getPosition()) + "** €.\nKód: ||" + rewardCode + "|| (klikni pro zobrazení)")
+                                .setDescription("Jako odměnu za hlasování získáváš dárkový poukaz v hodnotě **" + RewardMonthVoteUtils.getAmount(voteplayer.getPosition()) + "** CZK.\nKód: ||" + rewardCode + "|| (klikni pro zobrazení)")
                                 .build()).submit())
                         .whenComplete((v, error) -> {
                             if (error != null) {
