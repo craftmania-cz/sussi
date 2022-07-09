@@ -1,7 +1,6 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.commands.mod.*;
-import cz.wake.sussi.commands.owner.Stop;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 
@@ -36,7 +35,6 @@ public class CommandHandler {
     public void register() {
         SussiLogger.infoMessage("Loading all commands.");
         registerCommand(new Help());
-        registerCommand(new Stop());
         registerCommand(new Blacklist());
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());
@@ -46,7 +44,6 @@ public class CommandHandler {
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
         registerCommand(new NoteCommand());
-        registerCommand(new NewAts()); // Nahrazuje ATSSlashCommand
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
