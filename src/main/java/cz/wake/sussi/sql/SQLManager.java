@@ -1505,4 +1505,23 @@ public class SQLManager {
         }
     }
 
+    public final int getServerLevel(long userId, String serverId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT " + serverId + " FROM player_profile WHERE discord_user_id = ?;");
+            ps.setLong(1, userId);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getInt(serverId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return 0;
+    }
+
 }

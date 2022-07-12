@@ -5,6 +5,7 @@ import cz.wake.sussi.commands.mod.CheckBanSlashCommand;
 import cz.wake.sussi.commands.mod.CheckIpSlashCommand;
 import cz.wake.sussi.commands.mod.ATSSlashCommand;
 import cz.wake.sussi.commands.mod.StaffListSlashCommand;
+import cz.wake.sussi.commands.owner.SetupCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -65,7 +66,7 @@ public class SlashCommandHandler {
                     .addChoice("Jak se připojit na server", "jak-se-pripojit")
                     .addChoice("Problémy s resource packem", "problemy-s-resource-packem")
                     .addChoice("Návod: Jak na Craftmania Discord", "navod-discord")
-                    .addChoice("Návod: Jak najít screeny, logy atd.", "navod-screeny-a-logy")));
+                    .addChoice("Návod: Jak najít screeny, logy", "navod-screeny-a-logy")));
 
         commands.addCommands(new CommandData("choose", "Vyber nějaké možnosti a nech na Sussi ať vybere tu správnou.")
                 .addOptions(new OptionData(OptionType.STRING, "opt1", "První hodnota na zvolení").setRequired(true))
@@ -95,20 +96,6 @@ public class SlashCommandHandler {
                         .addChoice("Žena", "2")
                         .addChoice("Nezvoleno", "0"))));
 
-        commands.addCommands(new CommandData("role", "Nastavení role pro přístup do kanálů nebo dostávání upozornění")
-                .addOptions(new OptionData(OptionType.STRING, "name", "Zvol si roli, kterou si chceš přidat nebo odebrat.").setRequired(true)
-                    .addChoice("News (oznámení o novinkách)", "news")
-                    .addChoice("Events (oznámení o eventech)", "events")
-                    .addChoice("Apple", "apple")
-                    .addChoice("Android", "android")
-                    .addChoice("Crypto", "crypto")
-                    .addChoice("Fortnite", "fortnite")
-                    .addChoice("Hytale", "hytale")
-                    .addChoice("Genshin Impact", "genshin")
-                    .addChoice("Osu", "osu")
-                    .addChoice("GTA", "gta")
-                    .addChoice("Korean (Kanál v jiném jazyce)", "korean")));
-
         commands.addCommands(new CommandData("checkban", "Zkontrolování zda má hráč aktivní ban a odkoho.")
                 //.addOptions(new OptionData(OptionType.STRING, "ip", "IP adresa ve formát IPv4 nebo IPv6"))
                 .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče, který bude zkontrolován").setRequired(true)));
@@ -122,8 +109,9 @@ public class SlashCommandHandler {
         commands.addCommands(new CommandData("booster", "Nastavění vlastní booster barvy.")
                 .addOptions(new OptionData(OptionType.STRING, "hex_color", "Barva ve formátu hex.").setRequired(true)));
 
-        //commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
-        //        .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.")));
+        commands.addCommands(new CommandData("setup", "Nastavení specifických nastavení na Discord serveru")
+                .addOptions(new OptionData(OptionType.STRING, "type", "Hodnota k nastavení").setRequired(true)
+                        .addChoice("Výběr rolí", "role-selector")));
 
         // Finální update všech slash příkazů
         commands.queue();
@@ -168,5 +156,8 @@ public class SlashCommandHandler {
         registerSlashCommand(new StaffListSlashCommand());
         registerSlashCommand(new CheckBanSlashCommand());
         registerSlashCommand(new ATSSlashCommand());
+
+        // Owner
+        registerSlashCommand(new SetupCommand());
     }
 }
