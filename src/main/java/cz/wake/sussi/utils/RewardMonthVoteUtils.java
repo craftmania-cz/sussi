@@ -7,10 +7,10 @@ import org.json.JSONObject;
 public class RewardMonthVoteUtils {
     public static int getAmount(int i) {
         return switch (i) {
-            case 1 -> 370;
-            case 2 -> 250;
-            case 3 -> 170;
-            case 4, 5 -> 120;
+            case 1 -> 250;
+            case 2 -> 180;
+            case 3 -> 120;
+            case 4, 5 -> 50;
             default -> 0;
         };
     }
