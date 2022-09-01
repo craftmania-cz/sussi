@@ -36,11 +36,8 @@ public class CommandHandler {
         SussiLogger.infoMessage("Loading all commands.");
         registerCommand(new Help());
         registerCommand(new Blacklist());
-        registerCommand(new IPWhitelist());
-        registerCommand(new NickWhitelist());
         registerCommand(new BlockCountry());
         registerCommand(new Napad());
-        registerCommand(new NickWordBlacklist());
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");

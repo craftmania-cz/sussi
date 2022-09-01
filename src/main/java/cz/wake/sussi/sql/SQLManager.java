@@ -180,7 +180,7 @@ public class SQLManager {
         }
     }
 
-    public final void removeWhitelistedUUID(final String nick) {
+    public final void removeWhitelistedName(final String nick) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {

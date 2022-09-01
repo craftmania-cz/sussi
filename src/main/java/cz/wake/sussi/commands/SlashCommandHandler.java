@@ -1,10 +1,7 @@
 package cz.wake.sussi.commands;
 
 import cz.wake.sussi.Sussi;
-import cz.wake.sussi.commands.mod.CheckBanSlashCommand;
-import cz.wake.sussi.commands.mod.CheckIpSlashCommand;
-import cz.wake.sussi.commands.mod.ATSSlashCommand;
-import cz.wake.sussi.commands.mod.StaffListSlashCommand;
+import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.SetupCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
@@ -113,6 +110,18 @@ public class SlashCommandHandler {
                 .addOptions(new OptionData(OptionType.STRING, "type", "Hodnota k nastavení").setRequired(true)
                         .addChoice("Výběr rolí", "role-selector")));
 
+        commands.addCommands(new CommandData("whitelist", "Správa whitelistu serveru, pokud se připojuje na server mimo CZ/SK.")
+                .addSubcommands(new SubcommandData("add", "Přidání hráče na whitelist")
+                    .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče").setRequired(true))
+                    .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče, lze použít IPv4 i IPv6").setRequired(true)))
+                .addSubcommands(new SubcommandData("remove", "Odebrání hráče z whitelistu")
+                    .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče"))
+                    .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče, lze použít IPv4 i IPv6")))
+                .addSubcommands(new SubcommandData("check", "Kontrola zda je hráč nebo není na whitelistu")
+                    .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče"))
+                    .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče pro kontrolu")))
+        );
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -156,6 +165,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new StaffListSlashCommand());
         registerSlashCommand(new CheckBanSlashCommand());
         registerSlashCommand(new ATSSlashCommand());
+        registerSlashCommand(new WhitelistSlashCommand());
 
         // Owner
         registerSlashCommand(new SetupCommand());
