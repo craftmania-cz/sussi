@@ -138,7 +138,7 @@ public class Sussi {
                 e.printStackTrace();
             }
         } else {
-            jda.getPresence().setActivity(Activity.of(Activity.ActivityType.DEFAULT, "Testovací režim."));
+            jda.getPresence().setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS, "Testovací režim."));
             jda.getPresence().setStatus(OnlineStatus.IDLE);
         }
     }

@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 import java.awt.*;
 import java.io.File;
@@ -29,7 +30,7 @@ public class Napad implements ICommand {
         }
 
         if (args.length < 1) {
-            channel.sendMessage(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - napad :question:")
+            channel.sendMessageEmbeds(MessageUtils.getEmbed().setTitle("Nápověda k příkazu - napad :question:")
                     .setDescription(getDescription() + "\n\n**Použití**\n" + getHelp()).build()).queue();
             return;
         }
@@ -50,15 +51,15 @@ public class Napad implements ICommand {
             }
             attachment.downloadToFile(temp);
             embed.setImage("attachment://"+filename);
-            Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendFile(temp, filename).embed(embed.build()).queue(m -> {
-                m.addReaction(Constants.THUMB_UP).queue();
-                m.addReaction(Constants.THUMB_DOWN).queue();
+            Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendFile(temp, filename).setEmbeds(embed.build()).queue(m -> {
+                m.addReaction(Emoji.fromUnicode(Constants.THUMB_UP)).queue();
+                m.addReaction(Emoji.fromUnicode(Constants.THUMB_DOWN)).queue();
             });
             temp.delete();
         } else {
-            Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(embed.build()).queue(m -> {
-                m.addReaction(Constants.THUMB_UP).queue();
-                m.addReaction(Constants.THUMB_DOWN).queue();
+            Sussi.getJda().getGuildById(Sussi.getConfig().getCmGuildID()).getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessageEmbeds(embed.build()).queue(m -> {
+                m.addReaction(Emoji.fromUnicode(Constants.THUMB_UP)).queue();
+                m.addReaction(Emoji.fromUnicode(Constants.THUMB_DOWN)).queue();
             });
         }
 

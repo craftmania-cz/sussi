@@ -34,7 +34,6 @@ public class CommandHandler {
 
     public void register() {
         SussiLogger.infoMessage("Loading all commands.");
-        registerCommand(new Help());
         registerCommand(new Blacklist());
         registerCommand(new Napad());
         registerCommand(new CraftBox());

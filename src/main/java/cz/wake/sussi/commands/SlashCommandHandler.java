@@ -6,10 +6,9 @@ import cz.wake.sussi.commands.owner.SetupCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import java.util.ArrayList;
@@ -27,13 +26,13 @@ public class SlashCommandHandler {
 
     public void createAndUpdateCommands() {
 
-        commands.addCommands(new CommandData("help", "Nápověda k Sussi"));
-        commands.addCommands(new CommandData("unlink", "Odpojení svého CraftMania profilu od tvého Discord účtu."));
+        commands.addCommands(Commands.slash("help", "Nápověda k Sussi"));
+        commands.addCommands(Commands.slash("unlink", "Odpojení svého CraftMania profilu od tvého Discord účtu."));
 
-        commands.addCommands(new CommandData("link", "Propojení CraftMania účtu s tvým Discord účtem.")
+        commands.addCommands(Commands.slash("link", "Propojení CraftMania účtu s tvým Discord účtem.")
                 .addOptions(new OptionData(OptionType.STRING, "key", "Klíč, který se ti zobrazit skrz /link příkaz na serveru").setRequired(true)));
 
-        commands.addCommands(new CommandData("room", "Spravování vlastní hlasové místnosti")
+        commands.addCommands(Commands.slash("room", "Spravování vlastní hlasové místnosti")
                 .addSubcommands(new SubcommandData("info", "Zobrazení aktuální nastavení voice kanálu"))
                 .addSubcommands(new SubcommandData("help", "Zobrazení nápovědy pro spravování voice kanálu"))
                 .addSubcommands(new SubcommandData("lock", "Uzamknutí voice místnosti"))
@@ -56,7 +55,7 @@ public class SlashCommandHandler {
                 .addSubcommands(new SubcommandData("kick", "Vyhození uživatele z místnosti")
                     .addOptions(new OptionData(OptionType.USER, "user","Uživatel, který bude vyhozen z místnosti").setRequired(true))));
 
-        commands.addCommands(new CommandData("wiki", "Rychlé odkazy na témata a návody na naší Wiki")
+        commands.addCommands(Commands.slash("wiki", "Rychlé odkazy na témata a návody na naší Wiki")
                 .addOptions(new OptionData(OptionType.STRING, "id", "Výběr tématu nebo návodu z Wiki").setRequired(true)
                     .addChoice("Pravidla serveru", "pravidla")
                     .addChoice("Povolené a zakázané módy", "povolene-mody")
@@ -65,7 +64,7 @@ public class SlashCommandHandler {
                     .addChoice("Návod: Jak na Craftmania Discord", "navod-discord")
                     .addChoice("Návod: Jak najít screeny, logy", "navod-screeny-a-logy")));
 
-        commands.addCommands(new CommandData("choose", "Vyber nějaké možnosti a nech na Sussi ať vybere tu správnou.")
+        commands.addCommands(Commands.slash("choose", "Vyber nějaké možnosti a nech na Sussi ať vybere tu správnou.")
                 .addOptions(new OptionData(OptionType.STRING, "opt1", "První hodnota na zvolení").setRequired(true))
                 .addOptions(new OptionData(OptionType.STRING, "opt2", "Druhá hodnota na zvolení").setRequired(true))
                 .addOptions(new OptionData(OptionType.STRING, "opt3", "Třetí hodnota na zvolení"))
@@ -73,18 +72,18 @@ public class SlashCommandHandler {
                 .addOptions(new OptionData(OptionType.STRING, "opt5", "Pátá hodnota na zvolení"))
                 .addOptions(new OptionData(OptionType.STRING, "opt6", "Šestí hodnota na zvolení")));
 
-        commands.addCommands(new CommandData("checkip", "Kontrola IP adresy, zda je VPN, z jakého je kraje a jiné informace.")
+        commands.addCommands(Commands.slash("checkip", "Kontrola IP adresy, zda je VPN, z jakého je kraje a jiné informace.")
                 .addOptions(new OptionData(OptionType.STRING, "ip", "IP adresa ve formát IPv4 nebo IPv6"))
                 .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče, který bude zkontrolován")));
 
-        commands.addCommands(new CommandData("uuid", "Získání online a offline UUID podle nicku hráče.")
+        commands.addCommands(Commands.slash("uuid", "Získání online a offline UUID podle nicku hráče.")
                 .addOptions(new OptionData(OptionType.STRING, "name", "Minecraft nick hráče").setRequired(true)));
 
-        commands.addCommands(new CommandData("profile", "Zobrazení CraftMania statistik a hráčského profilu.")
+        commands.addCommands(Commands.slash("profile", "Zobrazení CraftMania statistik a hráčského profilu.")
                 .addOptions(new OptionData(OptionType.STRING, "name", "Minecraft nick hráče z serveru"))
                 .addOptions(new OptionData(OptionType.USER, "user", "Discord uživatel, který má propojený účet.")));
 
-        commands.addCommands(new CommandData("profile-settings", "Nastavení svého profilu pro statistiky na serveru.")
+        commands.addCommands(Commands.slash("profile-settings", "Nastavení svého profilu pro statistiky na serveru.")
                 .addSubcommands(new SubcommandData("status", "Nastavení statusu pro svůj profil na serveru")
                     .addOptions(new OptionData(OptionType.STRING, "text", "Status, který se nastaví na tvůj profil.").setRequired(true)))
                 .addSubcommands(new SubcommandData("gender", "Nastavení pohlaví pro svůj profil")
@@ -93,24 +92,24 @@ public class SlashCommandHandler {
                         .addChoice("Žena", "2")
                         .addChoice("Nezvoleno", "0"))));
 
-        commands.addCommands(new CommandData("checkban", "Zkontrolování zda má hráč aktivní ban a odkoho.")
+        commands.addCommands(Commands.slash("checkban", "Zkontrolování zda má hráč aktivní ban a odkoho.")
                 //.addOptions(new OptionData(OptionType.STRING, "ip", "IP adresa ve formát IPv4 nebo IPv6"))
                 .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče, který bude zkontrolován").setRequired(true)));
 
-        commands.addCommands(new CommandData("stafflist", "Seznam členů AT a jejich ID pro přidání do ticketů."));
+        commands.addCommands(Commands.slash("stafflist", "Seznam členů AT a jejich ID pro přidání do ticketů."));
 
-        commands.addCommands(new CommandData("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
+        commands.addCommands(Commands.slash("ats", "Zobrazení statistik o tom, jak který člen AT je aktivní na serveru.")
                         .addOptions(new OptionData(OptionType.STRING, "name", "Jméno člena AT k zobrazení.", false))
                         .addOptions(new OptionData(OptionType.USER, "user", "Uživatel z AT k zobrazení", false)));
                         
-        commands.addCommands(new CommandData("booster", "Nastavění vlastní booster barvy.")
+        commands.addCommands(Commands.slash("booster", "Nastavění vlastní booster barvy.")
                 .addOptions(new OptionData(OptionType.STRING, "hex_color", "Barva ve formátu hex.").setRequired(true)));
 
-        commands.addCommands(new CommandData("setup", "Nastavení specifických nastavení na Discord serveru")
+        commands.addCommands(Commands.slash("setup", "Nastavení specifických nastavení na Discord serveru")
                 .addOptions(new OptionData(OptionType.STRING, "type", "Hodnota k nastavení").setRequired(true)
                         .addChoice("Výběr rolí", "role-selector")));
 
-        commands.addCommands(new CommandData("whitelist", "Správa whitelistu serveru, pokud se připojuje na server mimo CZ/SK.")
+        commands.addCommands(Commands.slash("whitelist", "Správa whitelistu serveru, pokud se připojuje na server mimo CZ/SK.")
                 .addSubcommands(new SubcommandData("add", "Přidání hráče na whitelist")
                     .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče").setRequired(true))
                     .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče, lze použít IPv4 i IPv6").setRequired(true)))

@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ public class CraftBox implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if (args.length < 1) {
-            channel.sendMessage(
+            channel.sendMessageEmbeds(
                     MessageUtils.getEmbed(Constants.GRAY)
                             .setTitle("Odkaz na CraftBox")
                             .setDescription("Kliknutím [zde](https://craftbox.craftmania.cz/) se přesměruješ na CraftBox.")
@@ -46,14 +46,14 @@ public class CraftBox implements ICommand {
                     break;
                 }
 
-                channel.sendMessage(
+                channel.sendMessageEmbeds(
                         MessageUtils.getEmbed(Constants.RED)
                                 .setTitle("Registrace do CraftBoxu")
                                 .setDescription(":closed_lock_with_key: | Vypadá to, že se chceš registrovat do CraftBoxu. Poslala jsem ti DM.")
                                 .build()
                 ).queue(beginningMessage -> {
                     sender.openPrivateChannel().queue(privateChannel -> {
-                        privateChannel.sendMessage(
+                        privateChannel.sendMessageEmbeds(
                                 MessageUtils.getEmbed(Constants.LIGHT_BLUE)
                                         .setTitle("Registrace do CraftBoxu 0/2")
                                         .setDescription(":closed_lock_with_key: | Registrace do CraftBoxu je jednoduchá. Tvůj nick byl automaticky vybrán na základě tvého nicku na " +
@@ -63,7 +63,7 @@ public class CraftBox implements ICommand {
                                         .build()
                         ).queue();
 
-                        w.waitForEvent(PrivateMessageReceivedEvent.class, privateMessageReceivedEvent -> privateMessageReceivedEvent.getAuthor().equals(sender), privateMessageReceivedEvent -> {
+                        w.waitForEvent(MessageReceivedEvent.class, privateMessageReceivedEvent -> privateMessageReceivedEvent.getAuthor().equals(sender), privateMessageReceivedEvent -> {
                             String password = privateMessageReceivedEvent.getMessage().getContentRaw();
 
                             if (password.contains(" ") || password.length() < 6 || !password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
@@ -71,12 +71,12 @@ public class CraftBox implements ICommand {
                                 return;
                             }
 
-                            privateChannel.sendMessage(MessageUtils.getEmbed(Constants.BLUE)
+                            privateChannel.sendMessageEmbeds(MessageUtils.getEmbed(Constants.BLUE)
                                     .setTitle("Registrace do CraftBoxu 1/2")
                                     .setDescription(":closed_lock_with_key: | Výborně, tvé heslo splňuje minimální požadavky. Teď ho prosím napiš znovu pro potvrzení.")
                                     .build()).queue();
 
-                            w.waitForEvent(PrivateMessageReceivedEvent.class, privateMessageReceivedEvent1 -> privateMessageReceivedEvent1.getAuthor().equals(sender), privateMessageReceivedEvent1 -> {
+                            w.waitForEvent(MessageReceivedEvent.class, privateMessageReceivedEvent1 -> privateMessageReceivedEvent1.getAuthor().equals(sender), privateMessageReceivedEvent1 -> {
                                 String confirmedPassword = privateMessageReceivedEvent1.getMessage().getContentRaw();
 
                                 if (!confirmedPassword.equals(password)) {
@@ -106,7 +106,7 @@ public class CraftBox implements ICommand {
                                         return;
                                     }
 
-                                    beginningMessage.editMessage(
+                                    beginningMessage.editMessageEmbeds(
                                             MessageUtils.getEmbed(Constants.GREEN)
                                                     .setTitle("Registrace do CraftBoxu")
                                                     .setDescription(":closed_lock_with_key: | Uživatel " + sender.getAsMention() + " se registroval do CraftBoxu jako `" + nick + "`.")
@@ -114,14 +114,14 @@ public class CraftBox implements ICommand {
                                     ).queue();
                                     message.delete().queue();
 
-                                    privateChannel.sendMessage(
+                                    privateChannel.sendMessageEmbeds(
                                             MessageUtils.getEmbed(Constants.GREEN)
                                                     .setTitle("Registrace do CraftBoxu 2/2")
                                                     .setDescription("Registrace proběhla úspěšně. Do CraftBoxu se přihlásíš [zde](https://craftbox.craftmania.cz).\n" +
                                                             "Tvůj nick: `" + nick + "`\n" +
                                                             "Tvé heslo: `" + password + "` (heslo se zamaže za 30 vteřin)")
                                                     .build()
-                                    ).queue(sentMessage -> sentMessage.editMessage(
+                                    ).queue(sentMessage -> sentMessage.editMessageEmbeds(
                                             MessageUtils.getEmbed(Constants.GREEN)
                                                     .setTitle("Registrace do CraftBoxu 2/2")
                                                     .setDescription("Registrace proběhla úspěšně. Do CraftBoxu se přihlásíš [zde](https://craftbox.craftmania.cz).\n" +

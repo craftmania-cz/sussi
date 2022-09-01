@@ -2,13 +2,13 @@ package cz.wake.sussi.listeners;
 
 import cz.wake.sussi.Sussi;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class SelectionMenuListener extends ListenerAdapter {
 
-    public void onSelectionMenu(SelectionMenuEvent event) {
+    @Override
+    public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
         if (event.getMember() == null) return;
         switch (event.getComponentId()) {
             case "menu:role_theme" -> {
@@ -57,7 +57,7 @@ public class SelectionMenuListener extends ListenerAdapter {
         }
     }
 
-    private void addOrRemoveRole(Member member, String name, long roleId, SelectionMenuEvent event) {
+    private void addOrRemoveRole(Member member, String name, long roleId, SelectMenuInteractionEvent event) {
         if (!member.getRoles().contains(member.getGuild().getRoleById(roleId))) {
             member.getGuild().addRoleToMember(member, member.getGuild().getRoleById(roleId)).queue();
             event.getInteraction().getHook().sendMessage("Nastavil(a) jsi si roli **" + name + "**.").setEphemeral(true).queue();

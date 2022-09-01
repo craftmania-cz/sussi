@@ -3,18 +3,18 @@ package cz.wake.sussi.commands.owner;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
-import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
+import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
 public class SetupCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
         String type = event.getOption("type").getAsString();
 
         switch (type) {
@@ -33,13 +33,13 @@ public class SetupCommand implements ISlashCommand {
     }
 
     private void generateThemeRoleSelector(MessageChannel channel) {
-        SelectionMenu menu = SelectionMenu.create("menu:role_theme")
+        SelectMenu menu = SelectMenu.create("menu:role_theme")
                 .setPlaceholder("Zvol si roli pro kanál s specifickým tématem")
                 .setMaxValues(1)
                 .setMinValues(1)
-                .addOption("Apple", "apple", "Pokec o Applu a o tom kdo ztratil airpody", Emoji.fromMarkdown("<:apple:995454047375065198>"))
-                .addOption("Fortnite", "fortnite", "Novinky z Fortnitu a leaky", Emoji.fromMarkdown("<:fortnite:995454225561698334>"))
-                .addOption("Hytale", "hytale", "Čekání na novou hru Hytale (snad někdy)", Emoji.fromMarkdown("<:hytale:995454406793375795>"))
+                .addOption("Apple", "apple", "Pokec o Applu a o tom kdo ztratil airpody", Emoji.fromFormatted("<:apple:995454047375065198>"))
+                .addOption("Fortnite", "fortnite", "Novinky z Fortnitu a leaky", Emoji.fromFormatted("<:fortnite:995454225561698334>"))
+                .addOption("Hytale", "hytale", "Čekání na novou hru Hytale (snad někdy)", Emoji.fromFormatted("<:hytale:995454406793375795>"))
                 .build();
         StringBuilder description = new StringBuilder();
         description.append("\n\n**Tématické role**").append("\n");
@@ -48,13 +48,13 @@ public class SetupCommand implements ISlashCommand {
     }
 
     private void generateAnnounceRoleSelector(MessageChannel channel) {
-        SelectionMenu menu = SelectionMenu.create("menu:role_announce")
+        SelectMenu menu = SelectMenu.create("menu:role_announce")
                 .setPlaceholder("Zvol si roli od které budeš dosávat upozornění")
                 .setMaxValues(1)
                 .setMinValues(1)
-                .addOption("News", "news", "Novinky z CraftManie, malé změny a jiné informace", Emoji.fromMarkdown("<a:peepoOH:638776117590753290>"))
-                .addOption("Events", "events", "Oznámení o startu eventů na Event serveru", Emoji.fromMarkdown("<a:peepoTub:945650150649507870>"))
-                .addOption("Údržba", "udrzba", "Oznámení o plánovaných údržbách na serveru", Emoji.fromMarkdown("<a:zabickaAlarm:954242184511619113>"))
+                .addOption("News", "news", "Novinky z CraftManie, malé změny a jiné informace", Emoji.fromFormatted("<a:peepoOH:638776117590753290>"))
+                .addOption("Events", "events", "Oznámení o startu eventů na Event serveru", Emoji.fromFormatted("<a:peepoTub:945650150649507870>"))
+                .addOption("Údržba", "udrzba", "Oznámení o plánovaných údržbách na serveru", Emoji.fromFormatted("<a:zabickaAlarm:954242184511619113>"))
                 .build();
         StringBuilder description = new StringBuilder();
         description.append("\n\n**Oznamovací role**").append("\n");
@@ -63,7 +63,7 @@ public class SetupCommand implements ISlashCommand {
     }
 
     private void generateServerRoleSelector(MessageChannel channel) {
-        SelectionMenu menu = SelectionMenu.create("menu:role_server")
+        SelectMenu menu = SelectMenu.create("menu:role_server")
                 .setPlaceholder("Specifické kanály pro naše Minecraft servery")
                 .setMaxValues(1)
                 .setMinValues(1)

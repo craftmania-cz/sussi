@@ -26,7 +26,7 @@ public class Blacklist implements ICommand {
     @Override
     public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
         if(args.length < 1){
-            channel.sendMessage(MessageUtils.getEmbed(Constants.DARK_GRAY).setTitle("Blacklist hráčů")
+            channel.sendMessageEmbeds(MessageUtils.getEmbed(Constants.DARK_GRAY).setTitle("Blacklist hráčů")
                 .setDescription("Blacklist je seznam všech hráčů, kteří opakovaně porušovali pravidla serveru nebo dělali různé akce proti serveru.\nPokuď se tedy nachází v tomto seznamu, jejich bany jsou permanentní do doby, než kompletní AT odhlasuje jejich unban - zatím nikdy.").build()).queue();
         } else if (args[0].equalsIgnoreCase("list")){
             showPlayersInBlacklist(channel, w);
@@ -53,7 +53,7 @@ public class Blacklist implements ICommand {
             embed.addField("Konec banu", resolveEnd(player.getTimeEnd()), true);
             embed.setFooter("Pokuď je hráč v blacklistu, je blokovaný po celém serveru.", null);
 
-            channel.sendMessage(embed.build()).queue();
+            channel.sendMessageEmbeds(embed.build()).queue();
 
         }
     }

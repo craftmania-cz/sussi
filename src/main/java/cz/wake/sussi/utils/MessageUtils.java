@@ -47,7 +47,7 @@ public class MessageUtils {
 
     //TODO: Dodelat try
     public static Message sendErrorMessage(EmbedBuilder builder, MessageChannel channel) {
-        return channel.sendMessage(builder.setColor(Constants.RED).build()).complete();
+        return channel.sendMessageEmbeds(builder.setColor(Constants.RED).build()).complete();
     }
 
     public static Message sendErrorMessage(EmbedBuilder builder, InteractionHook hook) {
@@ -55,7 +55,7 @@ public class MessageUtils {
     }
 
     public static Message sendErrorMessage(String message, MessageChannel channel) {
-        return channel.sendMessage(MessageUtils.getEmbed().setColor(Constants.RED).setDescription(message).build())
+        return channel.sendMessageEmbeds(MessageUtils.getEmbed().setColor(Constants.RED).setDescription(message).build())
                 .complete();
     }
 
@@ -65,16 +65,7 @@ public class MessageUtils {
     }
 
     public static Message sendMessage(Color color, String message, MessageChannel channel) {
-        return channel.sendMessage(MessageUtils.getEmbed().setColor(color).setDescription(message).build()).complete();
-    }
-
-    public static void editMessage(EmbedBuilder embed, Message message) {
-        editMessage(message.getContentRaw(), embed, message);
-    }
-
-    public static void editMessage(String s, EmbedBuilder embed, Message message) {
-        if (message != null)
-            message.editMessage(new MessageBuilder().append(s).setEmbed(embed.build()).build()).queue();
+        return channel.sendMessageEmbeds(MessageUtils.getEmbed().setColor(color).setDescription(message).build()).complete();
     }
 
     public static EmbedBuilder getEmbedError() {
@@ -90,6 +81,6 @@ public class MessageUtils {
     }
 
     public static void sendAutoDeletedMessage(MessageEmbed messageEmbed, long delay, MessageChannel channel) {
-        channel.sendMessage(messageEmbed).queue(msg -> autoDeleteMessage(msg, delay));
+        channel.sendMessageEmbeds(messageEmbed).queue(msg -> autoDeleteMessage(msg, delay));
     }
 }

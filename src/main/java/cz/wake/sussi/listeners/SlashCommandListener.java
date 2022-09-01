@@ -6,14 +6,14 @@ import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class SlashCommandListener extends ListenerAdapter {
 
     @Override
-    public void onSlashCommand(@NotNull SlashCommandEvent event) {
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (event.getGuild() == null || event.getUser().isBot()) {
             return;
         }

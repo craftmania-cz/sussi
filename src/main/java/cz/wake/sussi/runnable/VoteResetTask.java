@@ -105,7 +105,7 @@ public class VoteResetTask implements Job {
                 RestAction<User> action = Sussi.getJda().retrieveUserById(discordID);
                 action.submit()
                         .thenCompose((user) -> user.openPrivateChannel().submit())
-                        .thenCompose((channel) -> channel.sendMessage(MessageUtils.getEmbed(Color.decode("#3cab59"))
+                        .thenCompose((channel) -> channel.sendMessageEmbeds(MessageUtils.getEmbed(Color.decode("#3cab59"))
                                 // Zpráva pro obdržitele odměny za hlasování
                                 .setDescription("Jako odměnu za hlasování získáváš dárkový poukaz v hodnotě **" + RewardMonthVoteUtils.getAmount(voteplayer.getPosition()) + "** CZK.\nKód: ||" + rewardCode + "|| (klikni pro zobrazení)")
                                 .build()).submit())
@@ -134,7 +134,7 @@ public class VoteResetTask implements Job {
         Sussi.getJda().getUserById(Sussi.getConfig().getOwnerID())
                 .openPrivateChannel()
                 .complete()
-                .sendMessage(MessageUtils.getEmbed(Color.decode("#3cab59"))
+                .sendMessageEmbeds(MessageUtils.getEmbed(Color.decode("#3cab59"))
                         .setTitle("Odměny za hlasování: " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
                         .setDescription("Zde je přehled ohledně posílání a generace odměn - " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
                         .addField("1.-5.",
@@ -179,7 +179,7 @@ public class VoteResetTask implements Job {
         calendar.add(Calendar.MONTH, -1);
         String month = new SimpleDateFormat("M").format(calendar.getTime());
         String year = new SimpleDateFormat("yyyy").format(calendar.getTime());
-        channel.sendMessage(MessageUtils.getEmbed(Color.decode("#3cab59"))
+        channel.sendMessageEmbeds(MessageUtils.getEmbed(Color.decode("#3cab59"))
                 .setTitle("Výsledky hlasování: " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
                 .setDescription("Zde jsou výslekdy hlasování za minulý měsíc - " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
                 .addField("1.-5.",

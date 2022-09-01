@@ -16,10 +16,10 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.components.ButtonStyle;
+import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,7 +27,7 @@ import java.util.Calendar;
 public class ATSSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
         try {
             OptionMapping nameOption = event.getOption("name");
             OptionMapping userOption = event.getOption("user");
@@ -86,7 +86,9 @@ public class ATSSlashCommand implements ISlashCommand {
     }
 
     private void sendATS(ATS ats, InteractionHook hook) {
-        InteractiveMessage iMessage = InteractiveMessage.create(new MessageBuilder().setEmbeds(getFirstPageEmbed(ats).build()));
+        //TODO: Vyřešit s mayu
+        hook.sendMessageEmbeds(getFirstPageEmbed(ats).build());
+        /*InteractiveMessage iMessage = InteractiveMessage.create(new MessageBuilder().setEmbeds(getFirstPageEmbed(ats).build()));
         iMessage.addInteraction(Interaction.asButton(DiscordUtils.generateButton(ButtonStyle.SECONDARY, "Další strana")), () -> {
             InteractiveMessage firstPageMessage = InteractiveMessage.create(new MessageBuilder().setEmbeds(getSecondPageEmbed(ats).build()));
             firstPageMessage.addInteraction(Interaction.asButton(DiscordUtils.generateButton(ButtonStyle.SECONDARY, "Předchozí strana")), () -> {
@@ -94,7 +96,7 @@ public class ATSSlashCommand implements ISlashCommand {
             });
             firstPageMessage.send(hook);
         });
-        iMessage.send(hook);
+        iMessage.send(hook);*/
     }
 
     private EmbedBuilder getFirstPageEmbed(ATS ats) {

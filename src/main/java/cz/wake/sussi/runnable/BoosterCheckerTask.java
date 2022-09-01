@@ -51,7 +51,7 @@ public class BoosterCheckerTask implements Job {
                         }
                     });
                     member.getUser().openPrivateChannel().queue(channel -> {
-                        channel.sendMessage(MessageUtils.getEmbedError().setTitle("Přestal jsi boostovat CraftMania server").setDescription("Z tohoto důvodu ti byla odebrána role `" + role.getName() + "` tvé barvy.").build()).queue();
+                        channel.sendMessageEmbeds(MessageUtils.getEmbedError().setTitle("Přestal jsi boostovat CraftMania server").setDescription("Z tohoto důvodu ti byla odebrána role `" + role.getName() + "` tvé barvy.").build()).queue();
                     });
                 }
             }
