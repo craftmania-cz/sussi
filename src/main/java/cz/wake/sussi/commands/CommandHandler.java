@@ -39,11 +39,8 @@ public class CommandHandler {
         registerCommand(new IPWhitelist());
         registerCommand(new NickWhitelist());
         registerCommand(new BlockCountry());
-        registerCommand(new Poll());
-        registerCommand(new LobbyNews());
         registerCommand(new Napad());
         registerCommand(new NickWordBlacklist());
-        registerCommand(new NoteCommand());
         registerCommand(new BugPoints());
         registerCommand(new CraftBox());
         SussiLogger.greatMessage("Sussi will respond to (" + commands.size() + ") commands.");
