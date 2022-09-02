@@ -99,7 +99,7 @@ public class Sussi {
                 .addEventListeners(new GuildStatisticsListener())
                 .addEventListeners(new SlashCommandListener())
                 .addEventListeners(new ButtonClickListener())
-                .addEventListeners(new MayuCoreListener())
+                //.addEventListeners(new MayuCoreListener())
                 .addEventListeners(new SelectionMenuListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
