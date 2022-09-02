@@ -84,7 +84,13 @@ public class Sussi {
         // Connecting to Discord API
         SussiLogger.infoMessage("Connecting to Discord API...");
         jda = JDABuilder.createDefault(config.getBotToken())
-                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_PRESENCES)
+                .enableIntents(
+                        GatewayIntent.GUILD_MEMBERS,
+                        GatewayIntent.GUILD_MESSAGES,
+                        GatewayIntent.GUILD_PRESENCES,
+                        GatewayIntent.MESSAGE_CONTENT,
+                        GatewayIntent.DIRECT_MESSAGES
+                )
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
                 .addEventListeners(waiter)
@@ -138,7 +144,7 @@ public class Sussi {
                 e.printStackTrace();
             }
         } else {
-            jda.getPresence().setActivity(Activity.of(Activity.ActivityType.CUSTOM_STATUS, "Testovací režim."));
+            jda.getPresence().setActivity(Activity.of(Activity.ActivityType.PLAYING, "Testovací režim."));
             jda.getPresence().setStatus(OnlineStatus.IDLE);
         }
     }
