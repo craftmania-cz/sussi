@@ -8,18 +8,18 @@ import cz.wake.sussi.objects.ats.ATS;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import cz.wake.sussi.utils.TimeUtils;
-import dev.mayuna.mayusjdautils.interactive.InteractiveMessage;
-import dev.mayuna.mayusjdautils.interactive.objects.Interaction;
-import dev.mayuna.mayusjdautils.utils.DiscordUtils;
+import dev.mayuna.mayusjdautils.interactive.Interaction;
+import dev.mayuna.mayusjdautils.interactive.components.InteractiveMessage;
+import dev.mayuna.mayusjdautils.util.DiscordUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -86,17 +86,17 @@ public class ATSSlashCommand implements ISlashCommand {
     }
 
     private void sendATS(ATS ats, InteractionHook hook) {
-        //TODO: Vyřešit s mayu
+        //TODO: Vyřešit s mayu DiscordUtils.generateButton(ButtonStyle.SECONDARY, "Další strana")
         hook.sendMessageEmbeds(getFirstPageEmbed(ats).build());
-        /*InteractiveMessage iMessage = InteractiveMessage.create(new MessageBuilder().setEmbeds(getFirstPageEmbed(ats).build()));
-        iMessage.addInteraction(Interaction.asButton(DiscordUtils.generateButton(ButtonStyle.SECONDARY, "Další strana")), () -> {
-            InteractiveMessage firstPageMessage = InteractiveMessage.create(new MessageBuilder().setEmbeds(getSecondPageEmbed(ats).build()));
-            firstPageMessage.addInteraction(Interaction.asButton(DiscordUtils.generateButton(ButtonStyle.SECONDARY, "Předchozí strana")), () -> {
-                iMessage.send(hook);
+        InteractiveMessage iMessage = InteractiveMessage.create(new MessageEditBuilder().setEmbeds(getFirstPageEmbed(ats).build()));
+        iMessage.addInteraction(Interaction.asButton(ButtonStyle.SECONDARY, "Další strana"), (interactionEvent) -> {
+            InteractiveMessage firstPageMessage = InteractiveMessage.create(new MessageEditBuilder().setEmbeds(getSecondPageEmbed(ats).build()));
+            firstPageMessage.addInteraction(Interaction.asButton(ButtonStyle.SECONDARY, "Předchozí strana"), (interactionEvent2) -> {
+                iMessage.sendMessage(hook);
             });
-            firstPageMessage.send(hook);
+            firstPageMessage.sendMessage(hook);
         });
-        iMessage.send(hook);*/
+        iMessage.sendMessage(hook);
     }
 
     private EmbedBuilder getFirstPageEmbed(ATS ats) {

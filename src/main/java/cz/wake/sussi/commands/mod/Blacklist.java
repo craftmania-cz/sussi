@@ -12,8 +12,8 @@ import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.text.SimpleDateFormat;
@@ -124,7 +124,7 @@ public class Blacklist implements ICommand {
             pBuilder.addItems(name);
         }
 
-        Paginator p = pBuilder.setColor(Constants.DARK_GRAY).setText("Seznam hráčů v blacklistu:").build();
-        p.paginate(channel,1);
+        // Paginator p = pBuilder.setColor(Constants.DARK_GRAY).setText("Seznam hráčů v blacklistu:").build();
+        //p.paginate(channel,1);
     }
 }

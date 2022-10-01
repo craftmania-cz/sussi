@@ -7,6 +7,7 @@ import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.EmoteList;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;

@@ -15,7 +15,6 @@ import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.SussiLogger;
-import dev.mayuna.mayusjdautils.data.MayuCoreListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
