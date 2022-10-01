@@ -1,7 +1,6 @@
 package cz.wake.sussi;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import cz.wake.sussi.commands.CommandHandler;
 import cz.wake.sussi.commands.SlashCommandHandler;
 import cz.wake.sussi.commands.console.ConsoleCommandManager;
 import cz.wake.sussi.listeners.*;
@@ -13,13 +12,12 @@ import cz.wake.sussi.runnable.*;
 import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
-import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.SussiLogger;
+import dev.mayuna.mayusjdautils.interactive.InteractiveListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.quartz.*;
@@ -30,7 +28,6 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,7 +39,6 @@ public class Sussi {
     private MainListener events;
     private static JDA jda;
     private SQLManager sql;
-    private CommandHandler ch = new CommandHandler();
     private static SlashCommandHandler slashCommandHandler;
     public static final String PREFIX = ",";
     public static long startUp;
@@ -98,13 +94,10 @@ public class Sussi {
                 .addEventListeners(new GuildStatisticsListener())
                 .addEventListeners(new SlashCommandListener())
                 .addEventListeners(new ButtonClickListener())
-                //.addEventListeners(new MayuCoreListener())
+                .addEventListeners(new InteractiveListener())
                 .addEventListeners(new SelectionMenuListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
-
-        // Register commands
-        (instance = new Sussi()).init();
 
         slashCommandHandler = new SlashCommandHandler();
         slashCommandHandler.createAndUpdateCommands();
@@ -115,13 +108,6 @@ public class Sussi {
         try {
             (instance = new Sussi()).initDatabase();
             SussiLogger.greatMessage("Sussi is successful connected to MySQL.");
-            SussiLogger.infoMessage("Sussi will run as PRODUCTION bot.");
-            //Add missing members into db
-            List<String> dbMembers = Sussi.getInstance().getSql().getAllDiscordMembers();
-            for (Member member : Sussi.getJda().getGuildById(Constants.CM_GUILD_ID).getMembers()) {
-                if (!dbMembers.contains(member.getId())) getInstance().getSql().addDiscordMembers(member.getId());
-            }
-
         } catch (Exception e) {
             SussiLogger.dangerMessage("During connection to MySQL, error has occurred:");
             e.printStackTrace();
@@ -160,16 +146,8 @@ public class Sussi {
         return jda;
     }
 
-    public CommandHandler getCommandHandler() {
-        return ch;
-    }
-
     public static SlashCommandHandler getSlashCommandHandler() {
         return slashCommandHandler;
-    }
-
-    private void init() {
-        ch.register();
     }
 
     public static long getStartUp() {
