@@ -10,7 +10,6 @@ import cz.wake.sussi.utils.SussiLogger;
 import cz.wake.sussi.utils.TimeUtils;
 import dev.mayuna.mayusjdautils.interactive.Interaction;
 import dev.mayuna.mayusjdautils.interactive.components.InteractiveMessage;
-import dev.mayuna.mayusjdautils.util.DiscordUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -92,11 +91,11 @@ public class ATSSlashCommand implements ISlashCommand {
         iMessage.addInteraction(Interaction.asButton(ButtonStyle.SECONDARY, "Další strana"), (interactionEvent) -> {
             InteractiveMessage firstPageMessage = InteractiveMessage.create(new MessageEditBuilder().setEmbeds(getSecondPageEmbed(ats).build()));
             firstPageMessage.addInteraction(Interaction.asButton(ButtonStyle.SECONDARY, "Předchozí strana"), (interactionEvent2) -> {
-                iMessage.sendMessage(hook);
+                iMessage.editOriginal(hook, true);
             });
-            firstPageMessage.sendMessage(hook);
+            firstPageMessage.editOriginal(hook, true);
         });
-        iMessage.sendMessage(hook);
+        iMessage.sendMessage(hook, true);
     }
 
     private EmbedBuilder getFirstPageEmbed(ATS ats) {
