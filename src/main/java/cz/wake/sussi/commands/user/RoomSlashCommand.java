@@ -10,18 +10,18 @@ import cz.wake.sussi.utils.MemberUtils;
 import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
-import java.util.List;
+import java.util.EnumSet;
 
 public class RoomSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
 
         String subcommandName = event.getSubcommandName();
 
@@ -100,13 +100,13 @@ public class RoomSlashCommand implements ISlashCommand {
                                 "`/room bitrate [číslo v kbps]` - Nastaví bitrate v místnosti.").build()).queue();
                 break;
             case "lock":
-                voiceChannel.putPermissionOverride(member.getGuild().getPublicRole()).setDeny(Permission.VOICE_CONNECT).queue();
+                voiceChannel.getManager().putPermissionOverride(member.getGuild().getPublicRole(), null, EnumSet.of(Permission.VOICE_CONNECT)).queue();
                 Sussi.getInstance().getSql().updateVoiceRoomLocked(event.getMember().getId(), true);
                 hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setDescription(":lock: | Místnost **" + voiceChannel.getName() + "** byla uzamknuta.").build()).queue();
                 break;
             case "unlock":
                 Sussi.getInstance().getSql().updateVoiceRoomLocked(event.getMember().getId(), false);
-                voiceChannel.putPermissionOverride(member.getGuild().getPublicRole()).setAllow(Permission.VOICE_CONNECT).queue();
+                voiceChannel.getManager().putPermissionOverride(member.getGuild().getPublicRole(), EnumSet.of(Permission.VOICE_CONNECT), null).queue();
                 hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(":unlock: | Místnost ** " + voiceChannel.getName() + "** byla odemknuta.").build()).queue();
                 break;
             case "add":
@@ -119,7 +119,7 @@ public class RoomSlashCommand implements ISlashCommand {
                     hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe pozvat nemůžeš, už tam jsi.").build()).queue();
                     return;
                 }
-                voiceChannel.getManager().getChannel().putPermissionOverride(toAdd).setAllow(Permission.VOICE_CONNECT).queue();
+                voiceChannel.getManager().getChannel().getManager().putPermissionOverride(toAdd, EnumSet.of(Permission.VOICE_CONNECT), null).queue();
                 Sussi.getInstance().getSql().updateVoiceRoomMembers(event.getMember().getId(), "added", MemberUtils.addMemberToIdList(Sussi.getInstance().getSql().getVoiceRoomMembers(event.getMember().getId(), "added"), toAdd.getId()));
                 hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Uživatel " + toAdd.getAsMention() + " byl přidán do voice").build()).queue();
                 break;
@@ -136,7 +136,7 @@ public class RoomSlashCommand implements ISlashCommand {
                 if (voiceChannel.getMembers().contains(toRemove)) {
                     voiceChannel.getGuild().kickVoiceMember(toRemove).queue();
                 }
-                voiceChannel.getManager().getChannel().putPermissionOverride(toRemove).setDeny(Permission.VOICE_CONNECT).queue();
+                voiceChannel.getManager().getChannel().getManager().putPermissionOverride(toRemove, EnumSet.of(Permission.VOICE_CONNECT), null).queue();
                 Sussi.getInstance().getSql().updateVoiceRoomMembers(event.getMember().getId(), "added", MemberUtils.removeMemberFromIdList(Sussi.getInstance().getSql().getVoiceRoomMembers(event.getMember().getId(), "added"), toRemove.getId()));
                 hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Uživatel " + toRemove.getAsMention() + " byl odebrán z kanálu").build()).queue();
                 break;
@@ -193,13 +193,13 @@ public class RoomSlashCommand implements ISlashCommand {
                     hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe zabanovat nemůžeš!").build()).queue();
                     return;
                 }
-                if (toBan.getVoiceState().inVoiceChannel() && toBan.getVoiceState().getChannel().getId().equals(voiceChannel.getId())) {
+                if (toBan.getVoiceState().inAudioChannel() && toBan.getVoiceState().getChannel().getId().equals(voiceChannel.getId())) {
                     voiceChannel.getGuild().kickVoiceMember(toBan).queue();
                 }
                 if (voiceChannel.getMembers().contains(toBan)) {
                     voiceChannel.getGuild().kickVoiceMember(toBan).queue();
                 }
-                voiceChannel.getManager().getChannel().putPermissionOverride(toBan).setDeny(Permission.VIEW_CHANNEL).queue();
+                voiceChannel.getManager().getChannel().getManager().putPermissionOverride(toBan, null, EnumSet.of(Permission.VIEW_CHANNEL)).queue();
                 Sussi.getInstance().getSql().updateVoiceRoomMembers(event.getMember().getId(), "banned", MemberUtils.addMemberToIdList(Sussi.getInstance().getSql().getVoiceRoomMembers(event.getMember().getId(), "banned"), toBan.getId()));
                 hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.ADMIN).setDescription(":hammer: | Uživatel " + toBan.getAsMention()  + " byl zabanován v kanálu.").build()).queue();
                 break;
@@ -213,7 +213,7 @@ public class RoomSlashCommand implements ISlashCommand {
                     hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Sám sebe odbanovat nemůžeš!").build()).queue();
                     return;
                 }
-                voiceChannel.getManager().getChannel().putPermissionOverride(toUnban).setAllow(Permission.VIEW_CHANNEL).queue();
+                voiceChannel.getManager().getChannel().getManager().putPermissionOverride(toUnban, EnumSet.of(Permission.VIEW_CHANNEL), null).queue();
                 Sussi.getInstance().getSql().updateVoiceRoomMembers(event.getMember().getId(), "banned", MemberUtils.removeMemberFromIdList(Sussi.getInstance().getSql().getVoiceRoomMembers(event.getMember().getId(), "banned"), toUnban.getId()));
                 hook.sendMessageEmbeds(MessageUtils.getEmbed(Constants.GRAY).setDescription(":hammer_pick: | Uživatel " + toUnban.getAsMention()  + " byl odbanován z kanálu, nyní se může připojit.").build()).queue();
                 break;

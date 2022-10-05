@@ -4,7 +4,6 @@ import cz.wake.sussi.commands.console.commands.HelpConsoleCommand;
 import cz.wake.sussi.commands.console.commands.StopConsoleCommand;
 import cz.wake.sussi.commands.console.commands.generic.AbstractConsoleCommand;
 import cz.wake.sussi.utils.SussiLogger;
-import dev.mayuna.mayusjdautils.arguments.ArgumentParser;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class ConsoleCommandManager {
             return;
         }
 
-        ArgumentParser argumentParser = new ArgumentParser(command);
+        /*ArgumentParser argumentParser = new ArgumentParser(command);
 
         if (!argumentParser.hasAnyArguments()) {
             SussiLogger.dangerMessage("Unknown command '" + command + "'!");
@@ -58,7 +57,7 @@ public class ConsoleCommandManager {
                 }
                 return;
             }
-        }
+        }*/
 
         SussiLogger.dangerMessage("Unknown command '" + command + "'!");
     }
@@ -67,7 +66,7 @@ public class ConsoleCommandManager {
         commandThread = new Thread(() -> {
             while (true) {
                 String command = System.console().readLine();
-                processCommand(command);
+                //processCommand(command);
             }
         });
         commandThread.start();

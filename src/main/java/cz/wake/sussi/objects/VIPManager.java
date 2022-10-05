@@ -183,7 +183,7 @@ public class VIPManager {
 
     private void removeVIPRole(Guild guild, Member member, Role role, String reason) {
         guild.removeRoleFromMember(member, role).queue();
-        member.getUser().openPrivateChannel().queue(channel -> channel.sendMessage(
+        member.getUser().openPrivateChannel().queue(channel -> channel.sendMessageEmbeds(
                 MessageUtils.getEmbed(Constants.RED)
                         .setTitle("Byla ti odebrána VIP role: " + role.getName() + "")
                         .setDescription("Důvody proč se tohle mohlo stát:\n" +
@@ -199,7 +199,7 @@ public class VIPManager {
 
     private void addVIPRole(Guild guild, Member member, Role role, Profile.ServerVIP serverVIP) {
         guild.addRoleToMember(member, role).queue();
-        member.getUser().openPrivateChannel().queue(channel -> channel.sendMessage(
+        member.getUser().openPrivateChannel().queue(channel -> channel.sendMessageEmbeds(
                 MessageUtils.getEmbed(Constants.BLUE)
                         .setTitle("Byla ti nastavena VIP role: " + role.getName())
                         .setDescription((serverVIP.isPermanent() ? "Tato role neexpiruje." : "\nExpirace: " + serverVIP.getFormattedDate()))

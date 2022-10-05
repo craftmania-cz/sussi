@@ -122,7 +122,7 @@ public class ATS {
                                 "**Aktivita:** " + String.valueOf(getTotalActivity() + " bodů") + "\n\n" +
                                 (isComplete() ? "Vypadá to, že jsi odehral minimální počet hodin na serveru. Skvělá práce." :
                                         "Vypadá to, že jsi neodehral minimální počet hodin na serveru. Kontaktuj Waka když si tak ještě neudělal a vysvětluj proč."));
-                Message message = msg.sendMessage(embedBuilder.build()).complete();
+                Message message = msg.sendMessageEmbeds(embedBuilder.build()).complete();
             });
         } catch (Exception e) {
             return false;

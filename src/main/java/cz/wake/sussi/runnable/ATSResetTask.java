@@ -6,8 +6,8 @@ import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import cz.wake.sussi.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -154,16 +154,16 @@ public class ATSResetTask implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         TextChannel channel = Sussi.getJda().getTextChannelById(AT_POKEC_ID);
         assert channel != null;
-        channel.sendMessage(MessageUtils.getEmbed()
+        channel.sendMessageEmbeds(MessageUtils.getEmbed()
                 .setTitle("Vyhodnocení ATS - " + (new SimpleDateFormat("MM/yyyy").format(System.currentTimeMillis())))
                 .setDescription("Vyhodnocuji ATS...").build()).queue(msg -> {
             Triple<EmbedBuilder, EmbedBuilder, List<ATS>> pair = this.evaluate(true);
-            msg.editMessage(pair.getLeft().build()).queue();
+            msg.editMessageEmbeds(pair.getLeft().build()).queue();
             if (!pair.getRight().isEmpty())
                 channel.sendMessage(":warning: `" + pair.getRight().stream().map(ATS::getName).collect(Collectors.joining("` `")) + "` se nepodařilo zaslat individuální ATS do DM.").queue();
             MessageChannel secretChannel = Sussi.getJda().getTextChannelById(PRIVATE_CHANNEL_ID);
             if (secretChannel == null) return;
-            secretChannel.sendMessage(pair.getMiddle().build()).queue();
+            secretChannel.sendMessageEmbeds(pair.getMiddle().build()).queue();
         });
     }
 }

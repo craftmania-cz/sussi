@@ -1,17 +1,14 @@
 package cz.wake.sussi.commands.user;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
-import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.EmoteList;
 import cz.wake.sussi.utils.MessageUtils;
-import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
@@ -21,7 +18,7 @@ import java.util.List;
 public class BoosterSlashCommand implements ISlashCommand {
 
     @Override
-    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandEvent event) {
+    public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
         OptionMapping optionColor = event.getOption("hex_color");
         String colorString = optionColor.getAsString();
 

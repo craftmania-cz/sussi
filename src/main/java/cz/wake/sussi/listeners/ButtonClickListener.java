@@ -1,13 +1,13 @@
 package cz.wake.sussi.listeners;
 
 import cz.wake.sussi.commands.mod.CheckIP;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ButtonClickListener extends ListenerAdapter {
 
     @Override
-    public void onButtonClick(ButtonClickEvent event){
+    public void onButtonInteraction(ButtonInteractionEvent event){
         if (!event.getComponentId().contains(":")) {
             return;
         }

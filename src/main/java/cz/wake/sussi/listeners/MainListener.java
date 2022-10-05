@@ -6,19 +6,19 @@ import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.objects.VoiceRoom;
 import cz.wake.sussi.utils.Constants;
-import cz.wake.sussi.utils.MemberUtils;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.events.ShutdownEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -39,7 +39,7 @@ public class MainListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+    public void onMessageReceived(MessageReceivedEvent e) {
 
         if (e.getAuthor().isBot()) {
             return;
@@ -58,12 +58,12 @@ public class MainListener extends ListenerAdapter {
                 if (cmd.getCommand().equalsIgnoreCase(command) || Arrays.asList(cmd.getAliases()).contains(command)) {
                     SussiLogger.commandMessage("'," + cmd.getCommand() + "', Guild: " + e.getGuild().getName() + ", Channel: " + e.getChannel().getName() + ", Sender: " + e.getAuthor().getName() + "#" + e.getAuthor().getDiscriminator() + " (" + e.getAuthor().getId() + ")");
                     String[] finalArgs = args;
-                    EnumSet<Permission> perms = e.getGuild().getSelfMember().getPermissions(e.getChannel());
+                    EnumSet<Permission> perms = e.getGuild().getSelfMember().getPermissions((GuildChannel) e.getChannel());
                     if (!perms.contains(Permission.MESSAGE_EMBED_LINKS)) {
                         e.getChannel().sendMessage(":warning: | Nemám dostatečná práva na používání EMBED odkazů! Přiděl mi právo: `Vkládání odkazů` nebo `Embed Links`.").queue();
                         return;
                     }
-                    if (Rank.getPermLevelForUser(e.getAuthor(), e.getChannel()).isAtLeast(cmd.getRank())) {
+                    if (Rank.getPermLevelForUser(e.getAuthor(), (TextChannel) e.getChannel()).isAtLeast(cmd.getRank())) {
                         try {
                             cmd.onCommand(e.getAuthor(), e.getChannel(), e.getMessage(), finalArgs, e.getMember(), w);
                         } catch (Exception ex) {
@@ -86,8 +86,8 @@ public class MainListener extends ListenerAdapter {
     }
 
     private void delete(Message message) {
-        if (message.getTextChannel().getGuild().getSelfMember()
-                .getPermissions(message.getTextChannel()).contains(Permission.MESSAGE_MANAGE)) {
+        if (message.getGuildChannel().getGuild().getSelfMember()
+                .getPermissions(message.getGuildChannel()).contains(Permission.MESSAGE_MANAGE)) {
             message.delete().queue();
         }
     }
@@ -103,7 +103,7 @@ public class MainListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getReactionEmote().getName().equals("\u2705") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
+        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getEmoji().getName().equals("\u2705") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
             Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
                 MessageEmbed napadEmbed = message.getEmbeds().get(0);
 
@@ -111,13 +111,13 @@ public class MainListener extends ListenerAdapter {
                 embedBuilder.setColor(Constants.GREEN);
                 embedBuilder.addField("Přidáno", getStringDate(), true);
 
-                message.editMessage(embedBuilder.build()).queue();
+                message.editMessageEmbeds(embedBuilder.build()).queue();
 
-                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Proběhlo přidání nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
+                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Proběhlo přidání nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
             }));
         }
 
-        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getReactionEmote().getName().equals("\u2611\uFE0F") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
+        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getEmoji().getName().equals("\u2611\uFE0F") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
             Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
                 MessageEmbed napadEmbed = message.getEmbeds().get(0);
 
@@ -125,9 +125,9 @@ public class MainListener extends ListenerAdapter {
                 embedBuilder.setColor(Constants.BLUE);
                 embedBuilder.addField("Schváleno", getStringDate(), true);
 
-                message.editMessage(embedBuilder.build()).queue();
+                message.editMessageEmbeds(embedBuilder.build()).queue();
 
-                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessage(MessageUtils.getEmbed(Constants.BLUE).setDescription(Constants.THUMB_UP + " | Proběhlo schválení nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
+                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessageEmbeds(MessageUtils.getEmbed(Constants.BLUE).setDescription(Constants.THUMB_UP + " | Proběhlo schválení nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
             }));
         }
     }
@@ -158,19 +158,19 @@ public class MainListener extends ListenerAdapter {
                 event.getGuild().getCategoryById(Constants.CATEGORY_KECARNA_ID).createVoiceChannel(vrName).setUserlimit(Math.toIntExact(vr.getLimit())).setBitrate(vr.getBitrate() * 1000).queue(voiceChannel -> {
                     Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
                     if (vr.getLocked()) {
-                        voiceChannel.putPermissionOverride(event.getMember().getGuild().getPublicRole()).setDeny(Permission.VOICE_CONNECT).queue();
+                        voiceChannel.getManager().putPermissionOverride(event.getMember().getGuild().getPublicRole(), null, EnumSet.of(Permission.VOICE_CONNECT)).queue();
                     }
                     for (String memberId : vr.getBannedMembers()){
                         Member member = event.getGuild().getMemberById(memberId);
                         if (member == null) continue;
-                        voiceChannel.getManager().getChannel().putPermissionOverride(member).setDeny(Permission.VIEW_CHANNEL).queue();
+                        voiceChannel.getManager().getChannel().getManager().putPermissionOverride(member, null, EnumSet.of(Permission.VIEW_CHANNEL)).queue();
                     }
                     for (String memberId : vr.getAddedMembers()){
                         Member member = event.getGuild().getMemberById(memberId);
                         if (member == null) continue;
-                        voiceChannel.getManager().getChannel().putPermissionOverride(member).setAllow(Permission.VOICE_CONNECT).queue();
+                        voiceChannel.getManager().getChannel().getManager().putPermissionOverride(member, EnumSet.of(Permission.VOICE_CONNECT), null).queue();
                     }
-                    voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL).queue();
+                    voiceChannel.getManager().putPermissionOverride(event.getMember(), EnumSet.of(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL), null).queue();
                     event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
                     event.getGuild().getTextChannelById(Constants.CHANNEL_BOT_COMMANDS_ID).sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room info` nebo `/room help`").queue();
                 });
@@ -201,7 +201,7 @@ public class MainListener extends ListenerAdapter {
             if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
                 event.getGuild().getCategoryById(Constants.CATEGORY_KECARNA_ID).createVoiceChannel(name).queue(voiceChannel -> {
                     Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
-                    voiceChannel.putPermissionOverride(event.getMember()).setAllow(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL).queue();
+                    voiceChannel.getManager().putPermissionOverride(event.getMember(), EnumSet.of(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL), null).queue();
                     event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
                     event.getGuild().getTextChannelById(Constants.CHANNEL_BOT_COMMANDS_ID).sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room info` nebo `/room help`").queue();
                 });

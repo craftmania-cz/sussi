@@ -3,7 +3,7 @@ package cz.wake.sussi.runnable;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 

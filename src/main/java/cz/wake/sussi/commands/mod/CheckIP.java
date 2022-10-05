@@ -1,7 +1,6 @@
 package cz.wake.sussi.commands.mod;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
@@ -11,8 +10,8 @@ import cz.wake.sussi.utils.MessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
