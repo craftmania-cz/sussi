@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.SlashCommandHandler;
 import cz.wake.sussi.commands.console.ConsoleCommandManager;
 import cz.wake.sussi.listeners.*;
+import cz.wake.sussi.objects.NotificationCacheObject;
 import cz.wake.sussi.objects.VIPManager;
 import cz.wake.sussi.objects.jobs.DailyBonusResetJob;
 import cz.wake.sussi.objects.jobs.VIPCheckJob;
@@ -28,6 +29,7 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,6 +54,8 @@ public class Sussi {
     public static VoteResetTask voteManager;
     public static VIPManager vipManager;
     public static ConfigProperties config;
+
+    public HashMap<String, NotificationCacheObject> notificationCache = new HashMap<>();
 
     static {
         new File("logs/latest.log").renameTo(new File("logs/log-" + getCurrentTimeStamp() + ".log"));
@@ -96,6 +100,7 @@ public class Sussi {
                 .addEventListeners(new ButtonClickListener())
                 .addEventListeners(new InteractiveListener())
                 .addEventListeners(new SelectionMenuListener())
+                .addEventListeners(new ModalListener())
                 .setActivity(Activity.playing("Načítám se..."))
                 .build().awaitReady();
 
@@ -194,6 +199,10 @@ public class Sussi {
 
     public static ConfigProperties getConfig() {
         return config;
+    }
+
+    public HashMap<String, NotificationCacheObject> getNotificationCache() {
+        return notificationCache;
     }
 
     private static void scheduleTasks() throws SchedulerException {

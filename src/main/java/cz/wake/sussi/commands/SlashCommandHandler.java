@@ -118,7 +118,34 @@ public class SlashCommandHandler {
                     .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče, lze použít IPv4 i IPv6")))
                 .addSubcommands(new SubcommandData("check", "Kontrola zda je hráč nebo není na whitelistu")
                     .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče"))
-                    .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče pro kontrolu")))
+                    .addOptions(new OptionData(OptionType.STRING, "ipaddress", "IP adresa hráče pro kontrolu"))));
+
+        commands.addCommands(Commands.slash("notifications", "Vytváření notifikací pro hráče jednoduše z Discordu")
+                .addSubcommands(new SubcommandData("create", "Vytvoření notifikace pro specifického hráče")
+                        .addOptions(new OptionData(OptionType.STRING, "name", "Jméno hráče").setRequired(true))
+                        .addOptions(new OptionData(OptionType.STRING, "type", "Typ notifikace nebo-li kategorie").setRequired(true)
+                                .addChoice("Info", "INFO")
+                                .addChoice("Economy", "ECONOMY")
+                                .addChoice("Admin Team", "ADMIN_TEAM")
+                                .addChoice("Server", "SERVER")
+                                //.addChoice("Error", "ERROR")
+                                //.addChoice("Unknown", "UNKNOWN")
+                        )
+                        .addOptions(new OptionData(OptionType.STRING, "priority", "Priorita notifikace v 99% zvol vždy normalní").setRequired(true)
+                                .addChoice("Normalní", "NORMAL")
+                                .addChoice("Vyšší", "HIGHER")
+                                .addChoice("Urgentní", "URGENT")
+                        )
+                        .addOptions(new OptionData(OptionType.STRING, "server", "Server na kterém platí notifikace").setRequired(true)
+                                .addChoice("Všechny servery", "ALL")
+                                .addChoice("Survival", "SURVIVAL")
+                                .addChoice("Skyblock", "SKYBLOCK")
+                                .addChoice("Creative", "CREATIVE")
+                                .addChoice("Vanilla", "VANILLA")
+                        )
+                )
+                .addSubcommands(new SubcommandData("tutorial", "Základní informace k vytvoření notifikací a jak je používat."))
+                .addSubcommands(new SubcommandData("broadcast", "Odeslání notifikace hráčům, kteří byli na serveru za x dní"))
         );
 
         // Finální update všech slash příkazů
@@ -165,6 +192,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new CheckBanSlashCommand());
         registerSlashCommand(new ATSSlashCommand());
         registerSlashCommand(new WhitelistSlashCommand());
+        registerSlashCommand(new NotificationsSlashCommand());
 
         // Owner
         registerSlashCommand(new SetupCommand());
