@@ -20,7 +20,9 @@ public class SlashCommandListener extends ListenerAdapter {
         for (ISlashCommand slashCommand : Sussi.getSlashCommandHandler().getSlashCommands()) {
             if (slashCommand.getName().equals(event.getName())) {
                 if (Rank.getPermLevelForUser(event.getUser(), (TextChannel) event.getChannel()).isAtLeast(slashCommand.getRank())) {
-                    //event.deferReply(slashCommand.isEphemeral()).queue();
+                    if (slashCommand.isEphemeral()) { // Fix -> true musí být pokud se používají mayu hooky, opačně nefungují všechny ostaní příkazy
+                        event.deferReply(true).queue();
+                    }
                     try {
                         slashCommand.onSlashCommand(event.getUser(), event.getChannel(), event.getMember(), event.getHook(), event);
                         SussiLogger.commandMessage("Type: " + event.getName() + " - Channel: " + event.getChannel() + " - User: " + event.getUser().getAsTag());

@@ -34,6 +34,7 @@ public class ATSSlashCommand implements ISlashCommand {
             if (nameOption == null && userOption == null) { // /ats
                 if (Sussi.getInstance().getSql().isAlreadyLinkedByID(sender.getId())) {
                     String name = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
+                    System.out.println(name);
                     if (!Sussi.getATSManager().isInATS(name)) {
                         MessageUtils.sendErrorMessage(MessageUtils.getEmbedError().setDescription("Nelze použít `/ats` pokud nejsi člen AT!"), hook);
                         return;
@@ -85,7 +86,6 @@ public class ATSSlashCommand implements ISlashCommand {
     }
 
     private void sendATS(ATS ats, InteractionHook hook) {
-        //TODO: Vyřešit s mayu DiscordUtils.generateButton(ButtonStyle.SECONDARY, "Další strana")
         hook.sendMessageEmbeds(getFirstPageEmbed(ats).build());
         InteractiveMessage iMessage = InteractiveMessage.create(new MessageEditBuilder().setEmbeds(getFirstPageEmbed(ats).build()));
         iMessage.addInteraction(Interaction.asButton(ButtonStyle.SECONDARY, "Další strana"), (interactionEvent) -> {
