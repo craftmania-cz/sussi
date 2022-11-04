@@ -24,10 +24,6 @@ public enum CommandType {
         return new CommandType[]{GENERAL, FUN, MODERATION, GAME_CHANNEL, ADMINISTARTOR, BOT_OWNER};
     }
 
-    public List<ICommand> getCommands() {
-        return Sussi.getInstance().getCommandHandler().getCommandsByType(this);
-    }
-
     public String formattedName() {
         return toString();
     }

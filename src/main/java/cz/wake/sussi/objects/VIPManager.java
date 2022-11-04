@@ -45,7 +45,7 @@ public class VIPManager {
                     Profile profile = new Profile(nickname);
                     if (profile.hasAnyVIP()) vipProfiles.add(profile);
                 } catch (Exception e) {
-                    SussiLogger.dangerMessage("Could not load profile for " + nickname + ".");
+                    SussiLogger.errorMessage("Could not load profile for " + nickname + ".");
                     e.printStackTrace();
                 }
             }

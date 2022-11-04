@@ -17,6 +17,7 @@ public class RewardMonthVoteUtils {
 
     public static String getRewardCode(int amount) {
         JSONObject craftingStoreJSON;
+        SussiLogger.infoMessage("Generating gift card for amount: " + amount);
         try {
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             OkHttpClient caller = new OkHttpClient();
@@ -26,7 +27,6 @@ public class RewardMonthVoteUtils {
                     .post(body)
                     .build();
             Response response = caller.newCall(request).execute();
-            System.out.println(response);
             craftingStoreJSON = new JSONObject(response.body().string());
         } catch (Exception e) {
             e.printStackTrace();

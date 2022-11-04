@@ -31,10 +31,10 @@ public class ServerInfo {
                 }
                 return 0;
             } catch (NullPointerException e){
-                SussiLogger.dangerMessage("Chyba při zjišťování online hráčů.");
+                SussiLogger.errorMessage("Chyba při zjišťování online hráčů.");
                 return 0;
             } catch (NumberFormatException en) {
-                SussiLogger.dangerMessage("Nelze prevest online pocet hracu!");
+                SussiLogger.errorMessage("Nelze prevest online pocet hracu!");
                 return 0;
             }
         }

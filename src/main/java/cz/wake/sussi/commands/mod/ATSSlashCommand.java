@@ -76,7 +76,7 @@ public class ATSSlashCommand implements ISlashCommand {
             sendATS(ats, hook);
         } catch (Exception exception) {
             exception.printStackTrace();
-            SussiLogger.dangerMessage("Exception occurred while processing ATS Command!");
+            SussiLogger.errorMessage("Exception occurred while processing ATS Command!");
 
             MessageUtils.sendErrorMessage(MessageUtils.getEmbedError()
                     .setDescription("Nastala chyba při provádění ATS příkazu. Zkus to prosím později.")

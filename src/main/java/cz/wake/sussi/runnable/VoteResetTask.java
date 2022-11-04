@@ -112,7 +112,7 @@ public class VoteResetTask implements Job {
                         .whenComplete((v, error) -> {
                             if (error != null) {
                                 rewardVotePlayerList.add(new RewardMonthVotePlayer(voteplayer.getNick(), voteplayer.getUuid(), true, discordID, false, voteplayer.getPosition(), rewardCode));
-                                SussiLogger.dangerMessage("Vote month reward was not sent to player " + voteplayer.getNick());
+                                SussiLogger.errorMessage("Vote month reward was not sent to player " + voteplayer.getNick());
                             } else {
                                 rewardVotePlayerList.add(new RewardMonthVotePlayer(voteplayer.getNick(), voteplayer.getUuid(), true, discordID, true, voteplayer.getPosition(), rewardCode));
                                 SussiLogger.greatMessage("Vote month reward was successfully sent to player " + voteplayer.getNick());
@@ -120,8 +120,7 @@ public class VoteResetTask implements Job {
                         });
             } else {
                 rewardVotePlayerList.add(new RewardMonthVotePlayer(voteplayer.getNick(), voteplayer.getUuid(), false, null, false, voteplayer.getPosition(), rewardCode));
-                SussiLogger.dangerMessage("Winner of vote month reward " + voteplayer.getNick() + " Minecraft account is not linked with Discord.");
-
+                SussiLogger.errorMessage("Winner of vote month reward " + voteplayer.getNick() + " Minecraft account is not linked with Discord.");
             }
         }
         return rewardVotePlayerList;

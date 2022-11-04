@@ -114,16 +114,16 @@ public class Sussi {
             (instance = new Sussi()).initDatabase();
             SussiLogger.greatMessage("Sussi is successful connected to MySQL.");
         } catch (Exception e) {
-            SussiLogger.dangerMessage("During connection to MySQL, error has occurred:");
+            SussiLogger.errorMessage("During connection to MySQL, error has occurred:");
             e.printStackTrace();
             System.exit(-1);
         }
+        atsManager = new ATSResetTask();
 
         if (!isBeta) {
 
             // Inicializace základních managerů
             noteManager = new NoteManager();
-            atsManager = new ATSResetTask();
             voteManager = new VoteResetTask();
             vipManager = new VIPManager();
 

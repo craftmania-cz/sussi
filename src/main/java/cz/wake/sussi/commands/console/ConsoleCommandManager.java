@@ -59,7 +59,7 @@ public class ConsoleCommandManager {
             }
         }*/
 
-        SussiLogger.dangerMessage("Unknown command '" + command + "'!");
+        SussiLogger.errorMessage("Unknown command '" + command + "'!");
     }
 
     private static void startCommandThread() {

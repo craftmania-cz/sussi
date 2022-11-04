@@ -45,7 +45,6 @@ public class SelectionMenuListener extends ListenerAdapter {
                             return;
                         }
                         int level = Sussi.getInstance().getSql().getServerLevel(event.getMember().getIdLong(), "survival_118_level");
-                        System.out.println(level);
                         if (level < 5) {
                             event.getInteraction().getHook().sendMessage("Nemáš dostatečný level 5 k odemknutí kanálu. Hraj na Survivalu a až dosáhneš levelu 5, zkus to znova.").setEphemeral(true).queue();
                             return;
