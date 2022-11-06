@@ -61,7 +61,7 @@ public class UnlinkSlashCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
-        return false;
+    public boolean defferReply() {
+        return true;
     }
 }

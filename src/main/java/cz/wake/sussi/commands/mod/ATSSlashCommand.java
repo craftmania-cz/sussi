@@ -204,7 +204,10 @@ public class ATSSlashCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
+    public boolean defferReply() {
         return true;
     }
+
+    @Override
+    public boolean isEphemeral() { return true; }
 }

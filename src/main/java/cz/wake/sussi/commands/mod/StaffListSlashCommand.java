@@ -15,15 +15,15 @@ public class StaffListSlashCommand implements ISlashCommand {
     @Override
     public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
         MessageEmbed embed = MessageUtils.getEmbed(Constants.BLUE).setTitle("Seznam všech členů AT + jejich ID")
-                .addField("Owner", generateStaffList(member, "207423116861767681"), false)
-                .addField("Staff", generateStaffList(member, "208227643714306050"), false)
-                .addField("Admins", generateStaffList(member, "272454769975754753"), false)
-                .addField("Helpers", generateStaffList(member, "207638528757202945"), false)
-                .addField("Developers", generateStaffList(member, "364085114172604426"), false)
-                .addField("Eventer", generateStaffList(member, "272457315767287808"), false)
-                .addField("Builder", generateStaffList(member, "294897053207756800"), false)
-                .addField("Moderator", generateStaffList(member, "649927113964650496"), false)
-                .addField("Artist", generateStaffList(member, "796382683734605836"), false)
+                .addField("Owner", generateStaffList(member, "207423116861767681"), true)
+                .addField("Staff", generateStaffList(member, "208227643714306050"), true)
+                .addField("Admins", generateStaffList(member, "272454769975754753"), true)
+                .addField("Helpers", generateStaffList(member, "207638528757202945"), true)
+                .addField("Developers", generateStaffList(member, "364085114172604426"), true)
+                .addField("Eventer", generateStaffList(member, "272457315767287808"), true)
+                .addField("Builder", generateStaffList(member, "294897053207756800"), true)
+                .addField("Moderator", generateStaffList(member, "649927113964650496"), true)
+                .addField("Artist", generateStaffList(member, "796382683734605836"), true)
                 .build();
         hook.sendMessageEmbeds(embed).queue();
     }
@@ -54,8 +54,13 @@ public class StaffListSlashCommand implements ISlashCommand {
     }
 
     @Override
+    public boolean defferReply() {
+        return true;
+    }
+
+    @Override
     public boolean isEphemeral() {
-        return false;
+        return true;
     }
 
     private String generateStaffList(Member member, String roleId) {

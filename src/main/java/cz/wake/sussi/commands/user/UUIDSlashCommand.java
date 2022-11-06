@@ -76,8 +76,8 @@ public class UUIDSlashCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
-        return false;
+    public boolean defferReply() {
+        return true;
     }
 
     private static JSONObject getApiObject(String name) {

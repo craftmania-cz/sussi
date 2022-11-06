@@ -101,7 +101,7 @@ public class SetupCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
+    public boolean defferReply() {
         return true;
     }
 }

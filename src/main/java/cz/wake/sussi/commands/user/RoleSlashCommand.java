@@ -80,7 +80,7 @@ public class RoleSlashCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
+    public boolean defferReply() {
         return true;
     }
 

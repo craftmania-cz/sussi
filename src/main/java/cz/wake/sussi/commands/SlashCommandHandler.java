@@ -172,7 +172,6 @@ public class SlashCommandHandler {
     private void registerSlashCommands() {
 
         // General příkazy
-        registerSlashCommand(new HelpSlashCommand());
         registerSlashCommand(new LinkSlashCommand());
         registerSlashCommand(new UnlinkSlashCommand());
         registerSlashCommand(new RoomSlashCommand());

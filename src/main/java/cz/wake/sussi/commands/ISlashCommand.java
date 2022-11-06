@@ -20,5 +20,11 @@ public interface ISlashCommand {
 
     Rank getRank();
 
-    boolean isEphemeral();
+    default boolean defferReply() {
+        return true;
+    }
+
+    default boolean isEphemeral() {
+        return false;
+    }
 }

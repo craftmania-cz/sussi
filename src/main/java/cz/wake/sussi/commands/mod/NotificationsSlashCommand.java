@@ -113,7 +113,7 @@ public class NotificationsSlashCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
+    public boolean defferReply() {
         return false;
     }
 }

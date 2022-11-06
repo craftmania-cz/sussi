@@ -95,8 +95,8 @@ public class ProfileSlashCommand implements ISlashCommand {
     }
 
     @Override
-    public boolean isEphemeral() {
-        return false;
+    public boolean defferReply() {
+        return true;
     }
 
     private void firstPage(User s, InteractionHook hook, Profile profile) {
