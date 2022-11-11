@@ -57,6 +57,7 @@ public class SelectionMenuListener extends ListenerAdapter {
     }
 
     private void addOrRemoveRole(Member member, String name, long roleId, SelectMenuInteractionEvent event) {
+        event.deferReply(true).queue();
         if (!member.getRoles().contains(member.getGuild().getRoleById(roleId))) {
             member.getGuild().addRoleToMember(member, member.getGuild().getRoleById(roleId)).queue();
             event.getInteraction().getHook().sendMessage("Nastavil(a) jsi si roli **" + name + "**.").setEphemeral(true).queue();
