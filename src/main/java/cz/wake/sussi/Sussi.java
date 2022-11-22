@@ -1,6 +1,5 @@
 package cz.wake.sussi;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.SlashCommandHandler;
 import cz.wake.sussi.commands.console.ConsoleCommandManager;
 import cz.wake.sussi.listeners.*;
@@ -76,8 +75,6 @@ public class Sussi {
         ipHubKey = config.getIpHubKey();
         isBeta = config.isBeta();
 
-        EventWaiter waiter = new EventWaiter();
-
         startUp = System.currentTimeMillis();
 
         // Connecting to Discord API
@@ -91,8 +88,7 @@ public class Sussi {
                         GatewayIntent.DIRECT_MESSAGES
                 )
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .addEventListeners(new MainListener(waiter), new CraftManiaArchiveListener())
-                .addEventListeners(waiter)
+                .addEventListeners(new MainListener(), new CraftManiaArchiveListener())
                 .addEventListeners(new BoosterListener())
                 .addEventListeners(new ChangelogReactionsListener())
                 .addEventListeners(new GuildStatisticsListener())

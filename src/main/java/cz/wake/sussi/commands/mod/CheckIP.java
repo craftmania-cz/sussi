@@ -1,6 +1,5 @@
 package cz.wake.sussi.commands.mod;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
 import cz.wake.sussi.commands.Rank;
@@ -24,7 +23,7 @@ import java.util.regex.Pattern;
 public class CheckIP implements ICommand {
 
     @Override
-    public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
+    public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member) {
 
     }
 

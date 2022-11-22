@@ -37,8 +37,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.19'
-    implementation group: 'com.jagrosh', name: 'jda-utilities', version: '3.0.4'
+    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.22'
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '3.2.0'
     implementation group: 'org.slf4j', name: 'slf4j-api', version:' 1.7.25'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
@@ -49,7 +48,7 @@ dependencies {
     implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
-    implementation group: 'dev.mayuna', name: 'mayus-jda-utilities', version: '3.1.1'
+    implementation group: 'dev.mayuna', name: 'mayus-jda-utilities', version: '3.2.1'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.22'

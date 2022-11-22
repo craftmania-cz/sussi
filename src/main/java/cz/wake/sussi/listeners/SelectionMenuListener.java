@@ -2,13 +2,13 @@ package cz.wake.sussi.listeners;
 
 import cz.wake.sussi.Sussi;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class SelectionMenuListener extends ListenerAdapter {
 
     @Override
-    public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {
+    public void onStringSelectInteraction(StringSelectInteractionEvent event) {
         if (event.getMember() == null) return;
         switch (event.getComponentId()) {
             case "menu:role_theme" -> {
@@ -56,7 +56,7 @@ public class SelectionMenuListener extends ListenerAdapter {
         }
     }
 
-    private void addOrRemoveRole(Member member, String name, long roleId, SelectMenuInteractionEvent event) {
+    private void addOrRemoveRole(Member member, String name, long roleId, StringSelectInteractionEvent event) {
         event.deferReply(true).queue();
         if (!member.getRoles().contains(member.getGuild().getRoleById(roleId))) {
             member.getGuild().addRoleToMember(member, member.getGuild().getRoleById(roleId)).queue();

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 public class SetupCommand implements ISlashCommand {
 
@@ -33,7 +34,7 @@ public class SetupCommand implements ISlashCommand {
     }
 
     private void generateThemeRoleSelector(MessageChannel channel) {
-        SelectMenu menu = SelectMenu.create("menu:role_theme")
+        StringSelectMenu menu = StringSelectMenu.create("menu:role_theme")
                 .setPlaceholder("Zvol si roli pro kanál s specifickým tématem")
                 .setMaxValues(1)
                 .setMinValues(1)
@@ -48,7 +49,7 @@ public class SetupCommand implements ISlashCommand {
     }
 
     private void generateAnnounceRoleSelector(MessageChannel channel) {
-        SelectMenu menu = SelectMenu.create("menu:role_announce")
+        StringSelectMenu menu = StringSelectMenu.create("menu:role_announce")
                 .setPlaceholder("Zvol si roli od které budeš dosávat upozornění")
                 .setMaxValues(1)
                 .setMinValues(1)
@@ -63,7 +64,7 @@ public class SetupCommand implements ISlashCommand {
     }
 
     private void generateServerRoleSelector(MessageChannel channel) {
-        SelectMenu menu = SelectMenu.create("menu:role_server")
+        StringSelectMenu menu = StringSelectMenu.create("menu:role_server")
                 .setPlaceholder("Specifické kanály pro naše Minecraft servery")
                 .setMaxValues(1)
                 .setMinValues(1)

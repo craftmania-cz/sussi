@@ -5,6 +5,7 @@ import cz.wake.sussi.commands.mod.*;
 import cz.wake.sussi.commands.owner.SetupCommand;
 import cz.wake.sussi.commands.user.*;
 import cz.wake.sussi.utils.SussiLogger;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -148,6 +149,8 @@ public class SlashCommandHandler {
                 .addSubcommands(new SubcommandData("broadcast", "Odeslání notifikace hráčům, kteří byli na serveru za x dní"))
         );
 
+        commands.addCommands(Commands.slash("at-reputation", "Hodnocení CraftMania Admin Teamu"));
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -181,6 +184,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new RoleSlashCommand());
         registerSlashCommand(new ProfileSettingsSlashCommand());
         registerSlashCommand(new BoosterSlashCommand());
+        registerSlashCommand(new AtReputationCommand());
 
         // Fun příkazy
         registerSlashCommand(new ChooseSlashCommand());

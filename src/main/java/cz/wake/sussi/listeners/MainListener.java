@@ -1,84 +1,20 @@
 package cz.wake.sussi.listeners;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
-import cz.wake.sussi.commands.ICommand;
-import cz.wake.sussi.commands.Rank;
-import cz.wake.sussi.objects.VoiceRoom;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
-import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
 
 public class MainListener extends ListenerAdapter {
-
-    private EventWaiter w;
-
-    public MainListener(EventWaiter w) {
-        this.w = w;
-    }
-
-    @Override
-    public void onMessageReceived(MessageReceivedEvent e) {
-
-        if (e.getAuthor().isBot()) {
-            return;
-        }
-
-        /*if (e.getMessage().getContentRaw().startsWith(Sussi.PREFIX) && !e.getAuthor().isBot()) {
-            String message = e.getMessage().getContentRaw();
-            String command = message.substring(1);
-            String[] args = new String[0];
-            if (message.contains(" ")) {
-                command = command.substring(0, message.indexOf(" ") - 1);
-
-                args = message.substring(message.indexOf(" ") + 1).split(" ");
-            }
-            for (ICommand cmd : Sussi.getInstance().getCommandHandler().getCommands()) {
-                if (cmd.getCommand().equalsIgnoreCase(command) || Arrays.asList(cmd.getAliases()).contains(command)) {
-                    SussiLogger.commandMessage("'," + cmd.getCommand() + "', Guild: " + e.getGuild().getName() + ", Channel: " + e.getChannel().getName() + ", Sender: " + e.getAuthor().getName() + "#" + e.getAuthor().getDiscriminator() + " (" + e.getAuthor().getId() + ")");
-                    String[] finalArgs = args;
-                    EnumSet<Permission> perms = e.getGuild().getSelfMember().getPermissions((GuildChannel) e.getChannel());
-                    if (!perms.contains(Permission.MESSAGE_EMBED_LINKS)) {
-                        e.getChannel().sendMessage(":warning: | Nemám dostatečná práva na používání EMBED odkazů! Přiděl mi právo: `Vkládání odkazů` nebo `Embed Links`.").queue();
-                        return;
-                    }
-                    if (Rank.getPermLevelForUser(e.getAuthor(), (TextChannel) e.getChannel()).isAtLeast(cmd.getRank())) {
-                        try {
-                            cmd.onCommand(e.getAuthor(), e.getChannel(), e.getMessage(), finalArgs, e.getMember(), w);
-                        } catch (Exception ex) {
-                            SussiLogger.fatalMessage("Internal error when executing the command!");
-                            ex.printStackTrace();
-                        }
-                        if (cmd.deleteMessage()) {
-                            delete(e.getMessage());
-                        }
-                    }
-
-                }
-            }
-        }*/
-    }
 
     @Override
     public void onShutdown(ShutdownEvent event) {
@@ -102,7 +38,7 @@ public class MainListener extends ListenerAdapter {
     }*/
 
     @Override
-    public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getEmoji().getName().equals("\u2705") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
             Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
                 MessageEmbed napadEmbed = message.getEmbeds().get(0);
@@ -137,7 +73,7 @@ public class MainListener extends ListenerAdapter {
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
-
+/* //TODO: Update
     @Override
     public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
         super.onGuildVoiceJoin(event);
@@ -209,10 +145,10 @@ public class MainListener extends ListenerAdapter {
                 event.getGuild().kickVoiceMember(event.getMember()).queue();
             }
         }
-    }
+    }*/
 
     @Override
-    public void onGuildMemberUpdatePending(@Nonnull GuildMemberUpdatePendingEvent event){
+    public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event){
         if(!event.getGuild().getId().equals("207412074224025600")){ // CM
             return;
         }

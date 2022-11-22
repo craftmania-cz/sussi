@@ -1,6 +1,5 @@
 package cz.wake.sussi.commands.mod;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ICommand;
@@ -22,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 public class CraftBox implements ICommand {
 
     @Override
-    public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member, EventWaiter w) {
-        if (args.length < 1) {
+    public void onCommand(User sender, MessageChannel channel, Message message, String[] args, Member member) {
+        /*if (args.length < 1) {
             channel.sendMessageEmbeds(
                     MessageUtils.getEmbed(Constants.GRAY)
                             .setTitle("Odkaz na CraftBox")
@@ -148,7 +147,7 @@ public class CraftBox implements ICommand {
                 });
                 break;
             }
-        }
+        }*/
     }
 
     @Override
