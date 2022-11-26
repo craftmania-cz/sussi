@@ -7,6 +7,7 @@ import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -199,12 +200,16 @@ public class VIPManager {
 
     private void addVIPRole(Guild guild, Member member, Role role, Profile.ServerVIP serverVIP) {
         guild.addRoleToMember(member, role).queue();
-        member.getUser().openPrivateChannel().queue(channel -> channel.sendMessageEmbeds(
-                MessageUtils.getEmbed(Constants.BLUE)
-                        .setTitle("Byla ti nastavena VIP role: " + role.getName())
-                        .setDescription((serverVIP.isPermanent() ? "Tato role neexpiruje." : "\nExpirace: " + serverVIP.getFormattedDate()))
-                        .build()
-        ).queue());
+        try {
+            member.getUser().openPrivateChannel().queue(channel -> channel.sendMessageEmbeds(
+                    MessageUtils.getEmbed(Constants.BLUE)
+                            .setTitle("Byla ti nastavena VIP role: " + role.getName())
+                            .setDescription((serverVIP.isPermanent() ? "Tato role neexpiruje." : "\nExpirace: " + serverVIP.getFormattedDate()))
+                            .build()
+            ).queue());
+        } catch (ErrorResponseException exception) {
+            SussiLogger.warnMessage("Failed to send private message: " + member.getUser().getAsTag());
+        }
 
         SussiLogger.infoMessage("Activated " + role.getName() + " role to user " + member.getUser().getAsTag() + ".");
     }
