@@ -1,18 +1,22 @@
 package cz.wake.sussi.listeners;
 
 import cz.wake.sussi.Sussi;
+import cz.wake.sussi.objects.VoiceRoom;
 import cz.wake.sussi.utils.Constants;
 import cz.wake.sussi.utils.MessageUtils;
+import cz.wake.sussi.utils.SussiLogger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumSet;
 
 public class MainListener extends ListenerAdapter {
 
@@ -20,22 +24,6 @@ public class MainListener extends ListenerAdapter {
     public void onShutdown(ShutdownEvent event) {
         Sussi.getInstance().getSql().onDisable();
     }
-
-    private void delete(Message message) {
-        if (message.getGuildChannel().getGuild().getSelfMember()
-                .getPermissions(message.getGuildChannel()).contains(Permission.MESSAGE_MANAGE)) {
-            message.delete().queue();
-        }
-    }
-
- /*   @Override
-    public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
-        if (event.getMember().getUser().isBot()){
-            return;
-        }
-        Member member = event.getMember();
-        member.getGuild().addRoleToMember(member, member.getGuild().getRoleById("761020839683817472")).queue(); // Přidání News role všem novým
-    }*/
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
@@ -73,79 +61,74 @@ public class MainListener extends ListenerAdapter {
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
-/* //TODO: Update
+
     @Override
-    public void onGuildVoiceJoin(@Nonnull GuildVoiceJoinEvent event) {
-        super.onGuildVoiceJoin(event);
-        if(event.getChannelJoined().getIdLong() == Sussi.getConfig().getVytvoritVoiceID()) {
-            if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
-                VoiceRoom vr = Sussi.getInstance().getSql().getVoiceRoom(event.getMember().getId());
+    public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
+        if (event.getChannelJoined() != null && event.getChannelLeft() == null) { // Voice join -> create
+            if (event.getChannelJoined().getIdLong() == Sussi.getConfig().getVytvoritVoiceID()) {
+                if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
+                    VoiceRoom vr = Sussi.getInstance().getSql().getVoiceRoom(event.getMember().getId());
 
-                String vrName;
-                String vrAddedMembers;
-                String vrBannedMembers;
+                    String vrName;
+                    String vrAddedMembers;
+                    String vrBannedMembers;
 
-                if (vr.getName().equals("default")) {
-                    vrName = event.getMember().getUser().getName();
+                    if (vr.getName().equals("default")) {
+                        vrName = event.getMember().getUser().getName();
+                    } else {
+                        vrName = vr.getName();
+                    }
+
+                    event.getGuild().getCategoryById(Constants.CATEGORY_KECARNA_ID).createVoiceChannel(vrName).setUserlimit(Math.toIntExact(vr.getLimit())).setBitrate(vr.getBitrate() * 1000).queue(voiceChannel -> {
+                        Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
+                        if (vr.getLocked()) {
+                            voiceChannel.getManager().putPermissionOverride(event.getMember().getGuild().getPublicRole(), null, EnumSet.of(Permission.VOICE_CONNECT)).queue();
+                        }
+                        for (String memberId : vr.getBannedMembers()){
+                            Member member = event.getGuild().getMemberById(memberId);
+                            if (member == null) continue;
+                            voiceChannel.getManager().getChannel().getManager().putPermissionOverride(member, null, EnumSet.of(Permission.VIEW_CHANNEL)).queue();
+                        }
+                        for (String memberId : vr.getAddedMembers()){
+                            Member member = event.getGuild().getMemberById(memberId);
+                            if (member == null) continue;
+                            voiceChannel.getManager().getChannel().getManager().putPermissionOverride(member, EnumSet.of(Permission.VOICE_CONNECT), null).queue();
+                        }
+                        voiceChannel.getManager().putPermissionOverride(event.getMember(), EnumSet.of(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL), null).queue();
+                        event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
+                        event.getGuild().getTextChannelById(Constants.CHANNEL_BOT_COMMANDS_ID).sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room info` nebo `/room help`").queue();
+                    });
                 } else {
-                    vrName = vr.getName();
+                    event.getGuild().kickVoiceMember(event.getMember()).queue();
                 }
-
-                event.getGuild().getCategoryById(Constants.CATEGORY_KECARNA_ID).createVoiceChannel(vrName).setUserlimit(Math.toIntExact(vr.getLimit())).setBitrate(vr.getBitrate() * 1000).queue(voiceChannel -> {
-                    Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
-                    if (vr.getLocked()) {
-                        voiceChannel.getManager().putPermissionOverride(event.getMember().getGuild().getPublicRole(), null, EnumSet.of(Permission.VOICE_CONNECT)).queue();
-                    }
-                    for (String memberId : vr.getBannedMembers()){
-                        Member member = event.getGuild().getMemberById(memberId);
-                        if (member == null) continue;
-                        voiceChannel.getManager().getChannel().getManager().putPermissionOverride(member, null, EnumSet.of(Permission.VIEW_CHANNEL)).queue();
-                    }
-                    for (String memberId : vr.getAddedMembers()){
-                        Member member = event.getGuild().getMemberById(memberId);
-                        if (member == null) continue;
-                        voiceChannel.getManager().getChannel().getManager().putPermissionOverride(member, EnumSet.of(Permission.VOICE_CONNECT), null).queue();
-                    }
-                    voiceChannel.getManager().putPermissionOverride(event.getMember(), EnumSet.of(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL), null).queue();
-                    event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
-                    event.getGuild().getTextChannelById(Constants.CHANNEL_BOT_COMMANDS_ID).sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room info` nebo `/room help`").queue();
-                });
-            } else {
-                event.getGuild().kickVoiceMember(event.getMember()).queue();
+            }
+        }
+        if (event.getChannelJoined() == null && event.getChannelLeft() != null) { // Opustil kanál
+            if (event.getChannelLeft().getMembers().size() == 0 && event.getChannelLeft().getIdLong() != Sussi.getConfig().getVytvoritVoiceID()) {
+                Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
+                event.getChannelLeft().delete().queue();
+            }
+        }
+        if (event.getChannelJoined() != null && event.getChannelLeft() != null) { // Move action
+            if (event.getChannelLeft().getMembers().size() == 0 && event.getChannelLeft().getIdLong() != Sussi.getConfig().getVytvoritVoiceID()) { // Opustil jeho vlastní kanál
+                Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
+                event.getChannelLeft().delete().queue();
+            }
+            if (event.getChannelJoined().getIdLong() == Sussi.getConfig().getVytvoritVoiceID()) { // Přepojil se z svého voice znovu do create kanálu
+                String name = event.getMember().getUser().getName();
+                if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
+                    event.getGuild().getCategoryById(Constants.CATEGORY_KECARNA_ID).createVoiceChannel(name).queue(voiceChannel -> {
+                        Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
+                        voiceChannel.getManager().putPermissionOverride(event.getMember(), EnumSet.of(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL), null).queue();
+                        event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
+                        event.getGuild().getTextChannelById(Constants.CHANNEL_BOT_COMMANDS_ID).sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room info` nebo `/room help`").queue();
+                    });
+                } else {
+                    event.getGuild().kickVoiceMember(event.getMember()).queue();
+                }
             }
         }
     }
-
-    @Override
-    public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
-        super.onGuildVoiceLeave(event);
-        if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getChannelLeft().getIdLong()) != 0 && event.getChannelLeft().getMembers().size() == 0) {
-            Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
-            event.getChannelLeft().delete().queue();
-        }
-    }
-
-    @Override
-    public void onGuildVoiceMove(@Nonnull GuildVoiceMoveEvent event) {
-        super.onGuildVoiceMove(event);
-        if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getChannelLeft().getIdLong()) != 0 && event.getChannelLeft().getMembers().size() == 0) {
-            Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
-            event.getChannelLeft().delete().queue();
-        }
-        if(event.getChannelJoined().getIdLong()  == Sussi.getConfig().getVytvoritVoiceID()) {
-            String name = event.getMember().getUser().getName();
-            if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
-                event.getGuild().getCategoryById(Constants.CATEGORY_KECARNA_ID).createVoiceChannel(name).queue(voiceChannel -> {
-                    Sussi.getInstance().getSql().createNewPlayerVoice(event.getMember().getIdLong(), voiceChannel.getIdLong());
-                    voiceChannel.getManager().putPermissionOverride(event.getMember(), EnumSet.of(Permission.VOICE_CONNECT, Permission.VIEW_CHANNEL), null).queue();
-                    event.getGuild().moveVoiceMember(event.getMember(), voiceChannel).queue();
-                    event.getGuild().getTextChannelById(Constants.CHANNEL_BOT_COMMANDS_ID).sendMessage(event.getMember().getAsMention() + " tvůj kanál byl vytvořen, můžeš ho spravovat pomocí příkazu `/room info` nebo `/room help`").queue();
-                });
-            } else {
-                event.getGuild().kickVoiceMember(event.getMember()).queue();
-            }
-        }
-    }*/
 
     @Override
     public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event){
@@ -156,8 +139,7 @@ public class MainListener extends ListenerAdapter {
         if (!event.getOldPending()) {
             return;
         }
-        //TODO: New log
-        System.out.println("Adding to user: " + event.getUser().getName() + " news role.");
+        SussiLogger.infoMessage("User joined: " + event.getUser().getName());
         Role role = guild.getRoleById(847281784403001375L); // News role
         assert role != null;
         event.getGuild().addRoleToMember(event.getMember(), role).queue();
