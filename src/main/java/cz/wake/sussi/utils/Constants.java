@@ -60,6 +60,7 @@ public class Constants {
 
     // Others
     final public static String CM_GUILD_ID = Sussi.config.getCmGuildID().toString();
+    final public static long CM_AT_REPUTATION_CHANNEL = 1051917159674155038L;
     final public static String CATEGORY_KECARNA_ID = Sussi.config.getKecarnyCategoryID().toString();
     final public static String VOICE_CREATE_ID = Sussi.config.getVytvoritVoiceID().toString();
     final public static String CHANNEL_BOT_COMMANDS_ID = Sussi.config.getBotPrikazyChannelID().toString();

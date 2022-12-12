@@ -3,19 +3,15 @@ package cz.wake.sussi.listeners;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.VoiceRoom;
 import cz.wake.sussi.utils.Constants;
-import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdatePendingEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 
 public class MainListener extends ListenerAdapter {
@@ -23,43 +19,6 @@ public class MainListener extends ListenerAdapter {
     @Override
     public void onShutdown(ShutdownEvent event) {
         Sussi.getInstance().getSql().onDisable();
-    }
-
-    @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getEmoji().getName().equals("\u2705") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
-            Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
-                MessageEmbed napadEmbed = message.getEmbeds().get(0);
-
-                EmbedBuilder embedBuilder = new EmbedBuilder(napadEmbed);
-                embedBuilder.setColor(Constants.GREEN);
-                embedBuilder.addField("Přidáno", getStringDate(), true);
-
-                message.editMessageEmbeds(embedBuilder.build()).queue();
-
-                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessageEmbeds(MessageUtils.getEmbed(Constants.GREEN).setDescription(Constants.GREEN_MARK + " | Proběhlo přidání nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
-            }));
-        }
-
-        if (event.getChannel().getIdLong() == Sussi.getConfig().getNavrhyHlasovaniID() && event.getReaction().getEmoji().getName().equals("\u2611\uFE0F") && event.getUserIdLong() == Sussi.getConfig().getOwnerID()) {
-            Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).retrieveMessageById(event.getMessageId()).queue((message -> {
-                MessageEmbed napadEmbed = message.getEmbeds().get(0);
-
-                EmbedBuilder embedBuilder = new EmbedBuilder(napadEmbed);
-                embedBuilder.setColor(Constants.BLUE);
-                embedBuilder.addField("Schváleno", getStringDate(), true);
-
-                message.editMessageEmbeds(embedBuilder.build()).queue();
-
-                Sussi.getJda().getTextChannelById(Sussi.getConfig().getNavrhyHlasovaniID()).sendMessageEmbeds(MessageUtils.getEmbed(Constants.BLUE).setDescription(Constants.THUMB_UP + " | Proběhlo schválení nápadu: [**Link**](" + message.getJumpUrl() + ")").build()).queue();
-            }));
-        }
-    }
-
-    private String getStringDate() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDateTime now = LocalDateTime.now();
-        return dtf.format(now);
     }
 
     @Override
@@ -131,7 +90,7 @@ public class MainListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMemberUpdatePending(GuildMemberUpdatePendingEvent event){
+    public void onGuildMemberUpdatePending(@NotNull GuildMemberUpdatePendingEvent event){
         if(!event.getGuild().getId().equals("207412074224025600")){ // CM
             return;
         }
