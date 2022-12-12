@@ -93,6 +93,7 @@ public class Sussi {
                 .addEventListeners(new ChangelogReactionsListener())
                 .addEventListeners(new GuildStatisticsListener())
                 .addEventListeners(new AtReputationChannelListener())
+                .addEventListeners(new NewsThreadListener())
                 .addEventListeners(new SlashCommandListener())
                 .addEventListeners(new ButtonClickListener())
                 .addEventListeners(new InteractiveListener())
