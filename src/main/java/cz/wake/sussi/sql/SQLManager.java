@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.wake.sussi.Sussi;
 import cz.wake.sussi.objects.*;
+import cz.wake.sussi.objects.ats.AtsRatingObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
@@ -16,7 +17,6 @@ public class SQLManager {
 
     private final Sussi plugin;
     private final ConnectionPoolManager pool;
-    private HikariDataSource dataSource;
 
     public SQLManager(Sussi plugin) {
         this.plugin = plugin;
@@ -1035,6 +1035,87 @@ public class SQLManager {
             ps.setString(5, notificationTitle);
             ps.setString(6, notificationBody);
             ps.setLong(7, currentTime);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final List<AtsRatingObject> getAtsRatingList() {
+        List<AtsRatingObject> atsList = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT at_table.rank, at_table.rating_head, player_profile.nick, player_profile.discord_user_id FROM at_table LEFT JOIN player_profile ON at_table.uuid = player_profile.uuid GROUP BY player_profile.uuid;");
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                if (ps.getResultSet().getString("rating_head") != null) {
+                    atsList.add(new AtsRatingObject(ps.getResultSet().getString("nick"), ps.getResultSet().getLong("discord_user_id"), ps.getResultSet().getInt("rank"), ps.getResultSet().getString("rating_head")));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return atsList;
+    }
+
+    public final void updateKarmaStatistics(long giverDiscordId, long reviewedDiscordId, int karmaPoints) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("UPDATE player_profile SET last_karma_given = ? WHERE discord_user_id = ?;");
+            ps.setLong(1, System.currentTimeMillis());
+            ps.setLong(2, giverDiscordId);
+            ps.execute();
+
+            ps = conn.prepareStatement("UPDATE player_profile SET karma_points = ? WHERE discord_user_id = ?;");
+            ps.setLong(1, karmaPoints);
+            ps.setLong(2, reviewedDiscordId);
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+    }
+
+    public final long getLastKarmaGivenTime(long userId) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("SELECT last_karma_given FROM player_profile WHERE discord_user_id = ?;");
+            ps.setLong(1, userId);
+            ps.executeQuery();
+            if (ps.getResultSet().next()) {
+                return ps.getResultSet().getLong("last_karma_given");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pool.close(conn, ps, null);
+        }
+        return System.currentTimeMillis();
+    }
+
+    public final void createReputationLog(final String name, final long discordId, final String reviewerName, final long reviewerId, final int stars, final String text) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = pool.getConnection();
+            ps = conn.prepareStatement("INSERT INTO player_reputation_log (name,discord_id,reviewer_name,reviewer_id,stars,text) VALUES (?,?,?,?,?,?);");
+            ps.setString(1, name);
+            ps.setLong(2, discordId);
+            ps.setString(3, reviewerName);
+            ps.setLong(4, reviewerId);
+            ps.setInt(5, stars);
+            ps.setString(6, text);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

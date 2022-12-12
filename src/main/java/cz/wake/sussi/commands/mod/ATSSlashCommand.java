@@ -5,6 +5,7 @@ import cz.wake.sussi.commands.CommandType;
 import cz.wake.sussi.commands.ISlashCommand;
 import cz.wake.sussi.commands.Rank;
 import cz.wake.sussi.objects.ats.ATS;
+import cz.wake.sussi.objects.ats.AtsUtils;
 import cz.wake.sussi.utils.MessageUtils;
 import cz.wake.sussi.utils.SussiLogger;
 import cz.wake.sussi.utils.TimeUtils;
@@ -24,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ATSSlashCommand implements ISlashCommand {
+
+    private AtsUtils atsUtils = new AtsUtils();
 
     @Override
     public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
@@ -99,10 +102,10 @@ public class ATSSlashCommand implements ISlashCommand {
     }
 
     private EmbedBuilder getFirstPageEmbed(ATS ats) {
-        return MessageUtils.getEmbed(ats.getColorByRank())
+        return MessageUtils.getEmbed(atsUtils.getColorByRank(ats.getRank()))
                 .setTitle("Přehled ATS pro - " + ats.getName())
                 .setThumbnail("https://mc-heads.net/head/" + ats.getName() + "/128.png")
-                .addField("Rank", ats.getRankByID(), true)
+                .addField("Rank", atsUtils.getRankByID(ats.getRank()), true)
                 .addField("Přístup na Build", getResult(ats.getPristup_build()), true)
                 .addField("Celkem hodin", TimeUtils.formatTime("%d dni, %hh %mm", ats.getTotalTime(), false), true)
                 .addField("Celkem aktivita", ats.getTotalActivityFormatted(), true)
@@ -112,7 +115,7 @@ public class ATSSlashCommand implements ISlashCommand {
     }
 
     private EmbedBuilder getSecondPageEmbed(ATS ats) {
-        return MessageUtils.getEmbed(ats.getColorByRank())
+        return MessageUtils.getEmbed(atsUtils.getColorByRank(ats.getRank()))
                 .setTitle("Přehled ATS pro - " + ats.getName())
                 .addField("Survival",
                         "**Chat:** " + ats.getServerATS(ATS.Server.SURVIVAL).getChatBody() + "\n**Odehráno:** " + TimeUtils.formatTime("%d dni, %hh %mm",
