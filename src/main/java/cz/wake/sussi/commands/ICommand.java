@@ -16,6 +16,7 @@ public interface ICommand {
 
     String getHelp();
 
+    @Deprecated
     CommandType getType();
 
     Rank getRank();

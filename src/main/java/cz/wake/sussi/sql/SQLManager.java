@@ -363,7 +363,7 @@ public class SQLManager {
         } finally {
             pool.close(conn, ps, null);
         }
-        return "";
+        return null;
     }
 
     public final void connectToMC(final String id, final String code) {

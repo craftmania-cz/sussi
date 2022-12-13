@@ -4,6 +4,7 @@ import cz.wake.sussi.Sussi;
 
 import java.util.List;
 
+@Deprecated
 public enum CommandType {
 
     GENERAL,

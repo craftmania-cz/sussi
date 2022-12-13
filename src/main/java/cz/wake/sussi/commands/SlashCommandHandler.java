@@ -151,6 +151,10 @@ public class SlashCommandHandler {
 
         commands.addCommands(Commands.slash("at-reputation", "Hodnocení CraftMania Admin Teamu"));
 
+        commands.addCommands(Commands.slash("reputation", "Udělení reputace jinému hráči na serveru")
+                .addOptions(new OptionData(OptionType.USER, "user", "Hráč jako Discord uživatel, kterému chceš dát reputaci").setRequired(true))
+        );
+
         // Finální update všech slash příkazů
         commands.queue();
         this.registerSlashCommands();
@@ -185,6 +189,7 @@ public class SlashCommandHandler {
         registerSlashCommand(new ProfileSettingsSlashCommand());
         registerSlashCommand(new BoosterSlashCommand());
         registerSlashCommand(new AtReputationCommand());
+        registerSlashCommand(new ReputationSlashCommand());
 
         // Fun příkazy
         registerSlashCommand(new ChooseSlashCommand());

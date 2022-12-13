@@ -12,10 +12,13 @@ public interface ISlashCommand {
 
     String getName();
 
+    @Deprecated
     String getDescription();
 
+    @Deprecated
     String getHelp();
 
+    @Deprecated
     CommandType getType();
 
     Rank getRank();
