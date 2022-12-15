@@ -22,11 +22,6 @@ public class BoosterSlashCommand implements ISlashCommand {
         OptionMapping optionColor = event.getOption("hex_color");
         String colorString = optionColor.getAsString();
 
-        if (colorString == null) {
-            hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Špatně zadaný příkaz! Př. `/booster #8f9eb5`.\nPodporujeme jenom hex formát.").build()).queue();
-            return;
-        }
-
         if (!member.getRoles().contains(member.getGuild().getRoleById(Constants.BOOSTER_ROLE))) {
             hook.sendMessageEmbeds(MessageUtils.getEmbedError().setDescription("Na toto nemáš práva, musíš boostit náš server! " + EmoteList.ZABICKA_BOOSTER).build()).queue();
             return;
@@ -36,7 +31,7 @@ public class BoosterSlashCommand implements ISlashCommand {
             final Color color = Color.decode(colorString);
             final String colorHexString = "#"+Integer.toHexString(color.getRGB()).substring(2);
             final Guild guild = member.getGuild();
-            final int retiredPosition = guild.getRolesByName("Retired", true).stream().findFirst().get().getPosition(); // Under retired
+            final int retiredPosition = guild.getRoleById(388117229792788491L).getPositionRaw(); // Under retired
 
             member.getRoles().stream().filter(role -> role.getName().startsWith("#")).forEach(role -> {
                 // Remove all other roles
@@ -56,7 +51,7 @@ public class BoosterSlashCommand implements ISlashCommand {
                         .setColor(color)
                         .setMentionable(false)
                         .complete();
-                guild.modifyRolePositions().selectPosition(newRole).moveTo(retiredPosition).queue();
+                guild.modifyRolePositions().selectPosition(newRole).moveTo(guild.getRoles().size() - retiredPosition - 1).queue();
                 guild.addRoleToMember(member, newRole).queue();
             } else {
                 // Get and assign
