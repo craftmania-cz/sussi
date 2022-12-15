@@ -112,7 +112,7 @@ public class ProfileSlashCommand implements ISlashCommand {
         }
 
         EmbedBuilder embedBuilder = MessageUtils.getEmbed(color)
-                .setTitle("Informace o hráči: " + profile.getName() + "#" + profile.getDiscriminator() + " (lvl: " + profile.getGlobal_level() + ")", "https://stats.craftmania.cz/player/" + profile.getName())
+                .setTitle("Profil hráče: " + profile.getName() + "#" + profile.getDiscriminator() + " (lvl: " + profile.getGlobal_level() + ", reputace: " + profile.getKarmaPoints() + ")", "https://stats.craftmania.cz/player/" + profile.getName())
                 .setThumbnail("https://mc-heads.net/head/" + profile.getName() + "/128.png")
                 .addField("Globální statistiky",
                         "Registrován: " + getDate(profile.getRegistred()) + "\n" +
@@ -128,8 +128,7 @@ public class ProfileSlashCommand implements ISlashCommand {
                                 "VoteTokeny: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVoteTokens()) + "\n" +
                                 "Event pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getEventPoints()) + "\n" +
                                 "Quest pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getQuestPoints()) + "\n" +
-                                "Bug pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getBugPoints()) /*+ "\n" +
-                                "Parkour pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getParkourPoints())*/
+                                "Bug pointy: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getBugPoints())
                         , true)
                 .addField("Hlasování",
                         "Celkem hlasů: " + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getTotalVotes()) + "\n" +
@@ -144,9 +143,7 @@ public class ProfileSlashCommand implements ISlashCommand {
                         "Survival: " + profile.getSurvival_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSurvival_experience()) + "XP)" + "\n" +
                                 "SkyBlock: " + profile.getSkyblock_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getSkyblock_experience()) + "XP)" + "\n" +
                                 "Creative: " + profile.getCreative_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getCreative_experience()) + "XP)" + "\n" +
-                                "Prison: " + profile.getPrison_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getPrison_experience()) + "XP)" + "\n" +
                                 "Vanilla [Lands]: " + profile.getVanilla_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_experience()) + "XP)" + "\n" +
-                                "Vanilla [Anarchy]: " + profile.getVanilla_anarchy_level() + " (" + NumberFormat.getNumberInstance(Locale.ENGLISH).format(profile.getVanilla_anarchy_experience()) + "XP)" + "\n" +
                                 "Staré servery: " + profile.getStare_servery_level() + "\n"
                         , true)
                 .setFooter("CraftMania.cz Stats")

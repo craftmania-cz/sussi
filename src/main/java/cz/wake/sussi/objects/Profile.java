@@ -31,7 +31,6 @@ public class Profile {
     private String last_server = "";
     private boolean online = false;
     private long played_time = 0;
-    private String mc_version = "";
 
     // Economy
     private int craft_coins = 0;
@@ -53,12 +52,7 @@ public class Profile {
     private int creative_experience = 0;
     private int vanilla_level = 1;
     private int vanilla_experience = 0;
-    private int prison_level = 1;
-    private int prison_experience = 0;
-    private int vanilla_anarchy_level = 1;
-    private int vanilla_anarchy_experience = 0;
     private int stare_servery_level = 1;
-    private int stare_servery_experience = 0;
 
     // Discord
     private int discord_messages = 0;
@@ -123,7 +117,6 @@ public class Profile {
         this.last_server = data.isNull("last_server") ? "" : data.getString("last_server");
         this.online = data.isNull("is_online") ? false : data.getBoolean("is_online");
         this.played_time = data.isNull("played_time") ? 0 : data.getLong("played_time");
-        this.mc_version = data.isNull("mc_version") ? "" : data.getString("mc_version");
 
         // Economy
         this.craft_coins = economy.isNull("craft_coins") ? 0 : economy.getInt("craft_coins");
@@ -145,12 +138,7 @@ public class Profile {
         this.creative_experience = ranked.isNull("creative_experience") ? 0 : ranked.getInt("creative_experience");
         this.vanilla_level = ranked.isNull("vanilla_level") ? 0 : ranked.getInt("vanilla_level");
         this.vanilla_experience = ranked.isNull("vanilla_experience") ? 0 : ranked.getInt("vanilla_experience");
-        this.prison_level = ranked.isNull("prison_level") ? 0 : ranked.getInt("prison_level");
-        this.prison_experience = ranked.isNull("prison_experience") ? 0 : ranked.getInt("prison_experience");
-        this.vanilla_anarchy_level = ranked.isNull("anarchy_level") ? 0 : ranked.getInt("anarchy_level");
-        this.vanilla_anarchy_experience = ranked.isNull("anarchy_experience") ? 0 : ranked.getInt("anarchy_experience");
         this.stare_servery_level = ranked.isNull("old_servers_level") ? 0 : ranked.getInt("old_servers_level");
-        this.stare_servery_experience = ranked.isNull("old_servers_experience") ? 0 : ranked.getInt("old_servers_experience");
 
         // Votes
         this.total = votes.isNull("total") ? 0 : votes.getInt("total");
@@ -246,10 +234,6 @@ public class Profile {
         return played_time;
     }
 
-    public String getMcVersion() {
-        return mc_version;
-    }
-
     public int getCraftCoins() {
         return craft_coins;
     }
@@ -278,10 +262,6 @@ public class Profile {
         return creative_level;
     }
 
-    public int getPrison_level() {
-        return prison_level;
-    }
-
     public int getSkyblock_level() {
         return skyblock_level;
     }
@@ -298,10 +278,6 @@ public class Profile {
         return creative_experience;
     }
 
-    public int getPrison_experience() {
-        return prison_experience;
-    }
-
     public int getSkyblock_experience() {
         return skyblock_experience;
     }
@@ -314,20 +290,8 @@ public class Profile {
         return vanilla_experience;
     }
 
-    public int getVanilla_anarchy_level() {
-        return vanilla_anarchy_level;
-    }
-
-    public int getVanilla_anarchy_experience() {
-        return vanilla_anarchy_experience;
-    }
-
     public int getStare_servery_level() {
         return stare_servery_level;
-    }
-
-    public int getStare_servery_experience() {
-        return stare_servery_experience;
     }
 
     public int getTotalVotes() {
@@ -344,10 +308,6 @@ public class Profile {
 
     public long getLastVote() {
         return last_vote;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public int getDiscord_messages() {
@@ -563,7 +523,8 @@ public class Profile {
         GOLD("gold", 1, "#d4a01d"),
         DIAMOND("diamond", 2, "#87cefa"),
         EMERALD("emerald", 3, "#6cf1c6"),
-        OBSIDIAN("obsidian", 4, "#8953ff");
+        OBSIDIAN("obsidian", 4, "#8953ff"),
+        AMETHYST("amethyst", 5, "#b32ac9");
 
         private String groupName;
         private int priority;
