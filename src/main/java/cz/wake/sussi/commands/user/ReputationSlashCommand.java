@@ -34,7 +34,7 @@ public class ReputationSlashCommand implements ISlashCommand {
         String minecraftNick = Sussi.getInstance().getSql().getMinecraftNick(sender.getId());
         Profile profile = new Profile(minecraftNick);
         if (profile.getGlobal_level() < 2) {
-            hook.sendMessageEmbeds(new EmbedBuilder().setTitle("Chyba").setDescription("Nemáš dostatečný Globalní Level. Možnost hodnotit členy AT je zpřístupněno od levelu 2, ty máš: **" + profile.getGlobal_level() + "**").setColor(Constants.ADMIN).build()).setEphemeral(true).queue();
+            hook.sendMessageEmbeds(new EmbedBuilder().setTitle("Chyba").setDescription("Nemáš dostatečný Globalní Level. Možnost dávat reputaci ostatním hráčům je zpřístupněno od levelu 2, ty máš: **" + profile.getGlobal_level() + "**").setColor(Constants.ADMIN).build()).setEphemeral(true).queue();
             SussiLogger.infoMessage("User does not have global level higher then 2, reputation blocked.");
             return;
         }

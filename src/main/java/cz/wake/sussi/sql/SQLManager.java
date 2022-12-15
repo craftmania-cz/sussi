@@ -1074,7 +1074,7 @@ public class SQLManager {
             ps.setLong(2, giverDiscordId);
             ps.execute();
 
-            ps = conn.prepareStatement("UPDATE player_profile SET karma_points = ? WHERE discord_user_id = ?;");
+            ps = conn.prepareStatement("UPDATE player_profile SET karma_points = karma_points + ? WHERE discord_user_id = ?;");
             ps.setLong(1, karmaPoints);
             ps.setLong(2, reviewedDiscordId);
             ps.execute();
