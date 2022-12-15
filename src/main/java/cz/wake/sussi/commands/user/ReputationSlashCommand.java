@@ -58,11 +58,17 @@ public class ReputationSlashCommand implements ISlashCommand {
             return;
         }
 
+        if (selectedUser == sender) {
+            hook.sendMessageEmbeds(new EmbedBuilder().setTitle("Chyba").setDescription("Sám sobě dát reputaci nemůžeš!").setColor(Constants.ADMIN).build()).setEphemeral(true).queue();
+            SussiLogger.infoMessage("User gave reputation yourself, reputation blocked.");
+            return;
+        }
+
         SussiLogger.infoMessage("[REPUTATION] User " + sender.getAsTag() + "(" + sender.getId() + ") gave reputation to user " + selectedUser.getAsTag() + "(" + selectedUser.getId() + ")");
         Sussi.getInstance().getSql().updateKarmaStatistics(sender.getIdLong(), selectedUser.getIdLong(), 1);
         Sussi.getInstance().getSql().createReputationLog(selectedUserMinecraftNick, selectedUser.getIdLong(), minecraftNick, sender.getIdLong(), 1, null);
 
-        hook.sendMessage("Dal jsi hráči **" + selectedUserMinecraftNick + "**" + selectedUser.getAsMention() + " reputaci.").queue();
+        hook.sendMessage("Dal jsi hráči **" + selectedUserMinecraftNick + "** (" + selectedUser.getAsMention() + ") reputaci.").setEphemeral(false).queue();
     }
 
     @Override
@@ -82,16 +88,11 @@ public class ReputationSlashCommand implements ISlashCommand {
 
     @Override
     public CommandType getType() {
-        return CommandType.MODERATION;
+        return CommandType.GENERAL;
     }
 
     @Override
     public Rank getRank() {
-        return Rank.MODERATOR;
-    }
-
-    @Override
-    public boolean isEphemeral() {
-        return true;
+        return Rank.USER;
     }
 }
