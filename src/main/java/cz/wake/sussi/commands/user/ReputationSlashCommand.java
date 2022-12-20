@@ -73,7 +73,7 @@ public class ReputationSlashCommand implements ISlashCommand {
 
     @Override
     public String getName() {
-        return "reputation";
+        return "rep";
     }
 
     @Override
