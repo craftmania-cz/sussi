@@ -15,7 +15,6 @@ public class BoosterListener extends ListenerAdapter {
         if (guild == null) return;
         Member member = e.getMember();
 
-        System.out.println("[BOOST]: " + member.getNickname() + " - newTime(" + e.getNewTimeBoosted() + "), oldTime(" + e.getOldTimeBoosted() + ")");
         if(e.getNewTimeBoosted() != null && e.getOldTimeBoosted() == null) {
             /*
             member.getUser().openPrivateChannel().queue(msg -> msg.sendMessage(
@@ -30,7 +29,7 @@ public class BoosterListener extends ListenerAdapter {
         }
         if (e.getNewTimeBoosted() == null && e.getOldTimeBoosted() != null) {
             Sussi.getInstance().getSql().updateBooster(member.getId(), 0);
-            guild.getRoles().stream().filter(role -> role.getName().startsWith("#")).forEach(role -> {
+            member.getRoles().stream().filter(role -> role.getName().startsWith("#")).forEach(role -> {
                 guild.removeRoleFromMember(member, role).queue(success -> {
                     if (guild.getMembersWithRoles(role).isEmpty()) {
                         role.delete().queue();
