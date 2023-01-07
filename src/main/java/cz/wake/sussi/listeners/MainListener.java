@@ -16,13 +16,16 @@ import java.util.EnumSet;
 public class MainListener extends ListenerAdapter {
 
     @Override
-    public void onShutdown(ShutdownEvent event) {
+    public void onShutdown(@NotNull ShutdownEvent event) {
         Sussi.getInstance().getSql().onDisable();
     }
 
     @Override
     public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
         if (event.getChannelJoined() != null && event.getChannelLeft() == null) { // Voice join -> create
+            if (!event.getChannelJoined().getParentCategory().getId().equals(Constants.CATEGORY_KECARNA_ID)) {
+                return;
+            }
             if (event.getChannelJoined().getIdLong() == Sussi.getConfig().getVytvoritVoiceID()) {
                 if(Sussi.getInstance().getSql().getPlayerVoiceOwnerIdByRoomId(event.getMember().getIdLong()) == 0) {
                     VoiceRoom vr = Sussi.getInstance().getSql().getVoiceRoom(event.getMember().getId());
@@ -62,12 +65,18 @@ public class MainListener extends ListenerAdapter {
             }
         }
         if (event.getChannelJoined() == null && event.getChannelLeft() != null) { // Opustil kanál
+            if (!event.getChannelLeft().getParentCategory().getId().equals(Constants.CATEGORY_KECARNA_ID)) {
+                return;
+            }
             if (event.getChannelLeft().getMembers().size() == 0 && event.getChannelLeft().getIdLong() != Sussi.getConfig().getVytvoritVoiceID()) {
                 Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
                 event.getChannelLeft().delete().queue();
             }
         }
         if (event.getChannelJoined() != null && event.getChannelLeft() != null) { // Move action
+            if (!event.getChannelLeft().getParentCategory().getId().equals(Constants.CATEGORY_KECARNA_ID)) {
+                return;
+            }
             if (event.getChannelLeft().getMembers().size() == 0 && event.getChannelLeft().getIdLong() != Sussi.getConfig().getVytvoritVoiceID()) { // Opustil jeho vlastní kanál
                 Sussi.getInstance().getSql().deletePlayerVoice(event.getChannelLeft().getIdLong());
                 event.getChannelLeft().delete().queue();
