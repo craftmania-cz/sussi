@@ -5,8 +5,9 @@ import cz.wake.sussi.objects.votes.RewardMonthVotePlayer;
 import cz.wake.sussi.objects.votes.VotePlayer;
 import cz.wake.sussi.utils.*;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.quartz.Job;
@@ -57,6 +58,7 @@ public class VoteResetTask implements Job {
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
+                SussiLogger.debugMessage("Saving to cache " + resultSet.getString("nick"));
                 cache.add(new VotePlayer(resultSet.getString("nick"), UUID.fromString(resultSet.getString("uuid")), resultSet.getInt("month_votes"), resultSet.getInt("pos")));
             }
 
@@ -71,7 +73,7 @@ public class VoteResetTask implements Job {
         return cache;
     }
 
-    private List<RewardMonthVotePlayer> sendRewards(List<VotePlayer> votePlayerList) {
+    private List<RewardMonthVotePlayer> sendRewards(List<VotePlayer> votePlayerList, String rewardTitle) {
         List<RewardMonthVotePlayer> rewardVotePlayerList = new ArrayList<>();
         for (VotePlayer voteplayer : votePlayerList) {
             SussiLogger.infoMessage("Sending month vote reward for player " + voteplayer.getNick());
@@ -107,6 +109,7 @@ public class VoteResetTask implements Job {
                         .thenCompose((user) -> user.openPrivateChannel().submit())
                         .thenCompose((channel) -> channel.sendMessageEmbeds(MessageUtils.getEmbed(Color.decode("#3cab59"))
                                 // Zpráva pro obdržitele odměny za hlasování
+                                .setTitle("Odměna za hlasování: " + rewardTitle)
                                 .setDescription("Jako odměnu za hlasování získáváš dárkový poukaz v hodnotě **" + RewardMonthVoteUtils.getAmount(voteplayer.getPosition()) + "** CZK.\nKód: ||" + rewardCode + "|| (klikni pro zobrazení)")
                                 .build()).submit())
                         .whenComplete((v, error) -> {
@@ -171,29 +174,29 @@ public class VoteResetTask implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        TextChannel channel = Sussi.getJda().getTextChannelById(OZNAMENI_ID);
-        assert channel != null;
+        GuildMessageChannel channel = Sussi.getJda().getNewsChannelById(OZNAMENI_ID);
         List<VotePlayer> cache = evaluate(true);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
         String month = new SimpleDateFormat("M").format(calendar.getTime());
         String year = new SimpleDateFormat("yyyy").format(calendar.getTime());
-        channel.sendMessageEmbeds(MessageUtils.getEmbed(Color.decode("#3cab59"))
-                .setTitle("Výsledky hlasování: " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
-                .setDescription("Zde jsou výslekdy hlasování za minulý měsíc - " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
-                .addField("1.-5.",
-                        cache.stream().limit(5).map(voteplayer -> {
-                            return voteplayer.getPosition() + ". **" + voteplayer.getNick() + "** (" + voteplayer.getMonthlyVotes() + " hlasů)";
-                        }).collect(Collectors.joining("\n")), true)
-                .addField("6.-10.",
-                        cache.subList(5, 10).stream().map(votePlayer -> {
-                            return votePlayer.getPosition() + ". " + votePlayer.getNick() + " (" + votePlayer.getMonthlyVotes() + " hlasů)";
-                        }).collect(Collectors.joining("\n")), true)
+        SussiLogger.debugMessage("Sending embed message to channel");
+        String firstHalf = cache.stream().limit(5).map(voteplayer -> voteplayer.getPosition() + ". **" + voteplayer.getNick() + "** (" + voteplayer.getMonthlyVotes() + " hlasů)").collect(Collectors.joining("\n"));
+        System.out.println(firstHalf);
+        String secondHalf = cache.subList(5, 10).stream().map(votePlayer -> votePlayer.getPosition() + ". " + votePlayer.getNick() + " (" + votePlayer.getMonthlyVotes() + " hlasů)").collect(Collectors.joining("\n"));
+        System.out.println(secondHalf);
+        MessageCreateBuilder message = new MessageCreateBuilder();
+        message.addEmbeds(MessageUtils.getEmbed(Constants.GREEN)
+                .setTitle("Výsledky hlasování")
+                .setDescription("Zde jsou výsledky hlasování za minulý měsíc - " + MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year)
+                .addField("1.-5.", firstHalf, true)
+                .addField("6.-10.", secondHalf, true)
                 .build()
-        ).queue();
+        );
+        channel.sendMessage(message.build()).queue(success -> {}, System.out::println);
 
         SussiLogger.infoMessage("Starting generating and sending vote month rewards.");
-        List<RewardMonthVotePlayer> rewardMonthVotePlayerList = sendRewards(cache.subList(0, 5));
+        List<RewardMonthVotePlayer> rewardMonthVotePlayerList = sendRewards(cache.subList(0, 5), MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year);
 
         // Nechci kecat, tohle by se mělo vyřešit lépe
         CompletableFuture.delayedExecutor(5, TimeUnit.SECONDS).execute(() -> {

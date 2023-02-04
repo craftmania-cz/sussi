@@ -118,6 +118,7 @@ public class Sussi {
         atsManager = new ATSResetTask();
 
         if (!isBeta) {
+            SussiLogger.infoMessage("Sussi will run as production bot.");
 
             // Inicializace základních managerů
             noteManager = new NoteManager();
@@ -127,10 +128,11 @@ public class Sussi {
             // Tasks
             try {
                 scheduleTasks();
-            } catch (SchedulerException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
+            SussiLogger.infoMessage("Sussi is set to test mode, some functions may not work properly.");
             jda.getPresence().setActivity(Activity.of(Activity.ActivityType.PLAYING, "Testovací režim."));
             jda.getPresence().setStatus(OnlineStatus.IDLE);
         }
@@ -202,7 +204,8 @@ public class Sussi {
         return notificationCache;
     }
 
-    private static void scheduleTasks() throws SchedulerException {
+    private static void scheduleTasks() throws Exception {
+        SussiLogger.infoMessage("Start of scheduling tasks");
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
         scheduler.start();
@@ -215,7 +218,7 @@ public class Sussi {
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 8 5 1/1 ? *")) // 5th day of every month on 8am
                     .build();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -228,7 +231,7 @@ public class Sussi {
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1/1 ? *")) // every 1st of month on 1am
                     .build();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -241,7 +244,7 @@ public class Sussi {
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 * * ? *")) // everyday on 1 am
                     .build();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -254,7 +257,7 @@ public class Sussi {
                     .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 ? * MON"))
                     .build();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -265,7 +268,7 @@ public class Sussi {
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("statusChangeTask").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever()).build();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -276,7 +279,7 @@ public class Sussi {
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("emptyVoiceCheck").startNow().withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(3)).build();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -287,7 +290,7 @@ public class Sussi {
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("vipCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(2)).build(); // Every 2 hours
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -298,7 +301,7 @@ public class Sussi {
             SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
                     .forJob("textActivityCheck").withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1)).build(); // Every 1 minute
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -310,7 +313,7 @@ public class Sussi {
                     .forJob("boosterCheck").withSchedule(SimpleScheduleBuilder.repeatHourlyForever(1)).build(); // Every 1 hour
             scheduler.start();
             scheduler.scheduleJob(job, ITrigger);
-        } catch (SchedulerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
