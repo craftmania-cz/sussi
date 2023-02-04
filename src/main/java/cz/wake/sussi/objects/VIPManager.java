@@ -172,6 +172,7 @@ public class VIPManager {
      */
     private boolean isVIPRole(String roleName) {
         switch (roleName) {
+            case "Amethyst VIP":
             case "Obsidian VIP":
             case "Emerald VIP":
             case "Diamond VIP":
