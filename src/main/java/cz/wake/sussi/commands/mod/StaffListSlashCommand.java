@@ -16,7 +16,6 @@ public class StaffListSlashCommand implements ISlashCommand {
     public void onSlashCommand(User sender, MessageChannel channel, Member member, InteractionHook hook, SlashCommandInteractionEvent event) {
         MessageEmbed embed = MessageUtils.getEmbed(Constants.BLUE).setTitle("Seznam všech členů AT + jejich ID")
                 .addField("Owner", generateStaffList(member, "207423116861767681"), true)
-                .addField("Staff", generateStaffList(member, "208227643714306050"), true)
                 .addField("Admins", generateStaffList(member, "272454769975754753"), true)
                 .addField("Helpers", generateStaffList(member, "207638528757202945"), true)
                 .addField("Developers", generateStaffList(member, "364085114172604426"), true)
