@@ -195,12 +195,13 @@ public class VoteResetTask implements Job {
         );
         channel.sendMessage(message.build()).queue(success -> {}, System.out::println);
 
+        /*
         SussiLogger.infoMessage("Starting generating and sending vote month rewards.");
         List<RewardMonthVotePlayer> rewardMonthVotePlayerList = sendRewards(cache.subList(0, 5), MonthUtils.getMonthInCzech(Integer.parseInt(month)) + " " + year);
 
         // Nechci kecat, tohle by se mělo vyřešit lépe
         CompletableFuture.delayedExecutor(5, TimeUnit.SECONDS).execute(() -> {
             sendRewardAnnounce(month, year, rewardMonthVotePlayerList);
-        });
+        }); */
     }
 }
