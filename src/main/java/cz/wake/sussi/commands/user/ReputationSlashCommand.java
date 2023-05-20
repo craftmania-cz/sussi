@@ -69,6 +69,7 @@ public class ReputationSlashCommand implements ISlashCommand {
         Sussi.getInstance().getSql().createReputationLog(selectedUserMinecraftNick, selectedUser.getIdLong(), minecraftNick, sender.getIdLong(), 1, null);
 
         hook.sendMessage("Dal jsi hráči **" + selectedUserMinecraftNick + "** (" + selectedUser.getAsMention() + ") reputaci.").setEphemeral(false).queue();
+        channel.sendMessage(selectedUser.getAsMention() + " dostal(a) jsi reputaci od hráče **" + minecraftNick + "** (" + sender.getAsMention() + ")").queue();
     }
 
     @Override
