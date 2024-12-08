@@ -29,8 +29,8 @@ public class SlashCommandListener extends ListenerAdapter {
                     } catch (Exception exception) {
                         SussiLogger.fatalMessage("Internal error when executing the command!");
                         MessageUtils.sendErrorMessage(MessageUtils.getEmbedError()
-                                .setDescription("Nastala chyba při provádění ATS příkazu. Zkus to prosím později.")
-                                .addField("Technické informace", "`" + exception + "`", false), event.getHook());
+                                .setDescription("Nastala chyba při provádění příkazu. Zkus to prosím později.")
+                                .addField("Chyba příkazu", "`" + exception + "`", false), event.getHook());
                         exception.printStackTrace();
                     }
                 } else {
