@@ -179,16 +179,16 @@ public class SlashCommandHandler {
     private void registerSlashCommands() {
 
         // General příkazy
-        registerSlashCommand(new LinkSlashCommand());
-        registerSlashCommand(new UnlinkSlashCommand());
+        //registerSlashCommand(new LinkSlashCommand());
+        //registerSlashCommand(new UnlinkSlashCommand());
         registerSlashCommand(new RoomSlashCommand());
-        registerSlashCommand(new WikiSlashCommand());
+        //registerSlashCommand(new WikiSlashCommand());
         registerSlashCommand(new UUIDSlashCommand());
         registerSlashCommand(new ProfileSlashCommand());
-        registerSlashCommand(new RoleSlashCommand());
+        //registerSlashCommand(new RoleSlashCommand());
         registerSlashCommand(new ProfileSettingsSlashCommand());
         registerSlashCommand(new BoosterSlashCommand());
-        registerSlashCommand(new AtReputationCommand());
+        //registerSlashCommand(new AtReputationCommand());
         registerSlashCommand(new ReputationSlashCommand());
 
         // Fun příkazy

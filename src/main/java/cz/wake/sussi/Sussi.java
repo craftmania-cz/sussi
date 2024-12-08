@@ -5,9 +5,6 @@ import cz.wake.sussi.commands.console.ConsoleCommandManager;
 import cz.wake.sussi.listeners.*;
 import cz.wake.sussi.objects.NotificationCacheObject;
 import cz.wake.sussi.objects.VIPManager;
-import cz.wake.sussi.objects.jobs.DailyBonusResetJob;
-import cz.wake.sussi.objects.jobs.VIPCheckJob;
-import cz.wake.sussi.objects.jobs.WeekVotesJob;
 import cz.wake.sussi.runnable.*;
 import cz.wake.sussi.objects.notes.NoteManager;
 import cz.wake.sussi.sql.SQLManager;
@@ -176,10 +173,6 @@ public class Sussi {
         return API_URL;
     }
 
-    public static String getIpHubKey() {
-        return ipHubKey;
-    }
-
     public static NoteManager getNoteManager() {
         return noteManager;
     }
@@ -209,7 +202,9 @@ public class Sussi {
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
         scheduler.start();
-        try {
+
+        // ATS Reset
+        /* try {
             JobDetail job = JobBuilder.newJob(ATSResetTask.class)
                     .withIdentity("atsEvaluation")
                     .build();
@@ -220,8 +215,10 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
 
+        // CraftMania Statistics reset
+        /*
         try {
             JobDetail job = JobBuilder.newJob(VoteResetTask.class)
                     .withIdentity("monthVotesEvaluation")
@@ -259,7 +256,7 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
 
         try {
             JobDetail job = JobBuilder.newJob(StatusChangerTask.class)
@@ -283,6 +280,8 @@ public class Sussi {
             e.printStackTrace();
         }
 
+        // Synchronization with VIP on Minecraft server
+        /*
         try {
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
@@ -292,18 +291,7 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        try {
-            JobDetail job = JobBuilder.newJob(TextActivityTask.class)
-                    .withIdentity("textActivityCheck")
-                    .build();
-            SimpleTrigger ITrigger = TriggerBuilder.newTrigger()
-                    .forJob("textActivityCheck").withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1)).build(); // Every 1 minute
-            scheduler.scheduleJob(job, ITrigger);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } */
 
         try {
             JobDetail job = JobBuilder.newJob(BoosterCheckerTask.class)

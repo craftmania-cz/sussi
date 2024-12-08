@@ -11,6 +11,7 @@ public class StatusChangerTask implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        Sussi.getJda().getPresence().setActivity(Activity.listening(ServerInfo.getOnlinePlayers() + " hráčů"));
+        //Sussi.getJda().getPresence().setActivity(Activity.listening(ServerInfo.getOnlinePlayers() + " hráčů"));
+        Sussi.getJda().getPresence().setActivity(Activity.competing("Minecraft"));
     }
 }
