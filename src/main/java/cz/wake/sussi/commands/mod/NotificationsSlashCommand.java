@@ -62,7 +62,7 @@ public class NotificationsSlashCommand implements ISlashCommand {
                 String modalUUID = UUID.randomUUID().toString();
                 String modalId = "notification_create:" + modalUUID;
                 Modal.Builder modal = Modal.create(modalId, "Vytvoření notifikace")
-                        .addActionRows(ActionRow.of(title), ActionRow.of(description));
+                        .addActionRow(title, description);
 
                 String finalPlayerUUID = playerUUID;
                 event.replyModal(modal.build()).queue((success) -> {

@@ -107,7 +107,7 @@ public class AtReputationCommand implements ISlashCommand {
                         .setRequired(true)
                         .build();
 
-                modalBuilder.addActionRows(ActionRow.of(starsAmount), ActionRow.of(atReview));
+                modalBuilder.addActionRow(starsAmount, atReview);
                 InteractiveModal interactiveModal = InteractiveModal.create(modalBuilder, (onModalClosed) -> {
                     String starsSelected = onModalClosed.getValue("starsAmount").getAsString();
                     String reviewSelected = onModalClosed.getValue("atReview").getAsString();
@@ -128,11 +128,10 @@ public class AtReputationCommand implements ISlashCommand {
                             .queue();
                 });
 
-                interactiveModal.reply(onInteracted.getStringSelectInteractionEvent()).queue();
+                interactiveModal.replyModal(onInteracted.getStringSelectInteractionEvent()).queue();
             });
         });
 
-        message.setAcknowledgeInteractions(false); // Fix pro modal, aby šel odeslat po selectoru
         message.sendMessage(hook, true);
     }
 
