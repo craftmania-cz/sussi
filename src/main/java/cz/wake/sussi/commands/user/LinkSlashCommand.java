@@ -31,7 +31,7 @@ public class LinkSlashCommand implements ISlashCommand {
 
             hook.sendMessageEmbeds(MessageUtils.getEmbed(Color.GREEN).setTitle("Účet byl úspěšně propojen").setDescription("Tento účet byl přepojen s MC nickem " + Sussi.getInstance().getSql().getConnectionNick(keyId)).build()).queue();
             Sussi.getInstance().getSql().connectToMC(sender.getId(), keyId);
-            Sussi.getVIPManager().checkMember(member.getGuild(), member);
+            Sussi.getVipManager().checkMember(member.getGuild(), member);
 
             Role role = event.getGuild().getRoleById("876294038985265212"); // Verified role
             event.getGuild().addRoleToMember(member, role).queue();

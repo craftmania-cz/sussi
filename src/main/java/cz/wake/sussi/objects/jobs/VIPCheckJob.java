@@ -9,6 +9,6 @@ public class VIPCheckJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        Sussi.getVIPManager().recheck();
+        Sussi.getVipManager().recheck();
     }
 }

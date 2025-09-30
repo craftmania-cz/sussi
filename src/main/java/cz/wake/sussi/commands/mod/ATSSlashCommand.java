@@ -38,11 +38,11 @@ public class ATSSlashCommand implements ISlashCommand {
                 if (Sussi.getInstance().getSql().isAlreadyLinkedByID(sender.getId())) {
                     String name = Sussi.getInstance().getSql().getLinkedNickname(sender.getId());
                     System.out.println(name);
-                    if (!Sussi.getATSManager().isInATS(name)) {
+                    if (!Sussi.getAtsManager().isInATS(name)) {
                         MessageUtils.sendErrorMessage(MessageUtils.getEmbedError().setDescription("Nelze použít `/ats` pokud nejsi člen AT!"), hook);
                         return;
                     }
-                    ATS ats = Sussi.getATSManager().getATS(name);
+                    ATS ats = Sussi.getAtsManager().getATS(name);
                     if (ats == null) {
                         MessageUtils.sendErrorMessage(MessageUtils.getEmbedError().setDescription("Nelze použít `/ats` pokud nejsi člen AT!"), hook);
                         return;
@@ -65,12 +65,12 @@ public class ATSSlashCommand implements ISlashCommand {
                 }
             }
 
-            if (!Sussi.getATSManager().isInATS(nick)) {
+            if (!Sussi.getAtsManager().isInATS(nick)) {
                 MessageUtils.sendErrorMessage(MessageUtils.getEmbedError().setDescription("Požadovaný člen není v AT nebo nebyl nalezen!"), hook);
                 return;
             }
 
-            ATS ats = Sussi.getATSManager().getATS(nick);
+            ATS ats = Sussi.getAtsManager().getATS(nick);
 
             if (ats == null) {
                 MessageUtils.sendErrorMessage(MessageUtils.getEmbedError().setDescription("Požadovaný člen není v AT nebo nebyl nalezen!"), hook);

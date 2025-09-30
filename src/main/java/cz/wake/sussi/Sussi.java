@@ -11,6 +11,8 @@ import cz.wake.sussi.sql.SQLManager;
 import cz.wake.sussi.utils.ConfigProperties;
 import cz.wake.sussi.utils.SussiLogger;
 import dev.mayuna.mayusjdautils.interactive.InteractiveListener;
+import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -33,30 +35,28 @@ import static net.dv8tion.jda.internal.utils.JDALogger.getLog;
 
 public class Sussi {
 
-    private static Sussi instance;
-    private MainListener events;
-    private static JDA jda;
-    private SQLManager sql;
-    private static SlashCommandHandler slashCommandHandler;
-    public static final String PREFIX = ",";
-    public static long startUp;
-    public static String API_URL = "";
-    private static String ipHubKey = "";
-    private static boolean isBeta = true;
-    private static final Map<String, Logger> LOGGERS;
-    public static final Logger LOGGER;
-    public static NoteManager noteManager;
-    public static ATSResetTask atsManager;
-    public static VoteResetTask voteManager;
-    public static VIPManager vipManager;
-    public static ConfigProperties config;
+    public static final @Deprecated String PREFIX = ",";
+    public static @Getter long startUp;
+    public static @Getter NoteManager noteManager;
+    public static @Getter ATSResetTask atsManager;
+    public static @Getter VoteResetTask voteManager;
+    public static @Getter VIPManager vipManager;
+    public static @Getter ConfigProperties config;
 
-    public HashMap<String, NotificationCacheObject> notificationCache = new HashMap<>();
+    private static @Getter Sussi instance;
+    private static @Getter JDA jda;
+    private static @Getter @Setter boolean isBeta = true;
+    private @Getter MainListener events;
+    private @Getter SQLManager sql;
+    private static @Getter SlashCommandHandler slashCommandHandler;
+    private static final @Getter Map<String, Logger> loggerMap;
+    private static final @Getter Logger logger;
+    private final @Getter HashMap<String, NotificationCacheObject> notificationCache = new HashMap<>();
 
     static {
         new File("logs/latest.log").renameTo(new File("logs/log-" + getCurrentTimeStamp() + ".log"));
-        LOGGERS = new ConcurrentHashMap<>();
-        LOGGER = getLog(Sussi.class);
+        loggerMap = new ConcurrentHashMap<>();
+        logger = getLog(Sussi.class);
     }
 
     public static void main(String[] args) throws LoginException, InterruptedException {
@@ -69,7 +69,6 @@ public class Sussi {
         // Config
         SussiLogger.infoMessage("Loading config...");
         config = new ConfigProperties();
-        ipHubKey = config.getIpHubKey();
         isBeta = config.isBeta();
 
         startUp = System.currentTimeMillis();
@@ -137,66 +136,14 @@ public class Sussi {
         }
     }
 
-    public static Sussi getInstance() {
-        return instance;
-    }
-
-    public MainListener getEvents() {
-        return events;
-    }
-
-    public static JDA getJda() {
-        return jda;
-    }
-
-    public static SlashCommandHandler getSlashCommandHandler() {
-        return slashCommandHandler;
-    }
-
-    public static long getStartUp() {
-        return startUp;
-    }
-
     private void initDatabase() {
         sql = new SQLManager(this);
     }
 
-    public SQLManager getSql() {
-        return sql;
-    }
-
-    public static String getCurrentTimeStamp() {
+    private static String getCurrentTimeStamp() {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         Date now = new Date();
         return sdfDate.format(now);
-    }
-
-    public static String getApiUrl() {
-        return API_URL;
-    }
-
-    public static NoteManager getNoteManager() {
-        return noteManager;
-    }
-
-    public static ATSResetTask getATSManager() {
-        return atsManager;
-    }
-
-    public static VoteResetTask getVoteManager() {
-        return voteManager;
-    }
-
-    public static VIPManager getVIPManager() {
-        return vipManager;
-    }
-
-    public static ConfigProperties getConfig() {
-        return config;
-    }
-
-    public HashMap<String, NotificationCacheObject> getNotificationCache() {
-        return notificationCache;
     }
 
     private static void scheduleTasks() throws Exception {
