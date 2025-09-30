@@ -128,6 +128,8 @@ public class Sussi {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            jda.getPresence().setActivity(Activity.competing("Minecraft"));
         } else {
             SussiLogger.infoMessage("Sussi is set to test mode, some functions may not work properly.");
             jda.getPresence().setActivity(Activity.of(Activity.ActivityType.PLAYING, "Testovací režim."));
@@ -256,7 +258,7 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (Exception e) {
             e.printStackTrace();
-        } */
+        }
 
         try {
             JobDetail job = JobBuilder.newJob(StatusChangerTask.class)
@@ -269,7 +271,7 @@ public class Sussi {
             e.printStackTrace();
         }
 
-        try {
+        /*try {
             JobDetail job = JobBuilder.newJob(EmptyVoiceCheckTask.class)
                     .withIdentity("emptyVoiceCheck")
                     .build();
@@ -281,7 +283,6 @@ public class Sussi {
         }
 
         // Synchronization with VIP on Minecraft server
-        /*
         try {
             JobDetail job = JobBuilder.newJob(VIPCheckJob.class)
                     .withIdentity("vipCheck")
@@ -291,7 +292,7 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (Exception e) {
             e.printStackTrace();
-        } */
+        }
 
         try {
             JobDetail job = JobBuilder.newJob(BoosterCheckerTask.class)
@@ -303,6 +304,22 @@ public class Sussi {
             scheduler.scheduleJob(job, ITrigger);
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+
+        try {
+            JobDetail job = JobBuilder.newJob(DailyPollTask.class)
+                    .withIdentity("dailyPoll")
+                    .build();
+            CronTrigger ITrigger = TriggerBuilder.newTrigger()
+                    .forJob("dailyPoll")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0 6 * * ? *")) // every day at 6:00 AM
+                    .build();
+            scheduler.scheduleJob(job, ITrigger);
+            SussiLogger.infoMessage("Daily poll task scheduled.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        SussiLogger.greatMessage("All tasks were successfully scheduled.");
     }
 }
